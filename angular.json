@@ -25,9 +25,25 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.css"
+              "node_modules/bootstrap/dist/css/bootstrap.min.css",
+              "src/styles.css",
+              "src/assets/css/icons.css",
+              "src/assets/css/style.css",
+              "src/assets/css/uikit.css",
+              "src/assets/unpkg.com/tailwindcss@2.2.19/dist/tailwind.min.css"
             ],
-            "scripts": []
+            "scripts": [
+              "node_modules/jquery/dist/jquery.min.js",
+              "src/assets/js/bootstrap-select.min.js",
+              "src/assets/js/custom.js",
+              "src/assets/js/jquery-3.3.1.min.js",
+              "src/assets/js/simplebar.js",
+              "src/assets/js/tippy.all.min.js",
+              "src/assets/js/uikit.js",
+              "src/assets/unpkg.com/ionicons@5.2.3/dist/ionicons.js",
+              "src/assets/code.jquery.com/jquery-3.6.0.min.js",
+              "node_modules/bootstrap/dist/js/bootstrap.min.js"
+            ]
           },
           "configurations": {
             "production": {
@@ -94,5 +110,8 @@
         }
       }
     }
+  },
+  "cli": {
+    "analytics": false
   }
 }
