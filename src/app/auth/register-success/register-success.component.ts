@@ -1,10 +1,18 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-register-success',
   templateUrl: './register-success.component.html',
   styleUrls: ['./register-success.component.css']
 })
-export class RegisterSuccessComponent {
+export class RegisterSuccessComponent{
+  constructor(private router: Router) {
+  }
 
+  ngOnInit() {
+    setTimeout(()=>{
+      this.router.navigateByUrl('/login');
+    },5000)//5s
+  }
 }

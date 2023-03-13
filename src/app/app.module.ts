@@ -12,6 +12,7 @@ import {HttpClientModule} from "@angular/common/http";
 import { RegisterComponent } from './auth/register/register.component';
 import { LoginComponent } from './auth/login/login.component';
 import { RegisterSuccessComponent } from './auth/register-success/register-success.component';
+import { HomeComponent } from './home/home.component';
 
 @NgModule({
   declarations: [
@@ -21,6 +22,7 @@ import { RegisterSuccessComponent } from './auth/register-success/register-succe
     RegisterComponent,
     LoginComponent,
     RegisterSuccessComponent,
+    HomeComponent,
 
   ],
   imports: [
@@ -29,7 +31,10 @@ import { RegisterSuccessComponent } from './auth/register-success/register-succe
     FormsModule,
     ReactiveFormsModule,
     RouterModule.forRoot([
-      {path:'register', component: RegisterComponent}
+      {path:'register', component: RegisterComponent},
+      {path:'register-success', component:RegisterSuccessComponent},
+      {path:'login', component:LoginComponent},
+      {path: 'home',component:HomeComponent}
     ]),
     IonicModule,
     HttpClientModule,
