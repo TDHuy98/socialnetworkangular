@@ -43,7 +43,7 @@ export class MainTimeLineComponent implements OnInit {
   // @Input() NewFriends:Friend[] =[]
   // @Input() BlockFriends:Friend[] =[]
 
-currentListFriends:Friend[]=[]
+  currentListFriends:Friend[]=[]
   activeFriends:Friend[] =[]
   NewFriends:Friend[] =[]
   BlockFriends:Friend[] =[]
