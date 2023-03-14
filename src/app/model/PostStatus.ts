@@ -1,3 +1,3 @@
 export enum PostStatus {
-  Public,Private,Friend,Delete
+  Public = "Public",Private = "Private",Friend = "Friend",Delete = "Delete"
 }

@@ -31,28 +31,18 @@ export class FeedComponent implements OnInit {
 
 
     this.postForm = new FormGroup({
-      id: new FormControl(0),
-      user: new FormGroup({
-        id: new FormControl(1)
-      }),
       content: new FormControl("content", Validators.required),
-      postStatus: new FormControl("1"),
-      img: new FormControl("upLoadFile"),
+      postStatus: new FormControl("postStatus"),
+      img: new FormControl("img"),
       posts: new FormControl(""),
-      createAT: new FormControl(Date.now()),
-      updateAT: new FormControl("")
     })
 
 
     this.editForm =new FormGroup({
       id: new FormControl("id"),
-      user: new FormGroup({
-        id: new FormControl("idUser",Validators.required)
-      }),
+      postStatus: new FormControl("postStatus"),
       content: new FormControl("content",Validators.required),
       img : new FormControl("img"),
-      CreateAT : new FormControl("createAT"),
-      updateAT: new FormControl(Date.now())
     })
 
 
@@ -63,10 +53,11 @@ export class FeedComponent implements OnInit {
     this.postService.findById(this.id).subscribe((data) => {
       this.yoursPost = data
       this.editForm = new FormGroup({
-        id: new FormControl(data.id),
-        user: new FormGroup({
-          id: new FormControl(data.user.id)
-        }),
+        // id: new FormControl(data.id),
+        // user: new FormGroup({
+        //   id: new FormControl(data.user.id)
+        // }),
+        postStatus: new FormControl(data.postStatus),
         content: new FormControl(data.content),
         img: new FormControl(data.img),
         posts: new FormControl(data.posts)
