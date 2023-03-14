@@ -2166,11 +2166,14 @@
       </div>
       <div class="flex items-center w-full justify-between border-t p-3">
 
-        <select class="selectpicker mt-2 story" formControlName="postStatus">
-          <option value="1">Public</option>
-          <option value="2">Private</option>
-          <option value="3">Friend</option>
-        </select>
+        <div class="flex space-x-2" style="float: right !important;">
+          <select name="postSatus"  formControlName="postStatus">
+            <option [value]="1">Pulic</option>
+            <option [value]="2">Private</option>
+            <option [value]="3">Friend</option>
+
+          </select>
+        </div>
 
         <div class="flex space-x-2">
           <a href="#" class="bg-red-100 flex font-medium h-9 items-center justify-center px-5 rounded-md text-red-600 text-sm">
