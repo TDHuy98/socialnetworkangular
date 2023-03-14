@@ -6,12 +6,16 @@ import {FeedComponent} from "./feed/feed.component";
 import {ReactiveFormsModule} from "@angular/forms";
 import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {AppRoutingModule} from "./app-routing.module";
+import { LoginComponent } from './login/login.component';
+import { RegisterComponent } from './register/register.component';
 
 @NgModule({
   declarations: [
     AppComponent,
 
-    FeedComponent
+    FeedComponent,
+     LoginComponent,
+     RegisterComponent
   ],
   imports: [
     BrowserModule,
