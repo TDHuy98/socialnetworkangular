@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
+import {AuthService} from "../auth.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-common',
@@ -6,5 +8,14 @@ import { Component } from '@angular/core';
   styleUrls: ['./common.component.css']
 })
 export class CommonComponent {
+  constructor(private authService: AuthService, private router:Router) {
+  }
 
+
+
+  logoutservice() {
+    this.authService.logout()
+      this.router.navigateByUrl('')
+
+  }
 }

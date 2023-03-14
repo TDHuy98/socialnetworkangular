@@ -34,7 +34,8 @@ import { HomeComponent } from './home/home.component';
       {path:'register', component: RegisterComponent},
       {path:'register-success', component:RegisterSuccessComponent},
       {path:'login', component:LoginComponent},
-      {path: 'home',component:HomeComponent}
+      {path: 'home' ,component:HomeComponent},
+      {path: '' ,component:HomeComponent}
     ]),
     IonicModule,
     HttpClientModule,
