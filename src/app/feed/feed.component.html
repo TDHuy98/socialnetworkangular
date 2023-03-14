@@ -2076,8 +2076,8 @@
     </div>
     <div class="bsolute bottom-0 p-4 space-x-4 w-full">
       <div class="flex bg-gray-50 border border-purple-100 rounded-2xl p-2 shadow-sm items-center">
-        <div class="lg:block hidden ml-1"> Add to your post </div>
-        <input type="text" placeholder="img" formControlName="upLoadFile">
+        <div class="lg:block hidden ml-1"><input type="file" placeholder="img" formControlName="upLoadFile"></div>
+
         <div class="flex flex-1 items-center lg:justify-end justify-center space-x-2">
 
           <svg class="bg-blue-100 h-9 p-1.5 rounded-full text-blue-600 w-9 cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
@@ -2096,11 +2096,15 @@
     </div>
     <div class="flex items-center w-full justify-between border-t p-3">
 
-      <select class="selectpicker mt-2 story" formControlName="postStatus">
-        <option ngValue="1">Public</option>
-        <option ngValue="2">Private</option>
-        <option ngValue="3">Friend</option>
-      </select>
+      <div class="flex space-x-2" style="float: right !important;">
+        <select name="postSatus" id="postStatus" formControlName="postStatus">
+          <option [value]="1">Pulic</option>
+          <option [value]="2">Private</option>
+          <option [value]="3">Friend</option>
+
+        </select>
+      </div>
+
 
       <div class="flex space-x-2">
         <a href="#" class="bg-red-100 flex font-medium h-9 items-center justify-center px-5 rounded-md text-red-600 text-sm">
@@ -2136,7 +2140,7 @@
              class="bg-gray-200 border border-white rounded-full w-11 h-11">
         <div class="flex-1 pt-2">
                     <textarea class="uk-textare text-black shadow-none focus:shadow-none text-xl font-medium resize-none" rows="5"
-                              placeholder="What's Your Mind ? Stella!" formControlName="content">{{}}</textarea>
+                              placeholder="What's Your Mind ? Stella!" formControlName="content"></textarea>
         </div>
 
       </div>

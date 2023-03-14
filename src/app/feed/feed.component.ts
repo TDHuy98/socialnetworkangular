@@ -29,8 +29,6 @@ export class FeedComponent implements OnInit {
   ngOnInit() {
 
 
-    this.postService.findAllByUser_Id(this.id)
-
 
     this.postForm = new FormGroup({
       id: new FormControl(0),
