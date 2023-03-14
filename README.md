@@ -1,6 +1,12 @@
+<<<<<<< HEAD
 # M6Fe2
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 15.2.0.
+=======
+# Socialnetworkangular
+
+This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 15.2.1.
+>>>>>>> dea19915bbfbb44c337cc7613b8121ed88cb5f97
 
 ## Development server
 

@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "m6Fe2": {
+    "socialnetworkangular": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -13,7 +13,8 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/m6-fe2",
+
+            "outputPath": "dist/socialnetworkangular",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": [
@@ -25,6 +26,8 @@
               "src/assets"
             ],
             "styles": [
+
+              "node_modules/bootstrap/dist/css/bootstrap.min.css",
               "src/styles.css",
               "src/assets/css/icons.css",
               "src/assets/css/style.css",
@@ -32,13 +35,17 @@
               "src/assets/unpkg.com/tailwindcss@2.2.19/dist/tailwind.min.css"
             ],
             "scripts": [
+
+              "node_modules/jquery/dist/jquery.min.js",
               "src/assets/js/bootstrap-select.min.js",
               "src/assets/js/custom.js",
               "src/assets/js/jquery-3.3.1.min.js",
               "src/assets/js/simplebar.js",
               "src/assets/js/tippy.all.min.js",
               "src/assets/js/uikit.js",
-              "src/assets/unpkg.com/ionicons@5.2.3/dist/ionicons.js"
+              "src/assets/unpkg.com/ionicons@5.2.3/dist/ionicons.js",
+              "src/assets/code.jquery.com/jquery-3.6.0.min.js",
+              "node_modules/bootstrap/dist/js/bootstrap.min.js"
             ]
           },
           "configurations": {
@@ -72,10 +79,11 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "m6Fe2:build:production"
+
+              "browserTarget": "socialnetworkangular:build:production"
             },
             "development": {
-              "browserTarget": "m6Fe2:build:development"
+              "browserTarget": "socialnetworkangular:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -83,7 +91,8 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "m6Fe2:build"
+
+            "browserTarget": "socialnetworkangular:build"
           }
         },
         "test": {
@@ -106,5 +115,9 @@
         }
       }
     }
+
+  },
+  "cli": {
+    "analytics": false
   }
 }
