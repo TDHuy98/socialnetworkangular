@@ -5,13 +5,13 @@ import {map, Observable} from "rxjs";
 import {LoginPayload} from "./auth/login-payload";
 import jwt_decode from "jwt-decode";
 import {JwtAuthResponse} from "./auth/jwt-auth-response";
+import {CurrentUser} from "./model/CurrentUser";
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
   private url = "http://localhost:8080/api/v1/auth/"
-  jwtAuthResponse: JwtAuthResponse
   constructor(private httpClient: HttpClient,) {
   }
 
@@ -23,32 +23,42 @@ export class AuthService {
 
 
    jwtBody = {
-    sub: '',
-    iat: '',
-    exp: ''
+     sub: '',
+     iat: '',
+     exp: '',
+     jti: ''
+   }
+  jwt = {
+    token: ''
   }
-  jwt={
-    token:''
-  }
+  jwtAuthResponse: JwtAuthResponse
 
   login(loginPayload: LoginPayload): Observable<any> {
     return this.httpClient.post<any>(this.url + "login", loginPayload, {responseType: "text" as "json"})
       .pipe(map(data => {
-        console.log(data);
-        this.jwtAuthResponse = data;
-        console.log("abc" + (this.jwtAuthResponse.authenticationToken))
+        console.log(JSON.parse(data));
+        this.jwtAuthResponse = JSON.parse(data);
+        console.log(this.jwtAuthResponse.token)
         this.jwtBody = jwt_decode(data);
-        console.log("test " + this.jwtBody)
-        localStorage.setItem('authenticationToken', data);
+        localStorage.setItem('authenticationToken', this.jwtAuthResponse.token);
         localStorage.setItem('username', this.jwtBody.sub);
+        localStorage.setItem('userId', this.jwtBody.jti)
+        console.log(this.jwtBody.jti)
         console.log(localStorage.getItem('username'))
         return data;
       }));
   }
 
   logout() {
-    const token = this.jwtAuthResponse
-    console.log("logout success")
-    return this.httpClient.post("http://localhost:8080/api/v1/auth/logout", token)
+    return this.httpClient.post(this.url + "logout", null)
+  }
+
+  getAuthToken() {
+    return localStorage.getItem('authenticationToken')
+  }
+
+  getCurrentLoggedInUser(){
+    alert('tétt')
+    return this.httpClient.get<CurrentUser>(this.url+"getCurrentUser")
   }
 }
