@@ -14,6 +14,7 @@ export class CommonComponent {
 
 
   logoutservice() {
+    localStorage.clear()
     this.authService.logout()
       this.router.navigateByUrl('')
 
