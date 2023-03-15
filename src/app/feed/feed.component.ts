@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {PostService} from "../service/post/postService";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
-import {UserToken} from "../model/UserToken";
+import {UserToken} from "../model/Token";
 import {Post} from "../model/Post";
 import {ActivatedRoute, Router} from "@angular/router";
 import {PostStatus} from "../model/PostStatus";

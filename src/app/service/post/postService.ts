@@ -19,7 +19,7 @@ export class PostService {
   }
 
   delete(id : number) {
-    this.http.delete('http://localhost:8080/post/'+id)
+    this.http.put('http://localhost:8080/post/'+id,id)
   }
 
   findById(id : number): Observable<any> {
