@@ -479,17 +479,17 @@
 
 
             <a href="#">
-              <img src="assets/images/avatars/avatar-2.jpg" class="is_avatar" alt="">
+              <img src="{{currentLoginUser.profile}}" class="is_avatar" alt="">
             </a>
             <div uk-drop="mode: click;offset:5" class="header_dropdown profile_dropdown">
 
               <a (click)="fowardToMainTimeLine(currentLoginUser.id)" class="user">
                 <div class="user_avatar">
-                  <img src="assets/images/avatars/avatar-2.jpg" alt="">
+                  <img src="{{currentLoginUser.profile}}" alt="">
                 </div>
                 <div class="user_name">
-                  <div> Stella Johnson</div>
-                  <span> @johnson</span>
+                  <div> {{currentLoginUser.middleName+currentLoginUser.lastName}}</div>
+<!--                  <span> @johnson</span>-->
                 </div>
               </a>
               <hr>
@@ -527,7 +527,7 @@
                 </svg>
                 My Billing
               </a>
-              <a href="#" id="night-mode" class="btn-night-mode">
+              <a  id="night-mode" class="btn-night-mode">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                   <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"/>
                 </svg>
@@ -1183,8 +1183,42 @@
 
   </div>
 </div>
-<!-- Javascript
-================================================== -->
+<!-- For Night mode -->
+<script>
+  (function (window, document, undefined) {
+    'use strict';
+    if (!('localStorage' in window)) return;
+    var nightMode = localStorage.getItem('gmtNightMode');
+    if (nightMode) {
+      document.documentElement.className += ' night-mode';
+    }
+  })(window, document);
+
+  (function (window, document, undefined) {
+
+    'use strict';
+
+    // Feature test
+    if (!('localStorage' in window)) return;
+
+    // Get our newly insert toggle
+    var nightMode = document.querySelector('#night-mode');
+    if (!nightMode) return;
+
+    // When clicked, toggle night mode on or off
+    nightMode.addEventListener('click', function (event) {
+      event.preventDefault();
+      document.documentElement.classList.toggle('dark');
+      if (document.documentElement.classList.contains('dark')) {
+        localStorage.setItem('gmtNightMode', true);
+        return;
+      }
+      localStorage.removeItem('gmtNightMode');
+    }, false);
+
+  })(window, document);
+</script>
+<!-- Javascript================================================== -->
 <script src="src/assets/code.jquery.com/jquery-3.6.0.min.js"
         integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 <script src="src/assets/js/tippy.all.min.js"></script>
