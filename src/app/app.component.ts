@@ -81,7 +81,8 @@ export class AppComponent {
     mainTimeLineComponent.newFriendsId = this.newFriendsId;
     mainTimeLineComponent.BlockFriends = this.BlockFriends;
     mainTimeLineComponent.blockFriendsId = this.blockFriendsId;
-    mainTimeLineComponent.currentUserId= this.currentUserId
+    mainTimeLineComponent.currentUserId= this.currentUserId;
+    mainTimeLineComponent.friendList= this.friendList;
   }
 
 

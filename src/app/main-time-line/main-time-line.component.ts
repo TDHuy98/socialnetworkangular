@@ -33,12 +33,7 @@ export class MainTimeLineComponent implements OnInit {
 
 
   }
-  // activeFriendsId:number[]=[]
-  // activeFriends:Friend[] =[]
-  // NewFriends:Friend[] =[]
-  // BlockFriends:Friend[] =[]
-  // newFriendsId:number[]=[]
-  // blockFriendsId:number[]=[]
+
   @Input() activeFriendsId:number[]=[]
   // @Input() NewFriends:Friend[] =[]
   // @Input() BlockFriends:Friend[] =[]
@@ -61,7 +56,9 @@ export class MainTimeLineComponent implements OnInit {
     }
   }
   showFriendListByIdUserAndStatus(id:number,status:string,type:string) {
-
+    for (let i = 0; i < this.activeFriends.length; i++) {
+      if (this.activeFriends[i].friendshipStatus == status && this.activeFriends[i].relationshipType == type && this.activeFriends)
+    }
   }
   fowardToMainTimeLine(id:number){
     this.router.navigateByUrl("/mainTimeLine/"+id )
