@@ -88,7 +88,6 @@ export class AppComponent {
   fowardToMainTimeLine(id:number){
     this.currentUserId = id
     this.router.navigateByUrl("/mainTimeLine/"+id )
-    console.log(id);
   }
 
 }
