@@ -3,13 +3,14 @@ import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {Post} from "../../model/Post";
 import {NewPost} from "../../model/Dto/newPost";
+import {Router} from "@angular/router";
 
 @Injectable({
   providedIn: 'root'
 })
 export class PostService {
 
-  constructor(private http:HttpClient) { }
+  constructor(private http:HttpClient, private router:Router) { }
 
   findAllByUser_Id(id:number):Observable<Post[]> {
     return this.http.get<Post[]>('http://localhost:8080/posts/'+id)
@@ -18,7 +19,7 @@ export class PostService {
 
 
   save(newPost : NewPost) : Observable<any> {
-    return this.http.post('http://localhost:8080/posts',newPost)
+    return this.http.post<NewPost>('http://localhost:8080/posts',newPost, )
   }
 
   delete(id : number) {

@@ -13,8 +13,7 @@ import {NewPost} from "../model/Dto/newPost";
   styleUrls: ['./feed.component.css']
 })
 export class FeedComponent implements OnInit {
-  // @ts-ignore
-  id=Number.parseInt(localStorage.getItem('userId'))
+  currentUserId=Number(localStorage.getItem('userId'))
   postForm: FormGroup[] | any;
   userToken: UserToken | any;
   editForm: FormGroup | any;
@@ -24,12 +23,14 @@ export class FeedComponent implements OnInit {
   newPost: NewPost
 
   constructor(private postService: PostService, private router: Router, private route: ActivatedRoute) {
+    this.router.routeReuseStrategy.shouldReuseRoute = () => false;
     this.newPost = {
+      userId:1,
       content: '',
       postStatus: PostStatus.Public,
       img: ''
     }
-      this.postService.findAllByUser_Id(this.id).subscribe(data => {
+      this.postService.findAllByUser_Id(this.currentUserId).subscribe(data => {
         this.posts= data
       },error => {
         alert("false")
@@ -61,8 +62,7 @@ export class FeedComponent implements OnInit {
   }
 
   showEdit(id: number) {
-    this.id = id
-    this.postService.findById(this.id).subscribe((data) => {
+    this.postService.findById(id).subscribe((data) => {
       this.yoursPost = data
       this.editForm = new FormGroup({
         // id: new FormControl(data.id),
@@ -79,17 +79,19 @@ export class FeedComponent implements OnInit {
 
 
   creatPost() {
-    console.log(this.postForm.value)
+    console.log(this.newPost)
+    this.newPost.userId=this.currentUserId;
     this.newPost.content=this.postForm.get("content").value;
     this.newPost.postStatus=this.postForm.get("postStatus").value;
     this.newPost.img=this.postForm.get("img").value;
 
 
     this.postService.save(this.newPost).subscribe(() => {
-      this.router.navigate(["/feed"])
+      this.router.navigateByUrl("/feed");
+      window.location.reload()
     }, error => {
       alert("lỗi đường truyền")
-      this.router.navigate(["/feed"])
+      this.router.navigateByUrl("/feed")
     })
   }
 

@@ -3,7 +3,8 @@ import {PostStatus} from "../PostStatus";
 import {Post} from "../Post";
 
 export class NewPost {
-  content!: string;
+  userId:number;
+  content: string;
   postStatus: PostStatus;
   img: string;
   // posts: Post[];
