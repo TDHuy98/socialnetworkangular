@@ -18,11 +18,14 @@ export class PostService {
     return this.http.post('http://localhost:8080/post',post)
   }
 
-  delete(id : number) {
-    this.http.put('http://localhost:8080/post/'+id,id)
+  delete(id : number) : Observable<any> {
+    return this.http.put('http://localhost:8080/post/'+id,id)
   }
 
   findById(id : number): Observable<any> {
     return this.http.get<Post>('http://localhost:8080/post/findById/'+ id)
   }
+
+
+
 }

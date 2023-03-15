@@ -1,11 +1,16 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Inject, OnInit} from '@angular/core';
 import {PostService} from "../service/post/postService";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
-import {UserToken} from "../model/Token";
 import {Post} from "../model/Post";
 import {ActivatedRoute, Router} from "@angular/router";
 import {PostStatus} from "../model/PostStatus";
-
+import {Token} from "../model/Token";
+import {formatDate} from "@angular/common";
+import {finalize} from "rxjs";
+import 'firebase/auth';
+import 'firebase/database';
+import 'firebase/storage'
+import {AngularFireStorage} from "@angular/fire/compat/storage";
 @Component({
   selector: 'app-feed',
   templateUrl: './feed.component.html',
@@ -14,13 +19,14 @@ import {PostStatus} from "../model/PostStatus";
 export class FeedComponent implements OnInit {
   id: number | any;
   postForm: FormGroup[] | any;
-  userToken: UserToken | any;
+  userToken: Token | any;
   editForm: FormGroup | any;
   yoursPost: Post | undefined;
   posts: Post[] | undefined;
+  selectedImage: any = null;
 
 
-  constructor(private postService: PostService, private router: Router, private route: ActivatedRoute) {
+  constructor(private postService: PostService, private router: Router, private route: ActivatedRoute,@Inject(AngularFireStorage) private storage: AngularFireStorage) {
 
 
   }
@@ -49,14 +55,10 @@ export class FeedComponent implements OnInit {
   }
 
   showEdit(id: number) {
-    this.id = id
-    this.postService.findById(this.id).subscribe((data) => {
-      this.yoursPost = data
+    alert("ok")
+    this.postService.findById(id).subscribe((data) => {
       this.editForm = new FormGroup({
-        // id: new FormControl(data.id),
-        // user: new FormGroup({
-        //   id: new FormControl(data.user.id)
-        // }),
+        id:new FormControl(data.id),
         postStatus: new FormControl(data.postStatus),
         content: new FormControl(data.content),
         img: new FormControl(data.img),
@@ -67,15 +69,36 @@ export class FeedComponent implements OnInit {
 
 
   post() {
-    console.log(this.postForm.value)
-    alert("Post Was add")
 
-    this.postService.save(this.postForm.value).subscribe(() => {
-      this.router.navigate(["/feed"])
-    }, error => {
-      alert("lỗi đường truyền")
-      this.router.navigate(["/feed"])
-    })
+    const nameImg = this.getCurrentDateTime() + this.selectedImage.name
+    const fileRef =this.storage.ref(nameImg);
+    this.storage.upload(nameImg,this.selectedImage).snapshotChanges().pipe(
+      finalize( ()=> {
+        fileRef.getDownloadURL().subscribe((url) =>{
+          this.postForm.patchValue({img : url});
+          this.postService.save(this.postForm.value).subscribe(() => {
+            console.log(this.postForm.value)
+            alert("success")
+            this.router.navigate(["/feed"])
+          },error => {
+            alert("false")
+          })
+        })
+      })
+    )
+    // console.log(this.postForm.value)
+    // alert("Post Was add")
+    //
+    // this.postService.save(this.postForm.value).subscribe(() => {
+    //   this.router.navigate(["/feed"])
+    // }, error => {
+    //   alert("lỗi đường truyền")
+    //   this.router.navigate(["/feed"])
+    // })
+  }
+
+  showReview(event : any){
+    this.selectedImage=event.targer.files[0];
   }
 
   edit() {
@@ -88,7 +111,16 @@ export class FeedComponent implements OnInit {
 
   delete(id: number) {
     alert("Delete Success")
-    this.postService.delete(id)
-    this.router.navigate(["/feed"])
+    this.postService.delete(id).subscribe(() =>{
+      alert("delete succes")
+      this.router.navigate(["/feed"])
+    },error => {
+      alert("delete false")
+    })
+
+  }
+
+  getCurrentDateTime() : string {
+    return formatDate(new Date(),'dd-MM-yyyyhhmmssa','en-US');
   }
 }
