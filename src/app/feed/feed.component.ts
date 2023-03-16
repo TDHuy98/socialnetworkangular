@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, ElementRef, Inject, OnInit, ViewChild} from '@angular/core';
 import {PostService} from "../service/post/postService";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {Post} from "../model/Post";
@@ -11,6 +11,7 @@ import 'firebase/auth';
 import 'firebase/database';
 import 'firebase/storage'
 import {AngularFireStorage} from "@angular/fire/compat/storage";
+import * as url from "url";
 @Component({
   selector: 'app-feed',
   templateUrl: './feed.component.html',
@@ -18,15 +19,19 @@ import {AngularFireStorage} from "@angular/fire/compat/storage";
 })
 export class FeedComponent implements OnInit {
   id: number | any;
-  postForm: FormGroup[] | any;
+  postForm: FormGroup | any;
   userToken: Token | any;
   editForm: FormGroup | any;
   yoursPost: Post | undefined;
   posts: Post[] | undefined;
+  newPost : Post | any;
   selectedImage: any = null;
+  currentUserId=Number(localStorage.getItem('userId'))
+  @ViewChild('uploadFile',{static:true}) public avatarDom : ElementRef | undefined ;
+  ArrayPicture = "";
 
 
-  constructor(private postService: PostService, private router: Router, private route: ActivatedRoute) {
+  constructor(private postService: PostService, private router: Router, private route: ActivatedRoute,@Inject(AngularFireStorage) private  storage : AngularFireStorage) {
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
     this.newPost = {
       userId:1,
@@ -48,9 +53,9 @@ export class FeedComponent implements OnInit {
 
 
     this.postForm = new FormGroup({
-      content: new FormControl("content", Validators.required),
-      postStatus: new FormControl("postStatus"),
-      img: new FormControl("img"),
+      content: new FormControl("content"),
+      postStatus: new FormControl("postStatus",Validators.required),
+      img: new FormControl(""),
       posts: new FormControl(""),
     })
 
@@ -79,40 +84,57 @@ export class FeedComponent implements OnInit {
   }
 
 
-  post() {
-
-    const nameImg = this.getCurrentDateTime() + this.selectedImage.name
-    const fileRef =this.storage.ref(nameImg);
-    this.storage.upload(nameImg,this.selectedImage).snapshotChanges().pipe(
-      finalize( ()=> {
-        fileRef.getDownloadURL().subscribe((url) =>{
-          this.postForm.patchValue({img : url});
-          this.postService.save(this.postForm.value).subscribe(() => {
-            console.log(this.postForm.value)
-            alert("success")
-            this.router.navigate(["/feed"])
-          },error => {
-            alert("false")
-          })
+  creatPost() {
+    const filePath = this.selectedImage.name;
+    const fileRef = this.storage.ref(filePath);
+    this.storage.upload(filePath,this.selectedImage).snapshotChanges().pipe(
+      finalize(()=> (fileRef.getDownloadURL().subscribe(url =>{
+        this.ArrayPicture = url;
+        console.log(url)
+        this.newPost.userId = this.currentUserId;
+        this.newPost.content= this.postForm.get("content").value;
+        this.newPost.postStatus=this.postForm.get("postStatus").value;
+        this.newPost.img = url
+        this.postService.save(this.newPost).subscribe(()=>{
+          alert("success")
+          this.router.navigateByUrl("/feed");
+          window.location.reload();
         })
-      })
-    )
-    // console.log(this.postForm.value)
-    // alert("Post Was add")
-    //
-    // this.postService.save(this.postForm.value).subscribe(() => {
-    //   this.router.navigate(["/feed"])
-    // }, error => {
-    //   alert("lỗi đường truyền")
-    //   this.router.navigate(["/feed"])
-    // })
+      })))
+    ).subscribe()
+
+
+      // const nameImg = this.getCurrentDateTime() + this.selectedImage.name
+      // const fileRef =this.storage.ref(nameImg);
+      // this.storage.upload(nameImg,this.selectedImage).snapshotChanges().pipe(
+      //   finalize( ()=> {
+      //     fileRef.getDownloadURL().subscribe((url) =>{
+      //       console.log('test' + url)
+      //       this.newPost.userId = this.currentUserId;
+      //       this.newPost.content = this.postForm.get("content").value;
+      //       this.newPost.postStatus = this.postForm.get("postStatus").value;
+      //       this.newPost.img = url;
+      //
+      //       console.log(this.newPost)
+      //       this.postService.save(this.newPost).subscribe(() => {
+      //         console.log(this.postForm.value)
+      //         alert("success")
+      //         this.router.navigateByUrl("/feed")
+      //         window.location.reload()
+      //       },error => {
+      //         alert("false")
+      //       })
+      //     })
+      //   })
+      // )
   }
 
-  showReview(event : any){
-    this.selectedImage=event.targer.files[0];
+  upload(){
+    this.selectedImage = this.avatarDom?.nativeElement.files[0];
   }
 
   edit() {
+
     this.postService.save(this.editForm.value).subscribe(() => {
       alert("update post success")
       this.router.navigate(["/feed"])

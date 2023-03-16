@@ -107,8 +107,9 @@
             </div>
 
             <div uk-lightbox>
-              <a href="assets/images/avatars/avatar-lg-3.jpg">
-                <img src="assets/images/avatars/avatar-lg-4.jpg" alt="" class="max-h-96 w-full object-cover">
+              <a href="{{p.img}}">
+                <p>{{p.img}}</p>
+                <img src="{{p.img}}" alt="" class="max-h-96 w-full object-cover">
               </a>
             </div>
 
@@ -1260,7 +1261,7 @@
     <div class="bsolute bottom-0 p-4 space-x-4 w-full">
       <div class="flex bg-gray-50 border border-purple-100 rounded-2xl p-2 shadow-sm items-center">
         <div class="lg:block hidden ml-1">
-          <input class="form-control-file"  type="file" placeholder="img" id="img" (change)="showReview($event)">
+          <input class="form-control-file" #uploadFile  type="file" (change)="upload()">
         </div>
 
         <div class="flex flex-1 items-center lg:justify-end justify-center space-x-2">

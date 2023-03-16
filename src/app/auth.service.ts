@@ -57,15 +57,14 @@ export class AuthService {
     return localStorage.getItem('authenticationToken')
   }
 
-  // getCurrentLoggedInUser(){
-  //   alert('tétt')
-  //   return this.httpClient.get<CurrentUser>(this.url+"getCurrentUser")
-  // }
+  getCurrentLoggedInUser(){
+    return this.httpClient.get<CurrentUser>(this.url+"getCurrentUser")
+  }
   getCurrentUserId(){
     const id=Number(localStorage.getItem('userId'))
   }
-
-  getCurrentLoggedInUser(){
-    return this.httpClient.get<CurrentUser>(this.url+'getUser/'+localStorage.getItem('userId'))
-  }
+  //
+  // getCurrentLoggedInUser(){
+  //   return this.httpClient.get<CurrentUser>(this.url+'getUser/'+localStorage.getItem('userId'))
+  // }
 }

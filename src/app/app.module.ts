@@ -17,9 +17,9 @@ import {environment} from "../environments/environment";
 import {AngularFireStorageModule} from "@angular/fire/compat/storage";
 import {AngularFireAuthModule} from "@angular/fire/compat/auth";
 import {AngularFireModule} from "@angular/fire/compat";
-
 import {HttpClientInterceptor} from "./http-client.interceptor";
 import {JwtModule} from "@auth0/angular-jwt";
+
 
 @NgModule({
   declarations: [
