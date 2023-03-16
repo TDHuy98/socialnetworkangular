@@ -1,3 +1,3 @@
 export class JwtAuthResponse{
-  authenticationToken: string
+  token: string
 }

@@ -26,8 +26,19 @@ export class FeedComponent implements OnInit {
   selectedImage: any = null;
 
 
-  constructor(private postService: PostService, private router: Router, private route: ActivatedRoute,@Inject(AngularFireStorage) private storage: AngularFireStorage) {
-
+  constructor(private postService: PostService, private router: Router, private route: ActivatedRoute) {
+    this.router.routeReuseStrategy.shouldReuseRoute = () => false;
+    this.newPost = {
+      userId:1,
+      content: '',
+      postStatus: PostStatus.Public,
+      img: ''
+    }
+      this.postService.findAllByUser_Id(this.currentUserId).subscribe(data => {
+        this.posts= data
+      },error => {
+        alert("false")
+      })
 
   }
 

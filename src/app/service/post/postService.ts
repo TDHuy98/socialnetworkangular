@@ -8,7 +8,7 @@ import {Post} from "../../model/Post";
 })
 export class PostService {
 
-  constructor(private http:HttpClient) { }
+  constructor(private http:HttpClient, private router:Router) { }
 
   findAllByUser_Id(id:number):Observable<Post[]> {
     return this.http.get<Post[]>('http://localhost:8080/post/'+id)
@@ -25,7 +25,4 @@ export class PostService {
   findById(id : number): Observable<any> {
     return this.http.get<Post>('http://localhost:8080/post/findById/'+ id)
   }
-
-
-
 }
