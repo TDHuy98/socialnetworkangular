@@ -15,6 +15,8 @@ import { RegisterSuccessComponent } from './auth/register-success/register-succe
 import { HomeComponent } from './home/home.component';
 import {HttpClientInterceptor} from "./http-client.interceptor";
 import {JwtModule} from "@auth0/angular-jwt";
+import {CommonModule} from "@angular/common";
+import { WallComponent } from './wall/wall.component';
 
 @NgModule({
   declarations: [
@@ -26,10 +28,12 @@ import {JwtModule} from "@auth0/angular-jwt";
     LoginComponent,
     RegisterSuccessComponent,
     HomeComponent,
+    WallComponent,
 
   ],
   imports: [
     BrowserModule,
+    CommonModule,
     AppRoutingModule,
     ReactiveFormsModule,
     HttpClientModule,

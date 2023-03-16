@@ -29,4 +29,8 @@ export class PostService {
   findById(id : number): Observable<any> {
     return this.http.get<Post>('http://localhost:8080/post/findById/'+ id)
   }
+
+  findByIdPostStatus(id: number): Observable<any>{
+    return this.http.get<Post> ('http://localhost:8080/posts' + id)
+  }
 }

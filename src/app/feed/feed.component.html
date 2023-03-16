@@ -58,7 +58,8 @@
                 </a>
                 <div class="flex-1 font-semibold capitalize">
                   <a href="#" class="text-black dark:text-gray-100">  </a>
-                  <div class="text-gray-700 flex items-center space-x-2"><span>{{p.firstname}} {{p.lastname}}</span> <ion-icon name="people"></ion-icon></div>
+                  <div class="text-gray-700 flex items-center space-x-2"><span>{{p.firstname}} {{p.lastname}}</span><ion-icon name="people"></ion-icon></div>
+                  <p class="material-symbols-outlined">{{p.postStatus}} </p>
                 </div>
               </div>
               <!-- drop down status service -->
@@ -1349,9 +1350,11 @@
       </div>
       <div class="flex items-center w-full justify-between border-t p-3">
 
+
         <div class="flex space-x-2" style="float: right !important;">
-          <select name="postSatus"  formControlName="postStatus">
-            <option [value]="1">Pulic</option>
+          <p>ádâsd</p>
+          <select  name="postSatus"  formControlName="postStatus">
+            <option [value]="1">Public</option>
             <option [value]="2">Private</option>
             <option [value]="3">Friend</option>
 

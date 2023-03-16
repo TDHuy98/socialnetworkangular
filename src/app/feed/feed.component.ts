@@ -6,6 +6,8 @@ import {Post} from "../model/Post";
 import {ActivatedRoute, Router} from "@angular/router";
 import {PostStatus} from "../model/PostStatus";
 import {NewPost} from "../model/Dto/newPost";
+import {UserService} from "../service/user/userService";
+import {User} from "../model/User";
 
 @Component({
   selector: 'app-feed',
@@ -22,6 +24,7 @@ export class FeedComponent implements OnInit {
 
   newPost: NewPost
 
+
   constructor(private postService: PostService, private router: Router, private route: ActivatedRoute) {
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
     this.newPost = {
@@ -29,6 +32,7 @@ export class FeedComponent implements OnInit {
       content: '',
       postStatus: PostStatus.Public,
       img: ''
+
     }
       this.postService.findAllByUser_Id(this.currentUserId).subscribe(data => {
         this.posts= data
@@ -57,6 +61,8 @@ export class FeedComponent implements OnInit {
       content: new FormControl("content",Validators.required),
       img : new FormControl("img"),
     })
+
+
 
 
   }
@@ -107,5 +113,15 @@ export class FeedComponent implements OnInit {
     alert("Delete Success")
     this.postService.delete(id)
     this.router.navigate(["/feed"])
+  }
+
+
+  showByIdStatus(id: number) {
+    this.postService.findByIdPostStatus(id).subscribe(data => {
+      this.posts= data
+    },
+        error => {
+      alert("lỗi")
+    })
   }
 }
