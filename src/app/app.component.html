@@ -368,16 +368,16 @@
 
 
             <a href="#">
-              <img src="{{currentLoginUser.profile}}" class="is_avatar" alt="">
+              <img src="{{currentLoggedInUser.profile}}" class="is_avatar" alt="">
             </a>
             <div uk-drop="mode: click;offset:5" class="header_dropdown profile_dropdown">
 
-              <a (click)="fowardToMainTimeLine(currentLoginUser.id)" class="user">
+              <a (click)="fowardToMainTimeLine(currentLoggedInUser.id)" class="user">
                 <div class="user_avatar">
-                  <img src="{{currentLoginUser.profile}}" alt="">
+                  <img src="{{currentLoggedInUser.profile}}" alt="">
                 </div>
                 <div class="user_name">
-                  <div> {{currentLoginUser.middleName+currentLoginUser.lastName}}</div>
+                  <div> {{currentLoggedInUser.middlename+currentLoggedInUser.lastname}}</div>
 <!--                  <span> @johnson</span>-->
                 </div>
               </a>
