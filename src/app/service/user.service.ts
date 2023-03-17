@@ -51,7 +51,7 @@ export class UserService {
   // }
   //
   findById(id: number): Observable<User> {
-    return this.httpClient.get<User>('http://localhost:8080/users/' + id);
+    return this.httpClient.get<User>('http://localhost:8080/user/' + id);
   }
   //
   //

@@ -9,6 +9,7 @@ import {Post} from "../model/model/Post";
 import {Like} from '../model/Like';
 import {FormControl, FormGroup} from "@angular/forms";
 import {Comment} from "../model/model/Comment";
+import {AuthService} from "../auth.service";
 
 @Component({
   selector: 'app-main-time-line',
@@ -20,13 +21,14 @@ export class MainTimeLineComponent implements OnInit {
     content: new FormControl(""),
     name: new FormControl(""),
   })
-  currentId: number = 1;
-  currentUserLogin: User;
+  currentId = Number(localStorage.getItem("userId"));
 
-  currenLogInId: number = 1;
+  // @ts-ignore
+  currentUserLogin= JSON.parse(localStorage.getItem("loggedInUser"));
+  currenLogInId = this.currentUserLogin.id;
   id: number | undefined;
   currenViewtUser = new User;
-  currentUserId: number = 0;
+  currentUserId = this.currentUserLogin.id;
   friendList: Friend[] = []
   posts: Post[] = [];
   @Input() activeFriendsId: number[] = []
@@ -50,11 +52,14 @@ export class MainTimeLineComponent implements OnInit {
   allCmt: Comment[] = [];
   thisPostLike: number
 
-  constructor(private route: ActivatedRoute, private userService: UserService, private router: Router, private friendService: FriendListService, private postService: PostService) {
+  constructor(private route: ActivatedRoute,
+              private userService: UserService,
+              private router: Router, private friendService: FriendListService,
+              private postService: PostService,
+              private authService: AuthService) {
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
 
   }
-
 
 
   ngOnInit(): void {
@@ -62,8 +67,8 @@ export class MainTimeLineComponent implements OnInit {
       data => {
         this.friendList = data;
         this.currentActiveFriendsId = this.showFriendListIdByIdUserAndStatus(this.currenLogInId, 'Active', 'Normal', this.friendList)
-        this.currentNewFriendsId    = this.showFriendListIdByIdUserAndStatus(this.currenLogInId, 'New', 'Normal', this.friendList)
-        this.currentBlockFriendsId  = this.showFriendListIdByIdUserAndStatus(this.currenLogInId, 'Block', 'Normal', this.friendList)
+        this.currentNewFriendsId = this.showFriendListIdByIdUserAndStatus(this.currenLogInId, 'New', 'Normal', this.friendList)
+        this.currentBlockFriendsId = this.showFriendListIdByIdUserAndStatus(this.currenLogInId, 'Block', 'Normal', this.friendList)
         this.currentSenderFriendsId = this.showFriendListIdByIdUserAndStatus(this.currenLogInId, 'Sender', 'Normal', this.friendList)
       })
     this.showDit()
@@ -87,6 +92,7 @@ export class MainTimeLineComponent implements OnInit {
 
       }
     )
+    // this.currentId = Number(this.authService.getCurrentUserId());
   }
 
   showDit() {
@@ -110,10 +116,10 @@ export class MainTimeLineComponent implements OnInit {
     this.friendService.getAll().subscribe(
       data => {
         this.friendList = data;
-        this.curentLoginUserActiveFriendList=[]
+        this.curentLoginUserActiveFriendList = []
 
-        data.forEach(f=>{
-          if (f.source.id==this.currenLogInId){
+        data.forEach(f => {
+          if (f.source.id == this.currenLogInId) {
             this.curentLoginUserActiveFriendList.push(f)
           }
         })
@@ -133,7 +139,6 @@ export class MainTimeLineComponent implements OnInit {
       this.currentId = 1
     }
     this.userService.findById(this.currentId).subscribe(data => {
-      this.currentUserLogin = data
       this.currenViewtUser = data
     });
 
@@ -171,7 +176,9 @@ export class MainTimeLineComponent implements OnInit {
       }
     }
   }
-  getFriendList: Friend[]=[]
+
+  getFriendList: Friend[] = []
+
   getFriendListByIdUserAndStatus(id: number, status: string, type: string) {
     this.getFriendList = []
     for (let i = 0; i < this.friendList.length; i++) {
@@ -410,22 +417,21 @@ export class MainTimeLineComponent implements OnInit {
     })
 
   }
-mutualTarget: Friend[] =[];
+
+  mutualTarget: Friend[] = [];
+
   mutualfriends() {
     this.mutualFriendsList = this.getFriendListByIdUserAndStatus(this.currenLogInId, 'Active', 'Normal')
     this.mutualTarget = this.getFriendListByIdUserAndStatus(this.currentUserId, 'Active', 'Normal')
-    console.log(this.currentUserId,this.currenLogInId)
-    this.curentLoginUserActiveFriendList=[]
+    console.log(this.currentUserId, this.currenLogInId)
+    this.curentLoginUserActiveFriendList = []
 
     for (let i = 0; i < this.mutualTarget.length; i++) {
       if (this.mutualFriendsList.includes(this.mutualTarget[i])) {
         this.curentLoginUserActiveFriendList.push(this.mutualTarget[i])
       }
     }
-    this.currentListFriends=this.curentLoginUserActiveFriendList
-     console.log("mu",this.mutualFriendsList)
-     console.log("ac",this.activeFriends)
-     console.log("cu",this.curentLoginUserActiveFriendList)
+    this.currentListFriends = this.curentLoginUserActiveFriendList
     return this.curentLoginUserActiveFriendList
   }
 }

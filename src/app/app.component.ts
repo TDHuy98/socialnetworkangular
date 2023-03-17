@@ -16,13 +16,15 @@ import {CurrentLoggedInUser} from "./model/CurrentLoggedInUser";
 export class AppComponent implements OnInit {
   title = 'socialnetworkangular';
   currentUser: User = new User();
-  currentUserId: number = 1;
   currenTargettUser: User = new User();
-  currentLoginUser: User = new User();
+  // @ts-ignore
+  currentLoginUser=new CurrentLoggedInUser();
+
+  currentUserId : number;
   currentNewFriendsId: number[] = []
   currentBlockFriendsId: number[] = []
   currentActiveFriendsId: number[] = []
-  currentLoggedInUser: CurrentLoggedInUser
+  currentLoggedInUser: CurrentLoggedInUser;
 
   private mainTimeLineComponent: MainTimeLineComponent;
 
@@ -41,6 +43,17 @@ export class AppComponent implements OnInit {
 
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
 
+    this.currentLoginUser={
+      id:1,
+      firstname:'',
+      middlename:'',
+      lastname:'',
+      profile:'',
+      dateOfBirth:Date,
+      email:'',
+      username:'',
+      mobile:''
+    }
   }
 
   friendList: Friend[] = []
@@ -86,10 +99,22 @@ export class AppComponent implements OnInit {
       data => {
         console.log(data);
         this.currentUser = data;
-        this.currentLoginUser = data;
 
       }
     )
+    //get current logged in user and save them to localstorage
+      this.authService.getCurrentLoggedInUser().subscribe(data => {
+        this.currentLoggedInUser = data
+        this.currentUserId=this.currentLoginUser.id;
+        console.log(JSON.stringify(this.currentLoggedInUser))
+        console.log(this.currentLoggedInUser.id)
+        console.log(this.currentLoggedInUser.profile)
+        localStorage.setItem('loggedInUser', JSON.stringify(this.currentLoggedInUser))
+      }, error => {
+        console.log('can not get current logged in user')
+      })
+
+    console.log(this.currentLoggedInUser)
   }
 
   onOutLetLoader(mainTimeLineComponent: MainTimeLineComponent) {

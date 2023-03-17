@@ -16,7 +16,7 @@ export class PostService {
   }
 
   getAll(): Observable<Post[]> {
-    return this.http.get<Post[]>('http://localhost:8080/post');
+    return this.http.get<Post[]>('http://localhost:8080/posts');
   }
 
   getAllImg(): Observable<ImgPost[]> {
@@ -24,20 +24,20 @@ export class PostService {
   }
 
   findAll(): Observable<Post[]> {
-    return this.http.get<Post[]>('http://localhost:8080/post');
+    return this.http.get<Post[]>('http://localhost:8080/posts');
   }
 
   findById(id: number): Observable<Post> {
-    return this.http.get<Post>('http://localhost:8080/post/' + id);
+    return this.http.get<Post>('http://localhost:8080/posts/' + id);
   }
 
 
   delete(id: number): Observable<void> {
-    return this.http.delete<void>(`http://localhost:8080/post/${id}`);
+    return this.http.delete<void>(`http://localhost:8080/posts/${id}`);
   }
 
   create(post: { postTime: string; user: { id: number }; content: any }): Observable<Post> {
-    return this.http.post<Post>('http://localhost:8080/post', post);
+    return this.http.post<Post>('http://localhost:8080/posts', post);
   }
 
   like(like: Like): Observable<Like>{
@@ -47,7 +47,7 @@ export class PostService {
     return this.http.delete<void>(`http://localhost:8080/like/${id}`);
   }
   findAllLikeByIdPost(id:number): Observable<Like[]> {
-    return this.http.get<Like[]>(`http://localhost:8080/like/post ${id}`);
+    return this.http.get<Like[]>(`http://localhost:8080/like/posts/${id}`);
   }
   findAllLike(): Observable<Like[]> {
     return this.http.get<Like[]>('http://localhost:8080/like');
