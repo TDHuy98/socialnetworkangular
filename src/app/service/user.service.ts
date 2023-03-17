@@ -3,6 +3,11 @@ import {HttpClient, HttpClientModule} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {User} from "../model/User";
 
+import {Injectable} from '@angular/core';
+import {HttpClient} from "@angular/common/http";
+import {UserUpdate} from "../model/UserUpdate";
+import {Observable} from "rxjs";
+import {CheckPassword} from "../model/CheckPassword";
 
 @Injectable({
   providedIn: 'root'
@@ -52,5 +57,23 @@ export class UserService {
   // edit(post: Post): Observable<any> {
   //   return this.http.put('http://localhost:8080/posts', post);
   // }
+
+  private url = "http://localhost:8080/user/"
+
+  constructor(private httpClient: HttpClient) {
+  }
+
+  getUserInformation(): Observable<UserUpdate> {
+    return this.httpClient.get<UserUpdate>(this.url + localStorage.getItem('userId'))
+  }
+
+  updateUserInformation(userInformation: UserUpdate): Observable<UserUpdate> {
+    return this.httpClient.post<UserUpdate>(this.url + "setting", userInformation)
+  }
+
+
+  isPasswordCorrect(checkPassword: CheckPassword){
+    return this.httpClient.post<boolean>(this.url+"changepassword", checkPassword)
+  }
 }
 
