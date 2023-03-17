@@ -76,7 +76,5 @@ export class AccountSettingComponent implements OnInit {
     this.checkUserPassword.password = this.password
     this.userService.isPasswordCorrect(this.checkUserPassword)
     console.log(this.checkUserPassword)
-    alert(this.userService.isPasswordCorrect(this.checkUserPassword))
-    alert('check')
   }
 }

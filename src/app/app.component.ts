@@ -5,6 +5,8 @@ import {Friend} from "./model/friend";
 import {UserService} from "./service/user.service";
 import {MainTimeLineComponent} from "./main-time-line/main-time-line.component";
 import {Router} from "@angular/router";
+import {AuthService} from "./auth.service";
+import {CurrentLoggedInUser} from "./model/CurrentLoggedInUser";
 
 @Component({
   selector: 'app-root',
@@ -20,6 +22,7 @@ export class AppComponent implements OnInit {
   currentNewFriendsId: number[] = []
   currentBlockFriendsId: number[] = []
   currentActiveFriendsId: number[] = []
+  currentLoggedInUser: CurrentLoggedInUser
 
   private mainTimeLineComponent: MainTimeLineComponent;
 
@@ -30,7 +33,10 @@ export class AppComponent implements OnInit {
 
   mainTL: MainTimeLineComponent | undefined
 
-  constructor(private friendService: FriendListService, private userService: UserService, private router: Router,) {
+  constructor(private friendService: FriendListService,
+              private userService: UserService,
+              private router: Router,
+              private authService: AuthService) {
     userService.mystatusChanged.subscribe(status => this.friendList);
 
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
@@ -102,5 +108,24 @@ export class AppComponent implements OnInit {
     console.log(id);
   }
 
+
+  logoutservice() {
+    localStorage.clear()
+    this.authService.logout()
+    this.router.navigateByUrl('')
+  }
+
+  getCurrentLoggedInUser() {
+    this.authService.getCurrentLoggedInUser().subscribe(data => {
+      this.currentLoggedInUser = data
+      console.log(this.currentLoggedInUser)
+    }, error => {
+      console.log('can not get current logged in user')
+    })
+  }
+
+  checkLog() {
+    return  localStorage.getItem('authenticationToken')!=null;
+  }
 }
 
