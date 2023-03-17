@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {PostService} from "../service/post/postService";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
+import {UserToken} from "../model/UserToken";
 import {Post} from "../model/Post";
 import {ActivatedRoute, Router} from "@angular/router";
 import {PostStatus} from "../model/PostStatus";
@@ -12,11 +13,16 @@ import {NewPost} from "../model/Dto/newPost";
   styleUrls: ['./feed.component.css']
 })
 export class FeedComponent implements OnInit {
-  currentUserId=Number(localStorage.getItem('userId'))
+  currentLoggedInUserId=Number(localStorage.getItem('userId'))
   postForm: FormGroup[] | any;
+  userToken: UserToken | any;
   editForm: FormGroup | any;
   yoursPost: Post | undefined;
   posts: Post[] | undefined;
+  selectedImage: any = null;
+  currentUserId=Number(localStorage.getItem('userId'))
+  @ViewChild('uploadFile',{static:true}) public avatarDom : ElementRef | undefined ;
+  ArrayPicture = "";
 
   newPost: NewPost
 
@@ -42,9 +48,9 @@ export class FeedComponent implements OnInit {
 
 
     this.postForm = new FormGroup({
-      content: new FormControl("content", Validators.required),
-      postStatus: new FormControl("postStatus"),
-      img: new FormControl("img"),
+      content: new FormControl("content"),
+      postStatus: new FormControl("postStatus",Validators.required),
+      img: new FormControl(""),
       posts: new FormControl(""),
     })
 
@@ -60,13 +66,10 @@ export class FeedComponent implements OnInit {
   }
 
   showEdit(id: number) {
+    alert("ok")
     this.postService.findById(id).subscribe((data) => {
-      this.yoursPost = data
       this.editForm = new FormGroup({
-        // id: new FormControl(data.id),
-        // user: new FormGroup({
-        //   id: new FormControl(data.user.id)
-        // }),
+        id:new FormControl(data.id),
         postStatus: new FormControl(data.postStatus),
         content: new FormControl(data.content),
         img: new FormControl(data.img),
@@ -77,20 +80,52 @@ export class FeedComponent implements OnInit {
 
 
   creatPost() {
-    console.log(this.newPost)
-    this.newPost.userId=this.currentUserId;
-    this.newPost.content=this.postForm.get("content").value;
-    this.newPost.postStatus=this.postForm.get("postStatus").value;
-    this.newPost.img=this.postForm.get("img").value;
+    const filePath = this.selectedImage.name;
+    const fileRef = this.storage.ref(filePath);
+    this.storage.upload(filePath,this.selectedImage).snapshotChanges().pipe(
+      finalize(()=> (fileRef.getDownloadURL().subscribe(url =>{
+        this.ArrayPicture = url;
+        console.log("picture " + url)
+        this.newPost.userId = this.currentUserId;
+        this.newPost.content= this.postForm.get("content").value;
+        this.newPost.postStatus=this.postForm.get("postStatus").value;
+        this.newPost.img = url
+        this.postService.save(this.newPost).subscribe(()=>{
+          console.log("success")
+          this.router.navigateByUrl("/feed");
+          window.location.reload();
+        })
+      })))
+    ).subscribe()
 
 
-    this.postService.save(this.newPost).subscribe(() => {
-      this.router.navigateByUrl("/feed");
-      window.location.reload()
-    }, error => {
-      alert("lỗi đường truyền")
-      this.router.navigateByUrl("/feed")
-    })
+      // const nameImg = this.getCurrentDateTime() + this.selectedImage.name
+      // const fileRef =this.storage.ref(nameImg);
+      // this.storage.upload(nameImg,this.selectedImage).snapshotChanges().pipe(
+      //   finalize( ()=> {
+      //     fileRef.getDownloadURL().subscribe((url) =>{
+      //       console.log('test' + url)
+      //       this.newPost.userId = this.currentUserId;
+      //       this.newPost.content = this.postForm.get("content").value;
+      //       this.newPost.postStatus = this.postForm.get("postStatus").value;
+      //       this.newPost.img = url;
+      //
+      //       console.log(this.newPost)
+      //       this.postService.save(this.newPost).subscribe(() => {
+      //         console.log(this.postForm.value)
+      //         alert("success")
+      //         this.router.navigateByUrl("/feed")
+      //         window.location.reload()
+      //       },error => {
+      //         alert("false")
+      //       })
+      //     })
+      //   })
+      // )
+  }
+
+  upload(){
+    this.selectedImage = this.avatarDom?.nativeElement.files[0];
   }
 
   edit() {
@@ -103,7 +138,16 @@ export class FeedComponent implements OnInit {
 
   delete(id: number) {
     alert("Delete Success")
-    this.postService.delete(id)
-    this.router.navigate(["/feed"])
+    this.postService.delete(id).subscribe(() =>{
+      alert("delete succes")
+      this.router.navigate(["/feed"])
+    },error => {
+      alert("delete false")
+    })
+
+  }
+
+  getCurrentDateTime() : string {
+    return formatDate(new Date(),'dd-MM-yyyyhhmmssa','en-US');
   }
 }

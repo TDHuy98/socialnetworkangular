@@ -13,6 +13,10 @@ import { RegisterComponent } from './auth/register/register.component';
 import { LoginComponent } from './auth/login/login.component';
 import { RegisterSuccessComponent } from './auth/register-success/register-success.component';
 import { HomeComponent } from './home/home.component';
+import {environment} from "../environments/environment";
+import {AngularFireStorageModule} from "@angular/fire/compat/storage";
+import {AngularFireAuthModule} from "@angular/fire/compat/auth";
+import {AngularFireModule} from "@angular/fire/compat";
 import {HttpClientInterceptor} from "./http-client.interceptor";
 import {JwtModule} from "@auth0/angular-jwt";
 import { AccountSettingComponent } from './user/account-setting/account-setting.component';
@@ -20,6 +24,7 @@ import { TimeLineComponent } from './time-line/time-line.component';
 import { FriendListComponent } from './friend-list/friend-list.component';
 import { PhotosComponent } from './photos/photos.component';
 import { MainTimeLineComponent } from './main-time-line/main-time-line.component';
+
 
 @NgModule({
   declarations: [
@@ -54,6 +59,10 @@ import { MainTimeLineComponent } from './main-time-line/main-time-line.component
     }),
     RouterModule.forRoot([]),
     HttpClientModule,
+    AngularFireStorageModule,
+    AngularFireAuthModule,
+    AngularFireModule.initializeApp(environment.firebaseConfig)
+
   ],
   providers: [{provide: HTTP_INTERCEPTORS, useClass: HttpClientInterceptor, multi: true}],
   bootstrap: [AppComponent],
