@@ -4,7 +4,6 @@ import {FeedComponent} from "./feed/feed.component";
 import {BrowserModule} from '@angular/platform-browser';
 import {AppRoutingModule} from './app-routing.module';
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
-import {RouterModule} from "@angular/router";
 import {CommonComponent} from './common/common.component';
 import {ContainerComponent} from './container/container.component';
 import {IonicModule} from "@ionic/angular";
@@ -15,6 +14,7 @@ import { RegisterSuccessComponent } from './auth/register-success/register-succe
 import { HomeComponent } from './home/home.component';
 import {HttpClientInterceptor} from "./http-client.interceptor";
 import {JwtModule} from "@auth0/angular-jwt";
+import { AccountSettingComponent } from './user/account-setting/account-setting.component';
 
 @NgModule({
   declarations: [
@@ -26,12 +26,12 @@ import {JwtModule} from "@auth0/angular-jwt";
     LoginComponent,
     RegisterSuccessComponent,
     HomeComponent,
+    AccountSettingComponent,
 
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    ReactiveFormsModule,
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,

@@ -1,7 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {PostService} from "../service/post/postService";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
-import {UserToken} from "../model/UserToken";
 import {Post} from "../model/Post";
 import {ActivatedRoute, Router} from "@angular/router";
 import {PostStatus} from "../model/PostStatus";
@@ -15,7 +14,6 @@ import {NewPost} from "../model/Dto/newPost";
 export class FeedComponent implements OnInit {
   currentUserId=Number(localStorage.getItem('userId'))
   postForm: FormGroup[] | any;
-  userToken: UserToken | any;
   editForm: FormGroup | any;
   yoursPost: Post | undefined;
   posts: Post[] | undefined;

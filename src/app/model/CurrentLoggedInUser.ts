@@ -1,4 +1,4 @@
-export class CurrentUser{
+export class CurrentLoggedInUser{
   id:number;
   firstname:string;
   middlename:string;

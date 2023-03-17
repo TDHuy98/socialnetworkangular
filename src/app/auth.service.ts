@@ -5,7 +5,7 @@ import {map, Observable} from "rxjs";
 import {LoginPayload} from "./auth/login-payload";
 import jwt_decode from "jwt-decode";
 import {JwtAuthResponse} from "./auth/jwt-auth-response";
-import {CurrentUser} from "./model/CurrentUser";
+import {CurrentLoggedInUser,} from "./model/CurrentLoggedInUser";
 
 @Injectable({
   providedIn: 'root'
@@ -32,6 +32,7 @@ export class AuthService {
     token: ''
   }
   jwtAuthResponse: JwtAuthResponse
+  someOneLoggedIn: boolean;
 
   login(loginPayload: LoginPayload): Observable<any> {
     return this.httpClient.post<any>(this.url + "login", loginPayload, {responseType: "text" as "json"})
@@ -45,6 +46,7 @@ export class AuthService {
         localStorage.setItem('userId', this.jwtBody.jti)
         console.log(this.jwtBody.jti)
         console.log(localStorage.getItem('username'))
+        this.someOneLoggedIn = true
         return data;
       }));
   }
@@ -57,15 +59,11 @@ export class AuthService {
     return localStorage.getItem('authenticationToken')
   }
 
-  // getCurrentLoggedInUser(){
-  //   alert('tétt')
-  //   return this.httpClient.get<CurrentUser>(this.url+"getCurrentUser")
-  // }
-  getCurrentUserId(){
-    const id=Number(localStorage.getItem('userId'))
+  getCurrentUserId() {
+    const id = Number(localStorage.getItem('userId'))
   }
 
-  getCurrentLoggedInUser(){
-    return this.httpClient.get<CurrentUser>(this.url+'getUser/'+localStorage.getItem('userId'))
+  getCurrentLoggedInUser() {
+    return this.httpClient.get<CurrentLoggedInUser>(this.url + 'getUser/' + localStorage.getItem('userId'))
   }
 }

@@ -36,7 +36,7 @@
       </div>
       <div>
         <label class="mb-0"> Phone:</label>
-        <input type="text" formControlName="mobile" placeholder="03 5445 0543" class="bg-gray-100 h-12 mt-2 px-3 rounded-md w-full">
+        <input type="text" formControlName="mobile" [maxLength]="10" [minLength]="10" placeholder="03 5445 0543" class="bg-gray-100 h-12 mt-2 px-3 rounded-md w-full">
       </div>
     </div>
     <div>
