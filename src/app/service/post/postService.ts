@@ -4,6 +4,7 @@ import {Observable} from "rxjs";
 import {Post} from "../../model/Post";
 import {Router} from "@angular/router";
 import {NewPost} from "../../model/Dto/newPost";
+import {PostDto} from "../../model/Dto/PostDto";
 
 @Injectable({
   providedIn: 'root'
@@ -12,8 +13,8 @@ export class PostService {
 
   constructor(private http:HttpClient, private router:Router) { }
 
-  findAllByUser_Id(id:number):Observable<Post[]> {
-    return this.http.get<Post[]>('http://localhost:8080/posts/'+id)
+  findAllByUser_Id(id:number):Observable<PostDto[]> {
+    return this.http.get<PostDto[]>('http://localhost:8080/posts/'+id)
   }
 
   save(post : NewPost) : Observable<any> {

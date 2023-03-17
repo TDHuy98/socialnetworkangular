@@ -12,6 +12,7 @@ import 'firebase/database';
 import 'firebase/storage'
 import {AngularFireStorage} from "@angular/fire/compat/storage";
 import * as url from "url";
+import {PostDto} from "../model/Dto/PostDto";
 @Component({
   selector: 'app-feed',
   templateUrl: './feed.component.html',
@@ -21,24 +22,18 @@ export class FeedComponent implements OnInit {
   currentLoggedInUserId=Number(localStorage.getItem('userId'))
   postForm: FormGroup[] | any;
   editForm: FormGroup | any;
-  yoursPost: Post | undefined;
-  posts: Post[] | undefined;
+  yoursPost: PostDto | undefined;
+  posts: PostDto[] | undefined;
   selectedImage: any = null;
-  currentUserId=Number(localStorage.getItem('userId'))
   @ViewChild('uploadFile',{static:true}) public avatarDom : ElementRef | undefined ;
   ArrayPicture = "";
 
-  newPost: NewPost
+  newPost: NewPost=new NewPost()
 
   constructor(private postService: PostService, private router: Router, private route: ActivatedRoute,@Inject(AngularFireStorage) private  storage : AngularFireStorage) {
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
-    this.newPost = {
-      userId:1,
-      content: '',
-      postStatus: PostStatus.Public,
-      img: ''
-    }
-      this.postService.findAllByUser_Id(this.currentUserId).subscribe(data => {
+
+      this.postService.findAllByUser_Id(this.currentLoggedInUserId).subscribe(data => {
         this.posts= data
       },error => {
         alert("false")
@@ -77,7 +72,7 @@ export class FeedComponent implements OnInit {
         postStatus: new FormControl(data.postStatus),
         content: new FormControl(data.content),
         img: new FormControl(data.img),
-        posts: new FormControl(data.posts)
+        posts: new FormControl(data.postId)
       })
     })
   }
@@ -89,15 +84,16 @@ export class FeedComponent implements OnInit {
     this.storage.upload(filePath,this.selectedImage).snapshotChanges().pipe(
       finalize(()=> (fileRef.getDownloadURL().subscribe(url =>{
         this.ArrayPicture = url;
+        alert(this.currentLoggedInUserId)
         console.log("picture " + url)
-        this.newPost.userId = this.currentUserId;
+        this.newPost.userId = this.currentLoggedInUserId;
         this.newPost.content= this.postForm.get("content").value;
         this.newPost.postStatus=this.postForm.get("postStatus").value;
         this.newPost.img = url
         this.postService.save(this.newPost).subscribe(()=>{
           console.log("success")
           this.router.navigateByUrl("/feed");
-          window.location.reload();
+          // window.location.reload();
         })
       })))
     ).subscribe()

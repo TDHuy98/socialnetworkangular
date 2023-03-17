@@ -7,4 +7,6 @@ export class PostDto{
   lastname!:string;
   content!:string;
   postStatus!: PostStatus;
+  img:string
+  postId:number
 }
