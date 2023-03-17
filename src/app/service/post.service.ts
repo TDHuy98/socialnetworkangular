@@ -5,6 +5,7 @@ import {Post} from "../model/model/Post";
 import {ImgPost} from "../model/model/ImgPost";
 import {Like} from "../model/Like";
 import {Comment} from "../model/model/Comment";
+import {PostDto} from "../model/Dto/PostDto";
 
 @Injectable({
   providedIn: 'root'
@@ -15,8 +16,8 @@ export class PostService {
   constructor(private http: HttpClient) {
   }
 
-  getAll(): Observable<Post[]> {
-    return this.http.get<Post[]>('http://localhost:8080/posts');
+  getAll(id:number): Observable<PostDto[]> {
+    return this.http.get<PostDto[]>('http://localhost:8080/posts/'+id);
   }
 
   getAllImg(): Observable<ImgPost[]> {

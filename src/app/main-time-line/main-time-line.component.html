@@ -218,23 +218,21 @@
 
 
         <div *ngFor="let puppy of posts">
-          <div *ngIf="puppy.user.id==currentUserId">
+          <div *ngIf="puppy.userId==currentUserId">
             <div class="card lg:mx-0 uk-animation-slide-bottom-small">
               <div
-                *ngIf="puppy.postStatus=='Friend'&&currentActiveFriendsId.includes(puppy.user.id)||puppy.postStatus=='Public'">
+                *ngIf="puppy.postStatus=='Friend'&&currentActiveFriendsId.includes(puppy.userId)||puppy.postStatus=='Public'">
                 <!-- post header-->
                 <div class="flex justify-between items-center lg:p-4 p-2.5">
                   <div class="flex flex-1 items-center space-x-4">
                     <a href="#">
-                      <img src="{{puppy.user.profile}}"
+                      <img src="{{puppy.profile}}"
                            class="bg-gray-200 border border-white rounded-full w-10 h-10">
                     </a>
                     <div class="flex-1 font-semibold capitalize">
                       <a href="#"
-                         class="text-black dark:text-gray-100"> {{puppy.user.firstName + " " + puppy.user.middleName + " " + puppy.user.lastName}} </a>
-                      <div class="text-gray-700 flex items-center space-x-2"> 5 <span> hrs </span>
+                         class="text-black dark:text-gray-100"> {{puppy.firstname + " " + puppy.middlename + " " + puppy.lastname}} </a>
                         <ion-icon name="people"></ion-icon>
-                      </div>
                     </div>
                   </div>
                   <div>
@@ -379,7 +377,7 @@
                         </div>
                         <div class="text-sm flex items-center space-x-3 mt-2 ml-5">
                                             <a href="#" class="text-red-600"> <i class="uil-heart"></i> Love </a>
-                          <button *ngIf="currenLogInId==comment.user.id || currenLogInId==puppy.user.id" (click)="DeleteCmt(comment.id)" class="btn-danger hover:bg-gray-50 text-grey-900"> Delete </button>
+                          <button *ngIf="currenLogInId==comment.user.id || currenLogInId==puppy.userId" (click)="DeleteCmt(comment.id)" class="btn-danger hover:bg-gray-50 text-grey-900"> Delete </button>
                           <span> 3d </span>
                         </div>
                       </div>

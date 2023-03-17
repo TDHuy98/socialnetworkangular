@@ -84,7 +84,6 @@ export class FeedComponent implements OnInit {
     this.storage.upload(filePath,this.selectedImage).snapshotChanges().pipe(
       finalize(()=> (fileRef.getDownloadURL().subscribe(url =>{
         this.ArrayPicture = url;
-        alert(this.currentLoggedInUserId)
         console.log("picture " + url)
         this.newPost.userId = this.currentLoggedInUserId;
         this.newPost.content= this.postForm.get("content").value;
@@ -93,35 +92,10 @@ export class FeedComponent implements OnInit {
         this.postService.save(this.newPost).subscribe(()=>{
           console.log("success")
           this.router.navigateByUrl("/feed");
-          // window.location.reload();
+          window.location.reload();
         })
       })))
     ).subscribe()
-
-
-      // const nameImg = this.getCurrentDateTime() + this.selectedImage.name
-      // const fileRef =this.storage.ref(nameImg);
-      // this.storage.upload(nameImg,this.selectedImage).snapshotChanges().pipe(
-      //   finalize( ()=> {
-      //     fileRef.getDownloadURL().subscribe((url) =>{
-      //       console.log('test' + url)
-      //       this.newPost.userId = this.currentUserId;
-      //       this.newPost.content = this.postForm.get("content").value;
-      //       this.newPost.postStatus = this.postForm.get("postStatus").value;
-      //       this.newPost.img = url;
-      //
-      //       console.log(this.newPost)
-      //       this.postService.save(this.newPost).subscribe(() => {
-      //         console.log(this.postForm.value)
-      //         alert("success")
-      //         this.router.navigateByUrl("/feed")
-      //         window.location.reload()
-      //       },error => {
-      //         alert("false")
-      //       })
-      //     })
-      //   })
-      // )
   }
 
   upload(){

@@ -10,6 +10,7 @@ import {Like} from '../model/Like';
 import {FormControl, FormGroup} from "@angular/forms";
 import {Comment} from "../model/model/Comment";
 import {AuthService} from "../auth.service";
+import {PostDto} from "../model/Dto/PostDto";
 
 @Component({
   selector: 'app-main-time-line',
@@ -24,13 +25,13 @@ export class MainTimeLineComponent implements OnInit {
   currentId = Number(localStorage.getItem("userId"));
 
   // @ts-ignore
-  currentUserLogin= JSON.parse(localStorage.getItem("loggedInUser"));
+  currentUserLogin = JSON.parse(localStorage.getItem("loggedInUser"));
   currenLogInId = this.currentUserLogin.id;
   id: number | undefined;
   currenViewtUser = new User;
   currentUserId = this.currentUserLogin.id;
   friendList: Friend[] = []
-  posts: Post[] = [];
+  posts: PostDto[] = [];
   @Input() activeFriendsId: number[] = []
 
   currentListFriends: Friend[] = [];
@@ -63,6 +64,7 @@ export class MainTimeLineComponent implements OnInit {
 
 
   ngOnInit(): void {
+    this.currentId=Number(localStorage.getItem('currentUserId'))
     this.friendService.getAll().subscribe(
       data => {
         this.friendList = data;
@@ -73,7 +75,7 @@ export class MainTimeLineComponent implements OnInit {
       })
     this.showDit()
 
-    this.postService.getAll().subscribe(
+    this.postService.getAll(this.currentId).subscribe(
       (data) => {
         this.posts = data;
         this.postService.findAllLike().subscribe(
@@ -96,7 +98,7 @@ export class MainTimeLineComponent implements OnInit {
   }
 
   showDit() {
-    this.postService.getAll().subscribe(
+    this.postService.getAll(this.currentId).subscribe(
       (data) => {
         console.log(data);
         this.posts = data;
@@ -142,7 +144,7 @@ export class MainTimeLineComponent implements OnInit {
       this.currenViewtUser = data
     });
 
-    this.postService.getAll().subscribe((data) => {
+    this.postService.getAll(this.currentId).subscribe((data) => {
         this.posts = data;
         this.currentPostLiked = []
         this.postService.findAllLike().subscribe(data => {
