@@ -81,7 +81,8 @@ export class AppComponent implements OnInit {
         console.log(this.friendList)
       }
     )
-    this.userService.findById(1).subscribe(
+
+    this.userService.findById(Number(localStorage.getItem('userId'))).subscribe(
       data => {
         console.log(data);
         this.currentUser = data;

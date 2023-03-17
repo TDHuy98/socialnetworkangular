@@ -1,12 +1,17 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, ElementRef, Inject, OnInit, ViewChild} from '@angular/core';
 import {PostService} from "../service/post/postService";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
-import {UserToken} from "../model/UserToken";
 import {Post} from "../model/Post";
 import {ActivatedRoute, Router} from "@angular/router";
 import {PostStatus} from "../model/PostStatus";
 import {NewPost} from "../model/Dto/newPost";
-
+import {formatDate} from "@angular/common";
+import {finalize} from "rxjs";
+import 'firebase/auth';
+import 'firebase/database';
+import 'firebase/storage'
+import {AngularFireStorage} from "@angular/fire/compat/storage";
+import * as url from "url";
 @Component({
   selector: 'app-feed',
   templateUrl: './feed.component.html',
@@ -15,7 +20,6 @@ import {NewPost} from "../model/Dto/newPost";
 export class FeedComponent implements OnInit {
   currentLoggedInUserId=Number(localStorage.getItem('userId'))
   postForm: FormGroup[] | any;
-  userToken: UserToken | any;
   editForm: FormGroup | any;
   yoursPost: Post | undefined;
   posts: Post[] | undefined;
@@ -26,7 +30,7 @@ export class FeedComponent implements OnInit {
 
   newPost: NewPost
 
-  constructor(private postService: PostService, private router: Router, private route: ActivatedRoute) {
+  constructor(private postService: PostService, private router: Router, private route: ActivatedRoute,@Inject(AngularFireStorage) private  storage : AngularFireStorage) {
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
     this.newPost = {
       userId:1,

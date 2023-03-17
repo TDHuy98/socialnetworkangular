@@ -3,6 +3,7 @@ import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {Post} from "../../model/Post";
 import {Router} from "@angular/router";
+import {NewPost} from "../../model/Dto/newPost";
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +16,7 @@ export class PostService {
     return this.http.get<Post[]>('http://localhost:8080/posts/'+id)
   }
 
-  save(post : Post) : Observable<any> {
+  save(post : NewPost) : Observable<any> {
     return this.http.post('http://localhost:8080/posts',post)
   }
 
