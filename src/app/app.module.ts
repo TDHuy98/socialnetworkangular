@@ -22,6 +22,7 @@ import { TimeLineComponent } from './time-line/time-line.component';
 import { FriendListComponent } from './friend-list/friend-list.component';
 import { PhotosComponent } from './photos/photos.component';
 import { MainTimeLineComponent } from './main-time-line/main-time-line.component';
+import { ChangePasswordSuccessComponent } from './auth/change-password-success/change-password-success.component';
 
 
 @NgModule({
@@ -37,7 +38,8 @@ import { MainTimeLineComponent } from './main-time-line/main-time-line.component
     TimeLineComponent,
     FriendListComponent,
     PhotosComponent,
-    MainTimeLineComponent
+    MainTimeLineComponent,
+    ChangePasswordSuccessComponent
 
   ],
   imports: [

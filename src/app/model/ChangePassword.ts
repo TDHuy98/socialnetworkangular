@@ -1,4 +1,4 @@
-export class CheckPassword{
+export class ChangePassword {
   userId:number;
   password:string
 }
