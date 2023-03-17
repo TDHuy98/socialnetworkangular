@@ -21,17 +21,17 @@
       <div class="header_search"><i class="uil-search-alt"></i>
 <form [formGroup]="formSearch" (submit)="searchByName()">
 <!--          [formGroup]="formSearch" (submit)="searchByName()"-->
-        <input (change)="searchByName()" formControlName="firstName" type="text" class="form-control" placeholder="Search for Friends , Videos and more.."
+        <input  formControlName="firstName" type="text" class="form-control" placeholder="Search for Friends , Videos and more.."
                autocomplete="off">
 </form>
         <div uk-drop="mode: click" class="header_search_dropdown">
 
-          <h4 class="search_title"> Recently </h4>
+          <h4 class="search_title">  </h4>
           <ul>
             <li *ngFor="let u of users">
               <a href="">
                 <img src="assets/images/avatars/avatar-1.jpg" alt="" class="list-avatar">
-                <div class="list-name" style="float: right"> {{u.firstname}} {{u.lastname}}</div>
+                <div class="list-name" style="float: right" > {{u.firstname}} {{u.lastname}}</div>
               </a>
             </li>
 <!--            <li>-->

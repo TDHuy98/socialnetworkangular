@@ -13,6 +13,8 @@ import {User} from "../model/User";
   styleUrls: ['./common.component.css']
 })
 export class CommonComponent implements OnInit{
+  title: string = 'title';
+
   formSearch!: FormGroup;
   users: User[] = []
   constructor(private authService: AuthService, private router:Router,private userService: UserService) {
