@@ -4,6 +4,11 @@ import {Friend} from "../model/friend";
 import {User} from "../model/User";
 import {UserService} from "../service/user.service";
 import {FriendListService} from "../service/friend-list.service";
+import {PostService} from "../service/post.service";
+import {Post} from "../model/model/Post";
+import {Like} from '../model/Like';
+import {FormControl, FormGroup} from "@angular/forms";
+import {Comment} from "../model/model/Comment";
 
 @Component({
   selector: 'app-main-time-line',
@@ -11,14 +16,41 @@ import {FriendListService} from "../service/friend-list.service";
   styleUrls: ['./main-time-line.component.css']
 })
 export class MainTimeLineComponent implements OnInit, OnChanges {
+  formCmt: FormGroup = new FormGroup({
+    content: new FormControl(""),
+    name: new FormControl(""),
+  })
   currentId: number = 1;
+  currentUserLogin: User;
+
   currenLogInId: number = 1;
   id: number | undefined;
   currentUser = new User;
   currentUserId: number = 0;
   friendList: Friend[] = []
+  posts: Post[] = [];
+  @Input() activeFriendsId: number[] = []
 
-  constructor(private route: ActivatedRoute, private userService: UserService, private router: Router, private friendService: FriendListService) {
+  currentListFriends: Friend[] = [];
+  currentListFriendsId: number[];
+  currentListType: number[];
+  activeFriends: Friend[] = [];
+  NewFriends: Friend[] = [];
+  BlockFriends: Friend[] = [];
+  newFriendsId: number[] = [];
+  blockFriendsId: number[] = [];
+  currentNewFriendsId: number[] = [];
+  currentBlockFriendsId: number[] = [];
+  currentActiveFriendsId: number[] = [];
+  currentSenderFriendsId: number[] = [];
+  currentAllLike: Like[] = [];
+  currentPostLiked: number[] = [];
+  mutualFriendsList: Friend[] = [];
+  curentLoginUserActiveFriendList: Friend[] = []
+  allCmt: Comment[] = [];
+  thisPostLike: number
+
+  constructor(private route: ActivatedRoute, private userService: UserService, private router: Router, private friendService: FriendListService, private postService: PostService) {
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
 
   }
@@ -30,19 +62,69 @@ export class MainTimeLineComponent implements OnInit, OnChanges {
   ngOnInit(): void {
     this.friendService.getAll().subscribe(
       data => {
-
         this.friendList = data;
 
+        this.currentActiveFriendsId = this.showFriendListIdByIdUserAndStatus(this.currenLogInId, 'Active', 'Normal', this.friendList)
+        this.currentNewFriendsId    = this.showFriendListIdByIdUserAndStatus(this.currenLogInId, 'New', 'Normal', this.friendList)
+        this.currentBlockFriendsId  = this.showFriendListIdByIdUserAndStatus(this.currenLogInId, 'Block', 'Normal', this.friendList)
+        this.currentSenderFriendsId = this.showFriendListIdByIdUserAndStatus(this.currenLogInId, 'Sender', 'Normal', this.friendList)
+      })
+    this.showDit()
+
+    this.postService.getAll().subscribe(
+      (data) => {
+        this.posts = data;
+        this.postService.findAllLike().subscribe(
+          (data) => {
+            this.currentAllLike = data;
+          }
+        )
+        // this.imgService.getAllImg().subscribe(
+        //   (data) => {
+        //     console.log(data);
+        //     this.imgs = data;
+        //
+        //
+        //   }
+        // )
+
+      }
+    )
+  }
+
+  showDit() {
+    this.postService.getAll().subscribe(
+      (data) => {
+        console.log(data);
+        this.posts = data;
+        this.postService.findAllLike().subscribe(
+          (data) => {
+            this.currentAllLike = data;
+
+            this.postService.getAllComment().subscribe(
+              (data) => {
+                this.allCmt = data;
+              }
+            )
+          }
+        )
+      }
+    )
+    this.friendService.getAll().subscribe(
+      data => {
+        this.friendList = data;
+        this.curentLoginUserActiveFriendList=[]
+
+        data.forEach(f=>{
+          if (f.source.id==this.currenLogInId){
+            this.curentLoginUserActiveFriendList.push(f)
+          }
+        })
         this.currentActiveFriendsId = this.showFriendListIdByIdUserAndStatus(this.currenLogInId, 'Active', 'Normal', this.friendList)
         this.currentNewFriendsId = this.showFriendListIdByIdUserAndStatus(this.currenLogInId, 'New', 'Normal', this.friendList)
         this.currentBlockFriendsId = this.showFriendListIdByIdUserAndStatus(this.currenLogInId, 'Block', 'Normal', this.friendList)
         this.currentSenderFriendsId = this.showFriendListIdByIdUserAndStatus(this.currenLogInId, 'Sender', 'Normal', this.friendList)
-
       })
-    this.showDit()
-  }
-
-  showDit() {
     // @ts-ignore
     this.currentId = +this.route.snapshot.paramMap.get('id');
     // @ts-ignore
@@ -54,42 +136,34 @@ export class MainTimeLineComponent implements OnInit, OnChanges {
       this.currentId = 1
     }
     this.userService.findById(this.currentId).subscribe(data => {
+      this.currentUserLogin = data
       this.currentUser = data
     });
 
+    this.postService.getAll().subscribe((data) => {
+        this.posts = data;
+        this.currentPostLiked = []
+        this.postService.findAllLike().subscribe(data => {
+            this.currentAllLike = data;
+            data.forEach(like => {
+              if (like.userId == this.currenLogInId) {
+                this.currentPostLiked.push(like.postId)
+              }
+            })
 
-    console.log('actve fr', this.currentActiveFriendsId)
-    console.log(this.currentNewFriendsId)
-    console.log(this.currentBlockFriendsId)
-  }
+          }
+        )
+        // this.imgService.getAllImg().subscribe(
+        //   (data) => {
+        //     console.log(data);
+        //     this.imgs = data;
+        //
+        //
+        //   }
+        // )
 
-  @Input() activeFriendsId: number[] = []
-  // @Input() NewFriends:Friend[] =[]
-  // @Input() BlockFriends:Friend[] =[]
-
-  currentListFriends: Friend[] = []
-  currentListFriendsId: number[]
-  currentListType: number[]
-  activeFriends: Friend[] = []
-  NewFriends: Friend[] = []
-  BlockFriends: Friend[] = []
-  newFriendsId: number[] = []
-  blockFriendsId: number[] = []
-  currentNewFriendsId: number[] = []
-  currentBlockFriendsId: number[] = []
-  currentActiveFriendsId: number[] = []
-  currentSenderFriendsId: number[] = []
-
-  showFriends(choose: number) {
-    if (choose == 1) {
-      this.currentListFriends = this.activeFriends
-    }
-    if (choose == 2) {
-      this.currentListFriends = this.NewFriends
-    }
-    if (choose == 3) {
-      this.currentListFriends = this.BlockFriends
-    }
+      }
+    )
   }
 
   showFriendListByIdUserAndStatus(id: number, status: string, type: string) {
@@ -99,9 +173,16 @@ export class MainTimeLineComponent implements OnInit, OnChanges {
         this.currentListFriends.push(this.friendList[i])
       }
     }
-    console.log(this.currentListFriends)
-    console.log(this.friendList)
-    console.log(this.currentUserId)
+  }
+  getFriendList: Friend[]=[]
+  getFriendListByIdUserAndStatus(id: number, status: string, type: string) {
+    this.getFriendList = []
+    for (let i = 0; i < this.friendList.length; i++) {
+      if (this.friendList[i].friendshipStatus == status && this.friendList[i].relationshipType == type && this.friendList[i].source.id == id) {
+        this.getFriendList.push(this.friendList[i])
+      }
+    }
+    return this.getFriendList;
   }
 
   showFriendListIdByIdUserAndStatus(id: number, status: string, type: string, listFriend: Friend[]) {
@@ -110,7 +191,6 @@ export class MainTimeLineComponent implements OnInit, OnChanges {
     for (let i = 0; i < this.friendList.length; i++) {
       if (listFriend[i].friendshipStatus == status && listFriend[i].relationshipType == type && listFriend[i].source.id == id) {
         this.currentListType.push(listFriend[i].target.id)
-        console.log('showFriendListIdByIdUserAndStatus')
       }
     }
     return this.currentListType
@@ -118,7 +198,6 @@ export class MainTimeLineComponent implements OnInit, OnChanges {
 
   fowardToMainTimeLine(id: number) {
     this.router.navigateByUrl("/mainTimeLine/" + id)
-    console.log(id);
   }
 
   // addFriend
@@ -148,19 +227,23 @@ export class MainTimeLineComponent implements OnInit, OnChanges {
     this.friendService.addFriend(friend).subscribe((data) => {
         // @ts-ignore
         this.friendService.addFriend(friendTarget).subscribe((data) => {
-          window.location.reload()
-
+            this.showDit()
           }
         );
       }
     );
   }
+
   acceptFiend(sourceId: number, targetId: number, relationshipType: string, friendshipStatus: string) {
     let sourceCancer = -1;
     let targetCancer = -1;
-    this.friendList.forEach(f=> {
-      if (f.target.id == targetId && f.source.id== sourceId){sourceCancer= f.id}
-      if (f.target.id == sourceId && f.source.id == targetId) {targetCancer= f.id}
+    this.friendList.forEach(f => {
+      if (f.target.id == targetId && f.source.id == sourceId) {
+        sourceCancer = f.id
+      }
+      if (f.target.id == sourceId && f.source.id == targetId) {
+        targetCancer = f.id
+      }
     })
     const friend = {
       // id:sourceId,
@@ -184,15 +267,14 @@ export class MainTimeLineComponent implements OnInit, OnChanges {
       relationshipType: 'Normal',
       friendshipStatus: 'Active',
     };
-    this.friendRequestCancerNoReload(sourceId,targetId)
+    this.friendRequestCancerNoReload(sourceId, targetId)
     // this.friendRequestCancer(targetId,sourceId)
     // console.log(this.friend)
-    console.log(sourceCancer+"_"+targetCancer)
     // @ts-ignore
     this.friendService.addFriend(friend).subscribe((data) => {
         // @ts-ignore
         this.friendService.addFriend(friendTarget).subscribe((data) => {
-          window.location.reload()
+            this.showDit()
           }
         );
       }
@@ -216,48 +298,137 @@ export class MainTimeLineComponent implements OnInit, OnChanges {
       }
     );
   }
+
   friendRequestCancerNoReload(sourceId: number, targetId: number) {
     let sourceCancer = -1;
     let targetCancer = -1;
-    this.friendList.forEach(f=> {
-      if (f.target.id == targetId && f.source.id== sourceId){
-        sourceCancer= f.id
+    this.friendList.forEach(f => {
+      if (f.target.id == targetId && f.source.id == sourceId) {
+        sourceCancer = f.id
       }
       if (f.target.id == sourceId && f.source.id == targetId) {
-        targetCancer= f.id
+        targetCancer = f.id
       }
     })
-    console.log(sourceCancer+"_"+targetCancer)
-    // @ts-ignore
-    this.friendService.unFriend(sourceCancer).subscribe((data) => {
-      this.friendService.unFriend(targetCancer).subscribe((data) => {
-        }
-      );
-      }
-    );
-
-  }
-  friendRequestCancer(sourceId: number, targetId: number) {
-    let sourceCancer = -1;
-    let targetCancer = -1;
-    this.friendList.forEach(f=> {
-      if (f.target.id == targetId && f.source.id== sourceId){
-        sourceCancer= f.id
-      }
-      if (f.target.id == sourceId && f.source.id == targetId) {
-        targetCancer= f.id
-      }
-    })
-    console.log(sourceCancer+"_"+targetCancer)
     // @ts-ignore
     this.friendService.unFriend(sourceCancer).subscribe((data) => {
         this.friendService.unFriend(targetCancer).subscribe((data) => {
-            window.location.reload()
-
           }
         );
       }
     );
 
+  }
+
+  friendRequestCancer(sourceId: number, targetId: number) {
+    let sourceCancer = -1;
+    let targetCancer = -1;
+    this.friendList.forEach(f => {
+      if (f.target.id == targetId && f.source.id == sourceId) {
+        sourceCancer = f.id
+      }
+      if (f.target.id == sourceId && f.source.id == targetId) {
+        targetCancer = f.id
+      }
+    })
+    // @ts-ignore
+    this.friendService.unFriend(sourceCancer).subscribe((data) => {
+        this.friendService.unFriend(targetCancer).subscribe((data) => {
+            this.showDit()
+          }
+        );
+      }
+    );
+  }
+
+
+  Like(postId: number, userId: number, userLastName: string) {
+    let flagLike = 0;
+    let flagLikeID = -1;
+    const like = {
+      postId: postId,
+      userId: userId,
+      userLastName: userLastName,
+    };
+    this.currentAllLike.forEach(l => {
+      if (l.userId == userId && l.postId == postId) {
+        flagLike += 1;
+        flagLikeID = l.id
+      }
+    })
+
+    if (flagLike == 0) {
+      //@ts-ignore
+      this.postService.like(like).subscribe((data) => {
+          this.showDit()
+        }
+      );
+    }
+    if (flagLike == 1) {
+      this.postService.unLike(flagLikeID).subscribe((data) => {
+          this.showDit()
+        }
+      );
+    }
+
+  }
+
+  cmt(idPost: number) {
+    const cmt = {
+      content: this.formCmt.controls["content"].value,
+      user: {
+        "id": this.currenLogInId
+      },
+      post: {
+        "id": idPost
+      }
+    };
+    // console.log(this.posts)
+    // @ts-ignore
+    this.postService.comment(cmt).subscribe((data) => {
+        this.formCmt.reset();
+      },
+    );
+    this.showDit()
+  }
+
+  coutLike(idPost: number) {
+    this.thisPostLike = 0;
+    for (let i = 0; i < this.currentAllLike.length; i++) {
+      if (this.currentAllLike[i].postId == idPost) {
+        this.thisPostLike += 1;
+      }
+    }
+    if (this.thisPostLike == 1) {
+      return 'You like this post'
+    } else if (this.thisPostLike == 0) {
+      return 'No one like this post'
+    } else
+      return (this.thisPostLike - 1 + 'Other like this post')
+  }
+
+  DeleteCmt(id: number) {
+    this.postService.commentDelete(id).subscribe(() => {
+      this.showDit()
+    })
+
+  }
+mutualTarget: Friend[] =[];
+  mutualfriends() {
+    this.mutualFriendsList = this.getFriendListByIdUserAndStatus(this.currenLogInId, 'Active', 'Normal')
+    this.mutualTarget = this.getFriendListByIdUserAndStatus(this.currentUserId, 'Active', 'Normal')
+    console.log(this.currentUserId,this.currenLogInId)
+    this.curentLoginUserActiveFriendList=[]
+
+    for (let i = 0; i < this.mutualTarget.length; i++) {
+      if (this.mutualFriendsList.includes(this.mutualTarget[i])) {
+        this.curentLoginUserActiveFriendList.push(this.mutualTarget[i])
+      }
+    }
+    this.currentListFriends=this.curentLoginUserActiveFriendList
+     console.log("mu",this.mutualFriendsList)
+     console.log("ac",this.activeFriends)
+     console.log("cu",this.curentLoginUserActiveFriendList)
+    return this.curentLoginUserActiveFriendList
   }
 }

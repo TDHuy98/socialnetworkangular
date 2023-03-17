@@ -1,12 +1,12 @@
 import {ImgPost} from "./ImgPost";
-import {User} from "./User";
 
 export class Post {
-  id: number;
-  content: string;
-  postTime: string;
-  title: string;
-  user: {id: number, username: string, avatar: string}
+ id : number;
+ content : string;
+ postStatus : string;
+ img : string;
+
+  user: {id: number, firstName: string, middleName:string, lastName:string,profile:string , avatar: string}
 
 
 

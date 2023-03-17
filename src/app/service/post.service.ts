@@ -3,6 +3,8 @@ import {HttpClient, HttpClientModule} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {Post} from "../model/model/Post";
 import {ImgPost} from "../model/model/ImgPost";
+import {Like} from "../model/Like";
+import {Comment} from "../model/model/Comment";
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +16,7 @@ export class PostService {
   }
 
   getAll(): Observable<Post[]> {
-    return this.http.get<Post[]>('http://localhost:8080/posts');
+    return this.http.get<Post[]>('http://localhost:8080/post');
   }
 
   getAllImg(): Observable<ImgPost[]> {
@@ -22,26 +24,48 @@ export class PostService {
   }
 
   findAll(): Observable<Post[]> {
-    return this.http.get<Post[]>('http://localhost:8080/posts');
+    return this.http.get<Post[]>('http://localhost:8080/post');
   }
 
   findById(id: number): Observable<Post> {
-    return this.http.get<Post>('http://localhost:8080/posts/' + id);
+    return this.http.get<Post>('http://localhost:8080/post/' + id);
   }
 
 
   delete(id: number): Observable<void> {
-    return this.http.delete<void>(`http://localhost:8080/posts/${id}`);
+    return this.http.delete<void>(`http://localhost:8080/post/${id}`);
   }
 
   create(post: { postTime: string; user: { id: number }; content: any }): Observable<Post> {
-    return this.http.post<Post>('http://localhost:8080/posts', post);
+    return this.http.post<Post>('http://localhost:8080/post', post);
   }
 
-
-
+  like(like: Like): Observable<Like>{
+    return this.http.post<Like>(`http://localhost:8080/like`,like)
+  }
+  unLike(id: number): Observable<void> {
+    return this.http.delete<void>(`http://localhost:8080/like/${id}`);
+  }
+  findAllLikeByIdPost(id:number): Observable<Like[]> {
+    return this.http.get<Like[]>(`http://localhost:8080/like/post ${id}`);
+  }
+  findAllLike(): Observable<Like[]> {
+    return this.http.get<Like[]>('http://localhost:8080/like');
+  }
   edit(post: Post): Observable<any> {
     return this.http.put('http://localhost:8080/posts', post);
+  }
+  getAllComment(): Observable<Comment[]> {
+    return this.http.get<Comment[]>('http://localhost:8080/cmt');
+  }
+  comment(cmt: Comment): Observable<Comment>{
+    return this.http.post<Comment>(`http://localhost:8080/cmt`,cmt)
+  }
+  commentDelete(id: number): Observable<void> {
+    return this.http.delete<void>(`http://localhost:8080/cmt/${id}`);
+  }
+  coutLike(id:number): Observable<any>{
+    return this.http.get<any>(`http://localhost:8080/like/coutLike/${id}`)
   }
 }
 
