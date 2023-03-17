@@ -22,7 +22,7 @@
 
       <div class="profile_avatar">
         <div class="profile_avatar_holder">
-          <img src="{{currentUser.profile}}" alt="">
+          <img src="{{currenViewtUser.profile}}" alt="">
         </div>
         <div class="user_status status_online"></div>
         <div class="icon_change_photo" hidden>
@@ -31,8 +31,8 @@
       </div>
 
       <div class="profile_info">
-        <h1>{{currentUser.firstName + " " + currentUser.middleName + " " + currentUser.lastName}} </h1>
-        <p> {{currentUser.intro + "  "}}<a> </a></p>
+        <h1>{{currenViewtUser.firstName + " " + currenViewtUser.middleName + " " + currenViewtUser.lastName}} </h1>
+        <p> {{currenViewtUser.intro + "  "}}<a> </a></p>
       </div>
 
     </div>
@@ -54,7 +54,7 @@
       <div class="flex items-center space-x-1.5 flex-shrink-0 pr-4 mb-2 justify-center order-1 relative">
 
         <!-- add story -->
-        <a *ngIf="currentUser.id==1" href="#"
+        <a *ngIf="currenViewtUser.id==1" href="#"
            class="flex items-center justify-center h-10 px-5 rounded-md bg-blue-600 text-white space-x-1.5 hover:text-white"
            uk-toggle="target: #create-post-modal">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5">

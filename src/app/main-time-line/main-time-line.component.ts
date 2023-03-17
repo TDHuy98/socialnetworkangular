@@ -15,7 +15,7 @@ import {Comment} from "../model/model/Comment";
   templateUrl: './main-time-line.component.html',
   styleUrls: ['./main-time-line.component.css']
 })
-export class MainTimeLineComponent implements OnInit, OnChanges {
+export class MainTimeLineComponent implements OnInit {
   formCmt: FormGroup = new FormGroup({
     content: new FormControl(""),
     name: new FormControl(""),
@@ -25,7 +25,7 @@ export class MainTimeLineComponent implements OnInit, OnChanges {
 
   currenLogInId: number = 1;
   id: number | undefined;
-  currentUser = new User;
+  currenViewtUser = new User;
   currentUserId: number = 0;
   friendList: Friend[] = []
   posts: Post[] = [];
@@ -55,15 +55,12 @@ export class MainTimeLineComponent implements OnInit, OnChanges {
 
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    throw new Error('Method not implemented.');
-  }
+
 
   ngOnInit(): void {
     this.friendService.getAll().subscribe(
       data => {
         this.friendList = data;
-
         this.currentActiveFriendsId = this.showFriendListIdByIdUserAndStatus(this.currenLogInId, 'Active', 'Normal', this.friendList)
         this.currentNewFriendsId    = this.showFriendListIdByIdUserAndStatus(this.currenLogInId, 'New', 'Normal', this.friendList)
         this.currentBlockFriendsId  = this.showFriendListIdByIdUserAndStatus(this.currenLogInId, 'Block', 'Normal', this.friendList)
@@ -137,7 +134,7 @@ export class MainTimeLineComponent implements OnInit, OnChanges {
     }
     this.userService.findById(this.currentId).subscribe(data => {
       this.currentUserLogin = data
-      this.currentUser = data
+      this.currenViewtUser = data
     });
 
     this.postService.getAll().subscribe((data) => {
