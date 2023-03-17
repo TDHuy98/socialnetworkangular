@@ -1,13 +1,74 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
+
+<!-- Mirrored from demo.foxthemes.net/socialitev2.2/timeline.html by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 07 Mar 2023 03:06:32 GMT -->
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Favicon -->
+  <link href="assets/images/favicon.png" rel="icon" type="image/png">
+
+  <!-- Basic Page Needs
+      ================================================== -->
+  <title>Socialite Template</title>
   <meta charset="utf-8">
-  <title>Socialnetworkangular</title>
-  <base href="/">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <meta name="description" content="Socialite is - Professional A unique and beautiful collection of UI elements">
+  <base href="/">
+
+  <!-- icons
+  ================================================== -->
+  <link rel="stylesheet" href="assets/css/icons.css">
+
+  <!-- CSS
+  ================================================== -->
+  <link rel="stylesheet" href="src/assets/css/uikit.css">
+  <link rel="stylesheet" href="src/assets/css/style.css">
+  <link rel="stylesheet" href="src/assets/unpkg.com/tailwindcss@2.2.19/dist/tailwind.min.css" >
+
 </head>
+
 <body>
-  <app-root></app-root>
+<app-root></app-root>
+
 </body>
+<!-- For Night mode -->
+<script>
+  (function (window, document, undefined) {
+    'use strict';
+    if (!('localStorage' in window)) return;
+    var nightMode = localStorage.getItem('gmtNightMode');
+    if (nightMode) {
+      document.documentElement.className += ' night-mode';
+    }
+  })(window, document);
+
+  (function (window, document, undefined) {
+
+    'use strict';
+
+    // Feature test
+    if (!('localStorage' in window)) return;
+
+    // Get our newly insert toggle
+    var nightMode = document.querySelector('#night-mode');
+    if (!nightMode) return;
+
+    // When clicked, toggle night mode on or off
+    nightMode.addEventListener('click', function (event) {
+      event.preventDefault();
+      document.documentElement.classList.toggle('dark');
+      if (document.documentElement.classList.contains('dark')) {
+        localStorage.setItem('gmtNightMode', true);
+        return;
+      }
+      localStorage.removeItem('gmtNightMode');
+    }, false);
+
+  })(window, document);
+</script>
+<!-- Javascript================================================== -->
+<script src="main.js" type="module"></script>
+
 </html>

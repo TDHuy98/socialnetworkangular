@@ -6,6 +6,7 @@ import {RegisterComponent} from "./auth/register/register.component";
 import {RegisterSuccessComponent} from "./auth/register-success/register-success.component";
 import {HomeComponent} from "./home/home.component";
 import {AccountSettingComponent} from "./user/account-setting/account-setting.component";
+import {MainTimeLineComponent} from "./main-time-line/main-time-line.component";
 
 const routes: Routes = [
   { path:'' ,pathMatch : "full",redirectTo:'login'},
@@ -14,11 +15,13 @@ const routes: Routes = [
   {path:'register',component:RegisterComponent},
   {path:'register-success', component:RegisterSuccessComponent},
   {path: 'home' ,redirectTo:'feed'},
-  {path:'setting',component:AccountSettingComponent}
+  {path:'setting',component:AccountSettingComponent},
+  {path:'',component: MainTimeLineComponent},
+  {path:'mainTimeLine/:id', component: MainTimeLineComponent}
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes,{onSameUrlNavigation: 'reload'})],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }
