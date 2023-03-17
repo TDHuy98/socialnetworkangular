@@ -17,14 +17,19 @@ export class PostService {
   }
 
   save(post : NewPost) : Observable<any> {
-    return this.http.post('http://localhost:8080/posts',post)
+    return this.http.post('http://localhost:8080/posts/create',post)
   }
 
   delete(id : number) : Observable<any> {
-    return this.http.put('http://localhost:8080/posts/'+id,id)
+    return this.http.put('http://localhost:8080/posts/delete/'+id,id)
   }
 
+
   findById(id : number): Observable<any> {
-    return this.http.get<Post>('http://localhost:8080/post/findById/'+ id)
+    return this.http.get<Post>('http://localhost:8080/posts/findById/'+ id)
+  }
+
+  edit(post : any) : Observable<any> {
+    return this.http.put('http://localhost:8080/posts/edit',post);
   }
 }
