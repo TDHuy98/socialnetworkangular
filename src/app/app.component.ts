@@ -18,9 +18,9 @@ export class AppComponent implements OnInit {
   currentUser: User = new User();
   currenTargettUser: User = new User();
   // @ts-ignore
-  currentLoginUser=new CurrentLoggedInUser();
+  currentLoginUser = new CurrentLoggedInUser();
 
-  currentUserId : number;
+  currentUserId: number;
   currentNewFriendsId: number[] = []
   currentBlockFriendsId: number[] = []
   currentActiveFriendsId: number[] = []
@@ -43,16 +43,16 @@ export class AppComponent implements OnInit {
 
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
 
-    this.currentLoggedInUser={
-      id:1,
-      firstname:'',
-      middlename:'',
-      lastname:'',
-      profile:'',
-      dateOfBirth:Date,
-      email:'',
-      username:'',
-      mobile:''
+    this.currentLoggedInUser = {
+      id: 1,
+      firstname: '',
+      middlename: '',
+      lastname: '',
+      profile: '',
+      dateOfBirth: Date,
+      email: '',
+      username: '',
+      mobile: ''
     }
   }
 
@@ -68,54 +68,58 @@ export class AppComponent implements OnInit {
 
 
   ngOnInit(): void {
-    this.friendService.getAll().subscribe(
-      data => {
-        this.friendList = data;
+    if (localStorage.length != 0) {
+      this.friendService.getAll().subscribe(
+        data => {
+          this.friendList = data;
 
-        for (let i = 0; i < this.friendList.length; i++) {
-          if (this.friendList[i].source.id == this.currentUserId && this.friendList[i].friendshipStatus == ("Active")) {
-            this.activeFriendsId.push(this.friendList[i].id);
-            this.activeFriends.push(this.friendList[i])
+          for (let i = 0; i < this.friendList.length; i++) {
+            if (this.friendList[i].source.id == this.currentUserId && this.friendList[i].friendshipStatus == ("Active")) {
+              this.activeFriendsId.push(this.friendList[i].id);
+              this.activeFriends.push(this.friendList[i])
+            }
           }
-        }
-        for (let i = 0; i < this.friendList.length; i++) {
-          if (this.friendList[i].source.id == this.currentUserId && this.friendList[i].friendshipStatus == ("New")) {
-            this.newFriendsId.push(this.friendList[i].id);
-            this.NewFriends.push(this.friendList[i])
+          for (let i = 0; i < this.friendList.length; i++) {
+            if (this.friendList[i].source.id == this.currentUserId && this.friendList[i].friendshipStatus == ("New")) {
+              this.newFriendsId.push(this.friendList[i].id);
+              this.NewFriends.push(this.friendList[i])
 
+            }
           }
-        }
-        for (let i = 0; i < this.friendList.length; i++) {
-          if (this.friendList[i].source.id == this.currentUserId && this.friendList[i].friendshipStatus == ("Block")) {
-            this.blockFriendsId.push(this.friendList[i].id);
-            this.BlockFriends.push(this.friendList[i])
+          for (let i = 0; i < this.friendList.length; i++) {
+            if (this.friendList[i].source.id == this.currentUserId && this.friendList[i].friendshipStatus == ("Block")) {
+              this.blockFriendsId.push(this.friendList[i].id);
+              this.BlockFriends.push(this.friendList[i])
+            }
           }
+          console.log(this.friendList)
         }
-        console.log(this.friendList)
-      }
-    )
+      )
 
-    this.userService.findById(Number(localStorage.getItem('userId'))).subscribe(
-      data => {
-        console.log(data);
-        this.currentUser = data;
+      this.userService.findById(Number(localStorage.getItem('userId'))).subscribe(
+        data => {
+          console.log(data);
+          this.currentUser = data;
 
-      }
-    )
-    //get current logged in user and save them to localstorage
+        }
+      )
+      //get current logged in user and save them to localstorage
+
       this.authService.getCurrentLoggedInUser().subscribe(data => {
         this.currentLoggedInUser = data
-        this.currentUserId=this.currentLoginUser.id;
+        this.currentUserId = this.currentLoginUser.id;
         console.log(JSON.stringify(this.currentLoggedInUser))
         console.log(this.currentLoggedInUser.id)
         console.log(this.currentLoggedInUser.profile)
         localStorage.setItem('loggedInUser', JSON.stringify(this.currentLoggedInUser))
+        console.log(localStorage.getItem('loggedInUser'))
       }, error => {
         console.log('can not get current logged in user')
       })
-
-    console.log(this.currentLoggedInUser)
+      console.log(this.currentLoggedInUser)
+    }
   }
+
 
   onOutLetLoader(mainTimeLineComponent: MainTimeLineComponent) {
     mainTimeLineComponent.activeFriends = this.activeFriends;
@@ -131,7 +135,7 @@ export class AppComponent implements OnInit {
   fowardToMainTimeLine(id: number) {
     this.currentUserId = id
     this.router.navigateByUrl("/mainTimeLine/" + id)
-    localStorage.setItem('currentUserId',String(id))
+    localStorage.setItem('currentUserId', String(id))
     console.log(id);
   }
 
@@ -143,16 +147,18 @@ export class AppComponent implements OnInit {
   }
 
   getCurrentLoggedInUser() {
-    this.authService.getCurrentLoggedInUser().subscribe(data => {
-      this.currentLoggedInUser = data
-      console.log(this.currentLoggedInUser)
-    }, error => {
-      console.log('can not get current logged in user')
-    })
+    if (localStorage.length != 0) {
+      this.authService.getCurrentLoggedInUser().subscribe(data => {
+        this.currentLoggedInUser = data
+        console.log(this.currentLoggedInUser)
+      }, error => {
+        console.log('can not get current logged in user')
+      })
+    }
   }
 
   checkLog() {
-    return  localStorage.getItem('authenticationToken')!=null;
+    return localStorage.getItem('authenticationToken') != null;
   }
 }
 

@@ -98,23 +98,23 @@
         <div class="col-span-2">
           <label for="old password">Old Password</label>
           <a>
-            <input id="old password" (change)="checkPassword()" [(ngModel)]="password" type="text"
+            <input id="old password" [(ngModel)]="password" type="text"
                    placeholder="old password" class="shadow-none with-border">
-            <p *ngIf="!isPasswordChecked">Please enter old password</p>
+            <p *ngIf="!isPasswordChecked" class="text-danger">Old Password wrong, please fill again!</p>
           </a>
         </div>
         <div class="col-span-2">
           <label for="new password"> New Password</label>
           <input id="new password" type="password" placeholder="New Password" class="shadow-none with-border"
-                 (change)="checkIsNewPasswordConfirmed()" [(ngModel)]="newPassword">
-          <a *ngIf="newPassword!='' &&!isNewPasswordConfirmed"> new password not matched confirm password</a>
+              (change)="checkIsNewPasswordConfirmed()"    [(ngModel)]="newPassword">
+          <a *ngIf="newPassword!='' &&!isNewPasswordConfirmed" class="text-danger"> New password not matched confirm password</a>
         </div>
         <div class="col-span-2">
           <label for="confirm new password"> Confirm New Password</label>
           <input id="confirm new password" type="password" placeholder="Confirm New Password"
                  class="shadow-none with-border"
                  (change)="checkIsNewPasswordConfirmed()" [(ngModel)]="confirmNewPassword">
-          <a *ngIf="confirmNewPassword!='' &&!isNewPasswordConfirmed">confirm password not matched new password</a>
+          <a *ngIf="confirmNewPassword!='' &&!isNewPasswordConfirmed" class="text-danger">Confirm password not matched new password</a>
         </div>
         <div class="col-span-2" disabled *ngIf="message!=''"><a>{{message}}</a></div>
 
