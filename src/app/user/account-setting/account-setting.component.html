@@ -60,7 +60,7 @@
             <label for="middleName">Middle Name</label>
             <input id="middleName" autocomplete="off" name="firstName" type="text"
                    onkeyup="this.setAttribute('value', this.value);" value=""
-                   [(ngModel)]="middleName"pattern="[a-zA-Z ]*">
+                   [(ngModel)]="middleName" pattern="[a-zA-Z ]*">
           </div>
           <div>
             <label for="lastName"> Last Name </label>
@@ -97,19 +97,30 @@
       <div class="grid grid-cols-2 gap-3 lg:p-6 p-4">
         <div class="col-span-2">
           <label for="old password">Old Password</label>
-          <input id="old password" (ngModelChange)="checkPassword()" [ngModel]="password" type="text" placeholder="old password" class="shadow-none with-border">
+          <a>
+            <input id="old password" (change)="checkPassword()" [(ngModel)]="password" type="text"
+                   placeholder="old password" class="shadow-none with-border">
+            <p *ngIf="!isPasswordChecked">Please enter old password</p>
+          </a>
         </div>
         <div class="col-span-2">
           <label for="new password"> New Password</label>
-          <input id="new password"  type="text" placeholder="" class="shadow-none with-border">
+          <input id="new password" type="password" placeholder="New Password" class="shadow-none with-border"
+                 (change)="checkIsNewPasswordConfirmed()" [(ngModel)]="newPassword">
+          <a *ngIf="newPassword!='' &&!isNewPasswordConfirmed"> new password not matched confirm password</a>
         </div>
         <div class="col-span-2">
           <label for="confirm new password"> Confirm New Password</label>
-          <input id="confirm new password" type="text" placeholder="" class="shadow-none with-border" >
+          <input id="confirm new password" type="password" placeholder="Confirm New Password"
+                 class="shadow-none with-border"
+                 (change)="checkIsNewPasswordConfirmed()" [(ngModel)]="confirmNewPassword">
+          <a *ngIf="confirmNewPassword!='' &&!isNewPasswordConfirmed">confirm password not matched new password</a>
         </div>
+        <div class="col-span-2" disabled *ngIf="message!=''"><a>{{message}}</a></div>
+
         <div class="bg-gray-10 p-6 pt-0 flex justify-end space-x-3">
           <button class="p-2 px-4 rounded bg-gray-50 text-red-500"> Cancel</button>
-          <button type="button" class="button bg-blue-700"> Save</button>
+          <button type="button" class="button bg-blue-700" (click)="changePassword()"> Save</button>
         </div>
       </div>
 

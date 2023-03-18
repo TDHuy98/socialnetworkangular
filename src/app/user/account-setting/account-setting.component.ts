@@ -2,7 +2,10 @@ import {Component, OnInit} from '@angular/core';
 import {UserService} from "../../service/user.service";
 import {FormControl, FormGroup} from "@angular/forms";
 import {UserUpdate} from "../../model/UserUpdate";
-import {CheckPassword} from "../../model/CheckPassword";
+import {ChangePassword} from "../../model/ChangePassword";
+import {Observable} from "rxjs";
+import {AuthService} from "../../auth.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-account-setting',
@@ -20,7 +23,8 @@ export class AccountSettingComponent implements OnInit {
   intro: string = '';
 
 
-  constructor(private userService: UserService) {
+  constructor(private userService: UserService, private authService: AuthService,
+              private router: Router) {
     this.updateInformationForm = new FormGroup({
       firstName: new FormControl,
       lastName: new FormControl,
@@ -65,16 +69,55 @@ export class AccountSettingComponent implements OnInit {
       console.log('update thất bại')
     })
 
-
+    window.location.reload();
   }
 
-  checkUserPassword: CheckPassword = new CheckPassword()
+  checkUserPassword: ChangePassword = new ChangePassword()
   password: string = '';
+  newPassword: string = '';
+  confirmNewPassword: string = '';
+  isNewPasswordConfirmed: boolean
+  isPasswordChecked: boolean
 
-  checkPassword() {
+  checkIsNewPasswordConfirmed(): boolean {
+    console.log(this.newPassword == this.confirmNewPassword)
+    this.isNewPasswordConfirmed = this.newPassword == this.confirmNewPassword
+    return this.isNewPasswordConfirmed
+  }
+
+  checkPassword(): boolean {
     this.checkUserPassword.userId = Number(localStorage.getItem('userId'))
     this.checkUserPassword.password = this.password
-    this.userService.isPasswordCorrect(this.checkUserPassword)
     console.log(this.checkUserPassword)
+    this.userService.isPasswordCorrect(this.checkUserPassword).subscribe(result => {
+      this.isPasswordChecked = result
+      console.log(result)
+      // return result;
+    }, error => {
+      console.log('không check được password')
+    })
+    console.log(this.isPasswordChecked)
+    return this.isPasswordChecked
   }
+
+  userChangePassword = new ChangePassword();
+  message: string = ''
+
+  changePassword() {
+    if (this.isNewPasswordConfirmed && this.isPasswordChecked) {
+      this.userChangePassword.userId = Number(localStorage.getItem('userId')),
+        this.userChangePassword.password = this.newPassword
+      this.userService.changePassword(this.userChangePassword).subscribe(data => {
+        console.log('đổi mk thành công')
+        this.router.navigateByUrl('/change-password-success')
+      }, error => {
+        console.log('đổi mk thất bại')
+      })
+
+
+    } else this.message = 'kiểm tra lại thông tin đã nhập'
+
+  }
+
 }
+

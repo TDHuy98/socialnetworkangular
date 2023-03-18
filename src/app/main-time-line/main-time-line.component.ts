@@ -26,8 +26,7 @@ export class MainTimeLineComponent implements OnInit {
 
   // @ts-ignore
   currentUserLogin = JSON.parse(localStorage.getItem("loggedInUser"));
-  // @ts-ignore
-  currenLogInId = JSON.parse(localStorage.getItem("loggedInUser")).id;
+  currenLogInId = this.currentUserLogin.id;
   id: number | undefined;
   currenViewtUser = new User;
   currentUserId = this.currentUserLogin.id;
@@ -53,7 +52,6 @@ export class MainTimeLineComponent implements OnInit {
   curentLoginUserActiveFriendList: Friend[] = []
   allCmt: Comment[] = [];
   thisPostLike: number
-  currentClickId: number;
 
   constructor(private route: ActivatedRoute,
               private userService: UserService,
@@ -61,16 +59,11 @@ export class MainTimeLineComponent implements OnInit {
               private postService: PostService,
               private authService: AuthService) {
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
-    // @ts-ignore
-    this.currentUserLogin = JSON.parse(localStorage.getItem("loggedInUser"));
-    // @ts-ignore
-    this.currenLogInId = JSON.parse(localStorage.getItem("loggedInUser")).id;
+
   }
 
 
   ngOnInit(): void {
-    // @ts-ignore
-
     this.currentId=Number(localStorage.getItem('currentUserId'))
     this.friendService.getAll().subscribe(
       data => {

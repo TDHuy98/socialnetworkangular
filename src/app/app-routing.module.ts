@@ -7,6 +7,7 @@ import {RegisterSuccessComponent} from "./auth/register-success/register-success
 import {HomeComponent} from "./home/home.component";
 import {AccountSettingComponent} from "./user/account-setting/account-setting.component";
 import {MainTimeLineComponent} from "./main-time-line/main-time-line.component";
+import {ChangePasswordSuccessComponent} from "./auth/change-password-success/change-password-success.component";
 
 const routes: Routes = [
   { path:'' ,pathMatch : "full",redirectTo:'login'},
@@ -17,7 +18,8 @@ const routes: Routes = [
   {path: 'home' ,redirectTo:'feed'},
   {path:'setting',component:AccountSettingComponent},
   {path:'',component: MainTimeLineComponent},
-  {path:'mainTimeLine/:id', component: MainTimeLineComponent}
+  {path:'mainTimeLine/:id', component: MainTimeLineComponent},
+  {path: 'change-password-success', component: ChangePasswordSuccessComponent},
 ];
 
 @NgModule({

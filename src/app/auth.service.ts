@@ -52,6 +52,7 @@ export class AuthService {
   }
 
   logout() {
+    localStorage.clear()
     return this.httpClient.post(this.url + "logout", null)
   }
 

@@ -5,8 +5,6 @@ import {BrowserModule} from '@angular/platform-browser';
 import {AppRoutingModule} from './app-routing.module';
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {RouterModule} from "@angular/router";
-import {CommonComponent} from './common/common.component';
-import {ContainerComponent} from './container/container.component';
 import {IonicModule} from "@ionic/angular";
 import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import { RegisterComponent } from './auth/register/register.component';
@@ -24,14 +22,13 @@ import { TimeLineComponent } from './time-line/time-line.component';
 import { FriendListComponent } from './friend-list/friend-list.component';
 import { PhotosComponent } from './photos/photos.component';
 import { MainTimeLineComponent } from './main-time-line/main-time-line.component';
+import { ChangePasswordSuccessComponent } from './auth/change-password-success/change-password-success.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     FeedComponent,
-    CommonComponent,
-    ContainerComponent,
     RegisterComponent,
     LoginComponent,
     RegisterSuccessComponent,
@@ -41,7 +38,8 @@ import { MainTimeLineComponent } from './main-time-line/main-time-line.component
     TimeLineComponent,
     FriendListComponent,
     PhotosComponent,
-    MainTimeLineComponent
+    MainTimeLineComponent,
+    ChangePasswordSuccessComponent
 
   ],
   imports: [

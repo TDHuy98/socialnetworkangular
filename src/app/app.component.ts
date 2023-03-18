@@ -44,7 +44,7 @@ export class AppComponent implements OnInit {
 
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
 
-    this.currentLoginUser={
+    this.currentLoggedInUser={
       id:1,
       firstname:'',
       middlename:'',
@@ -131,6 +131,7 @@ export class AppComponent implements OnInit {
     alert(id)
     this.currentUserId = id
     this.router.navigateByUrl("/mainTimeLine/" + id)
+    localStorage.setItem('currentUserId',String(id))
     console.log(id);
   }
 
