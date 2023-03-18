@@ -18,13 +18,14 @@ export class AppComponent implements OnInit {
   currentUser: User = new User();
   currenTargettUser: User = new User();
   // @ts-ignore
-  currentLoginUser=new CurrentLoggedInUser();
+  currentLoginUser= JSON.parse(localStorage.getItem("loggedInUser"));
 
   currentUserId : number;
   currentNewFriendsId: number[] = []
   currentBlockFriendsId: number[] = []
   currentActiveFriendsId: number[] = []
-  currentLoggedInUser: CurrentLoggedInUser;
+  // @ts-ignore
+  currentLoggedInUser= JSON.parse(localStorage.getItem("loggedInUser"));
 
   private mainTimeLineComponent: MainTimeLineComponent;
 
@@ -105,10 +106,8 @@ export class AppComponent implements OnInit {
     //get current logged in user and save them to localstorage
       this.authService.getCurrentLoggedInUser().subscribe(data => {
         this.currentLoggedInUser = data
+        console.log(data)
         this.currentUserId=this.currentLoginUser.id;
-        console.log(JSON.stringify(this.currentLoggedInUser))
-        console.log(this.currentLoggedInUser.id)
-        console.log(this.currentLoggedInUser.profile)
         localStorage.setItem('loggedInUser', JSON.stringify(this.currentLoggedInUser))
       }, error => {
         console.log('can not get current logged in user')
@@ -123,12 +122,13 @@ export class AppComponent implements OnInit {
     mainTimeLineComponent.newFriendsId = this.newFriendsId;
     mainTimeLineComponent.BlockFriends = this.BlockFriends;
     mainTimeLineComponent.blockFriendsId = this.blockFriendsId;
-    mainTimeLineComponent.currentUserId = this.currentUserId;
+    mainTimeLineComponent.currentClickId = this.currentUserId;
     mainTimeLineComponent.friendList = this.friendList;
   }
 
 
   fowardToMainTimeLine(id: number) {
+    alert(id)
     this.currentUserId = id
     this.router.navigateByUrl("/mainTimeLine/" + id)
     console.log(id);
