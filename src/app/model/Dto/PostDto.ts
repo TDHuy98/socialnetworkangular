@@ -11,4 +11,5 @@ export class PostDto{
   img:string
   postId:number
   profile:string
+
 }

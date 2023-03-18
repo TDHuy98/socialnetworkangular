@@ -8,9 +8,11 @@ import {PostService} from "../service/post.service";
 import {Post} from "../model/model/Post";
 import {Like} from '../model/Like';
 import {FormControl, FormGroup} from "@angular/forms";
-import {Comment} from "../model/model/Comment";
 import {AuthService} from "../auth.service";
 import {PostDto} from "../model/Dto/PostDto";
+import {data} from "jquery";
+import {Comment} from "../model/Comment";
+import {CommentDto} from "../model/Dto/CommentDto";
 
 @Component({
   selector: 'app-main-time-line',
@@ -50,7 +52,7 @@ export class MainTimeLineComponent implements OnInit {
   currentPostLiked: number[] = [];
   mutualFriendsList: Friend[] = [];
   curentLoginUserActiveFriendList: Friend[] = []
-  allCmt: Comment[] = [];
+  allCmt: CommentDto[];
   thisPostLike: number
   currentClickId: number;
 
@@ -106,7 +108,6 @@ export class MainTimeLineComponent implements OnInit {
         this.postService.findAllLike().subscribe(
           (data) => {
             this.currentAllLike = data;
-
             this.postService.getAllComment().subscribe(
               (data) => {
                 this.allCmt = data;
@@ -120,7 +121,6 @@ export class MainTimeLineComponent implements OnInit {
       data => {
         this.friendList = data;
         this.curentLoginUserActiveFriendList = []
-
         data.forEach(f => {
           if (f.source.id == this.currenLogInId) {
             this.curentLoginUserActiveFriendList.push(f)
@@ -158,19 +158,32 @@ export class MainTimeLineComponent implements OnInit {
 
           }
         )
-        // this.imgService.getAllImg().subscribe(
-        //   (data) => {
-        //     console.log(data);
-        //     this.imgs = data;
-        //
-        //
-        //   }
-        // )
-
       }
     )
   }
+loadLike(){
+  this.postService.getAll(this.currentId).subscribe(
+    (data) => {
+      console.log(data);
+      this.posts = data;
+      this.postService.findAllLike().subscribe(
+        (data) => {
+          this.currentAllLike = data;
+        }
+      )
+    }
+  )
+}
+ userToGet : User ;
 
+getUserByUserId(id: number){
+     this.userService.findById(id).subscribe((data) => {
+       this.userToGet= data
+
+      }
+    );
+     return this.userToGet;
+}
   showFriendListByIdUserAndStatus(id: number, status: string, type: string) {
     this.currentListFriends = []
     for (let i = 0; i < this.friendList.length; i++) {
@@ -274,7 +287,7 @@ export class MainTimeLineComponent implements OnInit {
       relationshipType: 'Normal',
       friendshipStatus: 'Active',
     };
-    this.friendRequestCancerNoReload(sourceId, targetId)
+    this.friendRequestCancelNoReload(sourceId, targetId)
     // this.friendRequestCancer(targetId,sourceId)
     // console.log(this.friend)
     // @ts-ignore
@@ -288,7 +301,7 @@ export class MainTimeLineComponent implements OnInit {
     );
   }
 
-  cancerFriendRequest(sourceId: number, targetId: number) {
+  cancelFriendRequest(sourceId: number, targetId: number) {
     const friend = {
       "source": {
         "id": sourceId
@@ -306,7 +319,7 @@ export class MainTimeLineComponent implements OnInit {
     );
   }
 
-  friendRequestCancerNoReload(sourceId: number, targetId: number) {
+  friendRequestCancelNoReload(sourceId: number, targetId: number) {
     let sourceCancer = -1;
     let targetCancer = -1;
     this.friendList.forEach(f => {
@@ -374,6 +387,7 @@ export class MainTimeLineComponent implements OnInit {
     if (flagLike == 1) {
       this.postService.unLike(flagLikeID).subscribe((data) => {
           this.showDit()
+
         }
       );
     }
@@ -384,11 +398,9 @@ export class MainTimeLineComponent implements OnInit {
     const cmt = {
       content: this.formCmt.controls["content"].value,
       user: {
-        "id": this.currenLogInId
+        "id": this.currentUserLogin
       },
-      post: {
-        "id": idPost
-      }
+      postId: idPost
     };
     // console.log(this.posts)
     // @ts-ignore

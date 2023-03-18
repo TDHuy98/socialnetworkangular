@@ -4,8 +4,10 @@ import {Observable} from "rxjs";
 import {Post} from "../model/model/Post";
 import {ImgPost} from "../model/model/ImgPost";
 import {Like} from "../model/Like";
-import {Comment} from "../model/model/Comment";
+
 import {PostDto} from "../model/Dto/PostDto";
+import {Comment} from "../model/Comment";
+import {CommentDto} from "../model/Dto/CommentDto";
 
 @Injectable({
   providedIn: 'root'
@@ -56,8 +58,8 @@ export class PostService {
   edit(post: Post): Observable<any> {
     return this.http.put('http://localhost:8080/posts', post);
   }
-  getAllComment(): Observable<Comment[]> {
-    return this.http.get<Comment[]>('http://localhost:8080/cmt');
+  getAllComment(): Observable<CommentDto[]> {
+    return this.http.get<CommentDto[]>('http://localhost:8080/cmt');
   }
   comment(cmt: Comment): Observable<Comment>{
     return this.http.post<Comment>(`http://localhost:8080/cmt`,cmt)

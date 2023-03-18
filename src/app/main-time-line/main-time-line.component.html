@@ -295,8 +295,7 @@
                 <div class="p-4 space-y-3">
 
                   <div class="flex space-x-4 lg:font-bold">
-                    <a
-                      (click)="Like(puppy.id,this.currenLogInId,this.currentUserLogin.middleName+currentUserLogin.lastName)"
+                    <a (click)="Like(puppy.id,this.currenLogInId,this.currentUserLogin.firstname+this.currentUserLogin.middleName+this.currentUserLogin.lastName)"
                       class="flex items-center space-x-2">
                       <div class="p-2 rounded-full  text-black lg:bg-gray-100 dark:bg-gray-600">
                         <svg *ngIf="currentPostLiked.includes(puppy.id)" xmlns="http://www.w3.org/2000/svg"
@@ -360,13 +359,13 @@
                   <div class="border-t py-4 space-y-4 dark:border-gray-600">
                     <div *ngFor="let comment of allCmt" class="flex">
 
-                      <div *ngIf="comment.post.id==puppy.id" class="w-10 h-10 rounded-full relative flex-shrink-0">
-                        <img src="{{comment.user.profile}}" alt="" class="absolute h-full rounded-full w-full">
+                      <div *ngIf="comment.userId== puppy.userId" class="w-10 h-10 rounded-full relative flex-shrink-0">
+                        <img src="{{comment.profile}}" alt="" class="absolute h-full rounded-full w-full">
                       </div>
-                      <div *ngIf="comment.post.id==puppy.id">
+                      <div *ngIf="comment.postId==puppy.id">
                         <!--                <p>{{comment.user.lastName}}</p>-->
                         <b style="margin-left: 0px"
-                           class=" py-2 px-3 rounded-md relative lg:ml-5 ml-2 lg:mr-12 ">{{comment.user.firstName + ' ' + comment.user.middleName + ' ' + comment.user.lastName}}</b>
+                           class=" py-2 px-3 rounded-md relative lg:ml-5 ml-2 lg:mr-12 ">{{comment.firstName + ' ' + comment.middleName + ' ' + comment.lastName}}</b>
                         <br>
                         <div
                           class="text-gray-700 py-2 px-3 rounded-md bg-gray-100 relative lg:ml-5 ml-2 lg:mr-12  dark:bg-gray-800 dark:text-gray-100">
@@ -377,7 +376,7 @@
                         </div>
                         <div class="text-sm flex items-center space-x-3 mt-2 ml-5">
                                             <a href="#" class="text-red-600"> <i class="uil-heart"></i> Love </a>
-                          <button *ngIf="currenLogInId==comment.user.id || currenLogInId==puppy.userId" (click)="DeleteCmt(comment.id)" class="btn-danger hover:bg-gray-50 text-grey-900"> Delete </button>
+                          <button *ngIf="currenLogInId==comment.userId || currenLogInId==puppy.userId" (click)="DeleteCmt(comment.id)" class="btn-danger hover:bg-gray-50 text-grey-900"> Delete </button>
                           <span> 3d </span>
                         </div>
                       </div>
