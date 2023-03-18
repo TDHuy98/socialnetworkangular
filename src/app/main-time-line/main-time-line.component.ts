@@ -31,6 +31,7 @@ export class MainTimeLineComponent implements OnInit {
   currenLogInId = this.currentUserLogin.id;
   id: number | undefined;
   currenViewtUser = new User;
+  currentUserId = this.currentUserLogin.id;
   friendList: Friend[] = []
   posts: PostDto[] = [];
   @Input() activeFriendsId: number[] = []
@@ -137,7 +138,9 @@ export class MainTimeLineComponent implements OnInit {
     if (this.currentId == 0) {
       this.currentId = 1
     }
-
+    if (this.currentUserId == 0) {
+      this.currentId = 1
+    }
     this.userService.findById(this.currentId).subscribe(data => {
       this.currenViewtUser = data
     });
@@ -434,8 +437,8 @@ getUserByUserId(id: number){
 
   mutualfriends() {
     this.mutualFriendsList = this.getFriendListByIdUserAndStatus(this.currenLogInId, 'Active', 'Normal')
-    this.mutualTarget = this.getFriendListByIdUserAndStatus(this.currentClickId, 'Active', 'Normal')
-    console.log(this.currentClickId, this.currenLogInId)
+    this.mutualTarget = this.getFriendListByIdUserAndStatus(this.currentUserId, 'Active', 'Normal')
+    console.log(this.currentUserId, this.currenLogInId)
     this.curentLoginUserActiveFriendList = []
 
     for (let i = 0; i < this.mutualTarget.length; i++) {
