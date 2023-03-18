@@ -77,7 +77,7 @@ export class AccountSettingComponent implements OnInit {
   newPassword: string = '';
   confirmNewPassword: string = '';
   isNewPasswordConfirmed: boolean
-  isPasswordChecked: boolean
+  isPasswordChecked: boolean=true
 
   checkIsNewPasswordConfirmed(): boolean {
     console.log(this.newPassword == this.confirmNewPassword)
@@ -104,6 +104,7 @@ export class AccountSettingComponent implements OnInit {
   message: string = ''
 
   changePassword() {
+    this.checkPassword()
     if (this.isNewPasswordConfirmed && this.isPasswordChecked) {
       this.userChangePassword.userId = Number(localStorage.getItem('userId')),
         this.userChangePassword.password = this.newPassword
