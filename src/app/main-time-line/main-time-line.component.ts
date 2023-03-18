@@ -75,7 +75,7 @@ export class MainTimeLineComponent implements OnInit {
       })
     this.showDit()
 
-    this.postService.getAll(this.currentId).subscribe(
+    this.postService.findByIdUser(this.currentId).subscribe(
       (data) => {
         this.posts = data;
         this.postService.findAllLike().subscribe(
@@ -98,7 +98,7 @@ export class MainTimeLineComponent implements OnInit {
   }
 
   showDit() {
-    this.postService.getAll(this.currentId).subscribe(
+    this.postService.findByIdUser(this.currentId).subscribe(
       (data) => {
         console.log(data);
         this.posts = data;
@@ -144,7 +144,7 @@ export class MainTimeLineComponent implements OnInit {
       this.currenViewtUser = data
     });
 
-    this.postService.getAll(this.currentId).subscribe((data) => {
+    this.postService.findByIdUser(this.currentId).subscribe((data) => {
         this.posts = data;
         this.currentPostLiked = []
         this.postService.findAllLike().subscribe(data => {
