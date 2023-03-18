@@ -830,21 +830,25 @@
                 uk-tooltip="title: Close ; pos: bottom ;offset:7"></button>
       </div>
 
-      <div class="flex flex-1 items-start space-x-4 p-5">
+      <div class="items-start space-x-4 p-5">
         <img src="assets/images/avatars/avatar-2.jpg"
-             class="bg-gray-200 border border-white rounded-full w-11 h-11">
-        <div class="flex-1 pt-2">
-                    <textarea
+             class="bg-gray-200 border border-white rounded-full w-11 ">
+        <div class="" >
+                    <textarea formControlName="content"
                       class="uk-textare text-black shadow-none focus:shadow-none text-xl font-medium resize-none"
                       rows="5"
-                      placeholder="What's Your Mind ? Stella!" formControlName="content"></textarea>
+                       ><input type="text" placeholder="What's Your Mind ? Stella!"></textarea>
+
+
         </div>
 
       </div>
+      <img id="imageCreate" >
       <div class="bsolute bottom-0 p-4 space-x-4 w-full">
         <div class="flex bg-gray-50 border border-purple-100 rounded-2xl p-2 shadow-sm items-center">
           <div class="lg:block hidden ml-1">
-            <input class="form-control-file" #uploadFile type="file" (change)="uploadFile2()">
+            <input  class="form-control-file" #uploadFile type="file" (change)="uploadFile2()" class="imageFile" onchange="chooseFileCreate(this)">
+
           </div>
 
           <div class="flex flex-1 items-center lg:justify-end justify-center space-x-2">
@@ -901,8 +905,8 @@
       <div class="flex items-center w-full justify-between border-t p-3">
 
         <div class="flex space-x-2" style="float: right !important;">
-          <select name="postSatus" id="postStatus" formControlName="postStatus">
-            <option [value]="'Public'">Pulic</option>
+          <select formControlName="postStatus">
+            <option [value]="'Public'" selected="selected ">Public</option>
             <option [value]="'Private'">Private</option>
             <option [value]="'Friend'">Friend</option>
 
@@ -939,6 +943,7 @@
 
       <div class="text-center py-3 border-b">
         <h3 class="text-lg font-semibold"> Edit Post </h3>
+        <p formControlName="postId" hidden></p>
         <button class="uk-modal-close-default bg-gray-100 rounded-full p-2.5 right-2" type="button" uk-close
                 uk-tooltip="title: Close ; pos: bottom ;offset:7"></button>
       </div>
@@ -951,12 +956,15 @@
                       class="uk-textare text-black shadow-none focus:shadow-none text-xl font-medium resize-none"
                       rows="5"
                       placeholder="What's Your Mind ? Stella!"></textarea>
+
         </div>
+
 
       </div>
       <div class="bsolute bottom-0 p-4 space-x-4 w-full">
+        <img [src]="editForm.get('img').value" id="imageEdit">
         <div class="flex bg-gray-50 border border-purple-100 rounded-2xl p-2 shadow-sm items-center">
-          <input class="form-control-file" #uploadFile type="file" (change)="uploadFile2()" formControlName="img">
+          <input class="form-control-file" #uploadFile type="file" (change)="uploadFile2()" class="imageFile" onchange="chooseFileEdit(this)">
 
           <div class="flex flex-1 items-center lg:justify-end justify-center space-x-2">
 
@@ -1012,10 +1020,10 @@
       <div class="flex items-center w-full justify-between border-t p-3">
 
         <div class="flex space-x-2" style="float: right !important;">
-          <select name="postSatus" formControlName="postStatus">
-            <option [value]="1">Pulic</option>
-            <option [value]="2">Private</option>
-            <option [value]="3">Friend</option>
+          <select name="postSatus" formControlName="postStatus" (selectstart)="editForm.get('postStatus').value">
+            <option [value]="'Public'">Pulic</option>
+            <option [value]="'Private'">Private</option>
+            <option [value]="'Friend'">Friend</option>
 
           </select>
         </div>
@@ -1043,6 +1051,7 @@
     </div>
   </form>
 </div>
+
 
 
 

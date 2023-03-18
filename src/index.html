@@ -72,3 +72,24 @@
 <script src="main.js" type="module"></script>
 
 </html>
+<script>
+  function  chooseFileCreate(fileInput) {
+    if (fileInput.files && fileInput.files[0]){
+      let  reader = new FileReader();
+      reader.onload = function (e) {
+        $('#imageCreate').attr('src',e.target.result);
+      }
+      reader.readAsDataURL(fileInput.files[0]);
+    }
+  }
+
+  function  chooseFileEdit(fileInput) {
+    if (fileInput.files && fileInput.files[0]){
+      let  reader = new FileReader();
+      reader.onload = function (e) {
+        $('#imageEdit').attr('src',e.target.result);
+      }
+      reader.readAsDataURL(fileInput.files[0]);
+    }
+  }
+</script>
