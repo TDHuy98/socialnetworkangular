@@ -52,6 +52,7 @@ export class MainTimeLineComponent implements OnInit {
   curentLoginUserActiveFriendList: Friend[] = []
   allCmt: Comment[] = [];
   thisPostLike: number
+  currentClickId: number;
 
   constructor(private route: ActivatedRoute,
               private userService: UserService,
@@ -75,30 +76,30 @@ export class MainTimeLineComponent implements OnInit {
       })
     this.showDit()
 
-    this.postService.findByIdUser(this.currentId).subscribe(
-      (data) => {
-        this.posts = data;
-        this.postService.findAllLike().subscribe(
-          (data) => {
-            this.currentAllLike = data;
-          }
-        )
-        // this.imgService.getAllImg().subscribe(
-        //   (data) => {
-        //     console.log(data);
-        //     this.imgs = data;
-        //
-        //
-        //   }
-        // )
-
-      }
-    )
+    // this.postService.getAll(this.currentId).subscribe(
+    //   (data) => {
+    //     this.posts = data;
+    //     this.postService.findAllLike().subscribe(
+    //       (data) => {
+    //         this.currentAllLike = data;
+    //       }
+    //     )
+    //     // this.imgService.getAllImg().subscribe(
+    //     //   (data) => {
+    //     //     console.log(data);
+    //     //     this.imgs = data;
+    //     //
+    //     //
+    //     //   }
+    //     // )
+    //
+    //   }
+    // )
     // this.currentId = Number(this.authService.getCurrentUserId());
   }
 
   showDit() {
-    this.postService.findByIdUser(this.currentId).subscribe(
+    this.postService.getAll(this.currentId).subscribe(
       (data) => {
         console.log(data);
         this.posts = data;
@@ -144,7 +145,7 @@ export class MainTimeLineComponent implements OnInit {
       this.currenViewtUser = data
     });
 
-    this.postService.findByIdUser(this.currentId).subscribe((data) => {
+    this.postService.getAll(this.currentId).subscribe((data) => {
         this.posts = data;
         this.currentPostLiked = []
         this.postService.findAllLike().subscribe(data => {
