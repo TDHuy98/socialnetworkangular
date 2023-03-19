@@ -13,6 +13,7 @@ import {PostDto} from "../model/Dto/PostDto";
 import {data} from "jquery";
 import {Comment} from "../model/Comment";
 import {CommentDto} from "../model/Dto/CommentDto";
+import {FriendDto} from "../model/Dto/FriendDto";
 
 @Component({
   selector: 'app-main-time-line',
@@ -36,17 +37,19 @@ export class MainTimeLineComponent implements OnInit {
   posts: PostDto[] = [];
   @Input() activeFriendsId: number[] = []
 
-  currentListFriends: Friend[] = [];
+  currentListFriends: FriendDto[] = [];
   currentListFriendsId: number[];
-  currentListType: number[];
-  activeFriends: Friend[] = [];
-  NewFriends: Friend[] = [];
-  BlockFriends: Friend[] = [];
+  currentListType: FriendDto[];
+  curentLoginActiveFriends: FriendDto[] = [];
+  curentLoginNewFriends: FriendDto[] = [];
+  curentLoginBlockFriends: FriendDto[] = [];
+  curentLoginSenderFriends: FriendDto[] = []
+
   newFriendsId: number[] = [];
   blockFriendsId: number[] = [];
   currentNewFriendsId: number[] = [];
   currentBlockFriendsId: number[] = [];
-  currentActiveFriendsId: number[] = [];
+  currentActiveFriendsId: Number[] = [];
   currentSenderFriendsId: number[] = [];
   currentAllLike: Like[] = [];
   currentPostLiked: number[] = [];
@@ -55,6 +58,7 @@ export class MainTimeLineComponent implements OnInit {
   allCmt: CommentDto[];
   thisPostLike: number
   currentClickId: number;
+  senderFriendsId: number[];
 
   constructor(private route: ActivatedRoute,
               private userService: UserService,
@@ -67,43 +71,67 @@ export class MainTimeLineComponent implements OnInit {
 
 
   ngOnInit(): void {
-    this.currentId=Number(localStorage.getItem('currentUserId'))
-    this.friendService.getAll().subscribe(
+    this.curentLoginActiveFriends=[]
+    this.curentLoginBlockFriends=[]
+    this.curentLoginNewFriends=[]
+    this.curentLoginBlockFriends=[]
+    this.currentId = Number(localStorage.getItem('currentUserId'))
+    this.friendService.getActiveFriendListByIdUser(this.currenLogInId).subscribe(
       data => {
-        this.friendList = data;
-        this.currentActiveFriendsId = this.showFriendListIdByIdUserAndStatus(this.currenLogInId, 'Active', 'Normal', this.friendList)
-        this.currentNewFriendsId = this.showFriendListIdByIdUserAndStatus(this.currenLogInId, 'New', 'Normal', this.friendList)
-        this.currentBlockFriendsId = this.showFriendListIdByIdUserAndStatus(this.currenLogInId, 'Block', 'Normal', this.friendList)
-        this.currentSenderFriendsId = this.showFriendListIdByIdUserAndStatus(this.currenLogInId, 'Sender', 'Normal', this.friendList)
-      })
-    this.showDit()
+        this.curentLoginActiveFriends = data
 
-    // this.postService.getAll(this.currentId).subscribe(
-    //   (data) => {
-    //     this.posts = data;
-    //     this.postService.findAllLike().subscribe(
-    //       (data) => {
-    //         this.currentAllLike = data;
-    //       }
-    //     )
-    //     // this.imgService.getAllImg().subscribe(
-    //     //   (data) => {
-    //     //     console.log(data);
-    //     //     this.imgs = data;
-    //     //
-    //     //
-    //     //   }
-    //     // )
-    //
-    //   }
-    // )
-    // this.currentId = Number(this.authService.getCurrentUserId());
+        this.friendService.getSendFriendListByIdUser(this.currenLogInId).subscribe(
+          data => {
+            this.curentLoginSenderFriends = data
+
+            console.log("dc,,", this.curentLoginSenderFriends)
+            this.friendService.getNewFriendListByIdUser(this.currenLogInId).subscribe(
+              data => {
+                this.curentLoginNewFriends = data
+
+                this.friendService.getBlockFriendListByIdUser(this.currenLogInId).subscribe(
+                  data => {
+                    this.curentLoginBlockFriends = data
+                    this.curentLoginActiveFriends.forEach(item=>{
+                      this.currentActiveFriendsId.push(item.target.id)
+                    })
+                    this.curentLoginSenderFriends.forEach(item=>{
+                      this.currentSenderFriendsId.push(item.target.id)
+                    })
+                    this.curentLoginNewFriends.forEach(item=>{
+                      this.currentNewFriendsId.push(item.target.id)
+                    })
+                    this.curentLoginBlockFriends.forEach(item=>{
+                      this.currentBlockFriendsId.push(item.target.id)
+                    })
+
+                    console.log("nearness test",this.currentSenderFriendsId)
+                    this.showOption()
+                  }
+                )
+
+              }
+            )
+          }
+        )
+      }
+    )
+
+
+    this.getListFriendId()
+    this.getCurentLoginListFriendId()
+    this.showDit()
+    console.log("frlist", this.curentLoginSenderFriends)
+    console.log("user", this.currentClickId)
   }
 
   showDit() {
+    // @ts-ignore
+    this.currentClickId = +this.route.snapshot.paramMap.get('id');
+    this.getListFriendId()
+    this.getCurentLoginListFriendId()
     this.postService.getAll(this.currentId).subscribe(
       (data) => {
-        console.log(data);
         this.posts = data;
         this.postService.findAllLike().subscribe(
           (data) => {
@@ -117,20 +145,11 @@ export class MainTimeLineComponent implements OnInit {
         )
       }
     )
-    this.friendService.getAll().subscribe(
-      data => {
-        this.friendList = data;
-        this.curentLoginUserActiveFriendList = []
-        data.forEach(f => {
-          if (f.source.id == this.currenLogInId) {
-            this.curentLoginUserActiveFriendList.push(f)
-          }
-        })
-        this.currentActiveFriendsId = this.showFriendListIdByIdUserAndStatus(this.currenLogInId, 'Active', 'Normal', this.friendList)
-        this.currentNewFriendsId = this.showFriendListIdByIdUserAndStatus(this.currenLogInId, 'New', 'Normal', this.friendList)
-        this.currentBlockFriendsId = this.showFriendListIdByIdUserAndStatus(this.currenLogInId, 'Block', 'Normal', this.friendList)
-        this.currentSenderFriendsId = this.showFriendListIdByIdUserAndStatus(this.currenLogInId, 'Sender', 'Normal', this.friendList)
-      })
+    this.curentLoginActiveFriends = this.returnActiveFriend(this.currenLogInId)
+    this.curentLoginSenderFriends = this.returnSenderFriend(this.currenLogInId)
+    this.curentLoginBlockFriends = this.returnBlockFriend(this.currenLogInId)
+    this.curentLoginNewFriends = this.returnNewFriend(this.currenLogInId)
+
     // @ts-ignore
     this.currentId = +this.route.snapshot.paramMap.get('id');
     // @ts-ignore
@@ -161,29 +180,31 @@ export class MainTimeLineComponent implements OnInit {
       }
     )
   }
-loadLike(){
-  this.postService.getAll(this.currentId).subscribe(
-    (data) => {
-      console.log(data);
-      this.posts = data;
-      this.postService.findAllLike().subscribe(
-        (data) => {
-          this.currentAllLike = data;
-        }
-      )
-    }
-  )
-}
- userToGet : User ;
 
-getUserByUserId(id: number){
-     this.userService.findById(id).subscribe((data) => {
-       this.userToGet= data
+  loadLike() {
+    this.postService.getAll(this.currentId).subscribe(
+      (data) => {
+        this.posts = data;
+        this.postService.findAllLike().subscribe(
+          (data) => {
+            this.currentAllLike = data;
+          }
+        )
+      }
+    )
+  }
+
+  userToGet: User;
+
+  getUserByUserId(id: number) {
+    this.userService.findById(id).subscribe((data) => {
+        this.userToGet = data
 
       }
     );
-     return this.userToGet;
-}
+    return this.userToGet;
+  }
+
   showFriendListByIdUserAndStatus(id: number, status: string, type: string) {
     this.currentListFriends = []
     for (let i = 0; i < this.friendList.length; i++) {
@@ -205,18 +226,9 @@ getUserByUserId(id: number){
     return this.getFriendList;
   }
 
-  showFriendListIdByIdUserAndStatus(id: number, status: string, type: string, listFriend: Friend[]) {
-    this.currentListType = []
-
-    for (let i = 0; i < this.friendList.length; i++) {
-      if (listFriend[i].friendshipStatus == status && listFriend[i].relationshipType == type && listFriend[i].source.id == id) {
-        this.currentListType.push(listFriend[i].target.id)
-      }
-    }
-    return this.currentListType
-  }
 
   fowardToMainTimeLine(id: number) {
+    this.currentClickId = id;
     this.router.navigateByUrl("/mainTimeLine/" + id)
   }
 
@@ -438,7 +450,6 @@ getUserByUserId(id: number){
   mutualfriends() {
     this.mutualFriendsList = this.getFriendListByIdUserAndStatus(this.currenLogInId, 'Active', 'Normal')
     this.mutualTarget = this.getFriendListByIdUserAndStatus(this.currentUserId, 'Active', 'Normal')
-    console.log(this.currentUserId, this.currenLogInId)
     this.curentLoginUserActiveFriendList = []
 
     for (let i = 0; i < this.mutualTarget.length; i++) {
@@ -448,5 +459,118 @@ getUserByUserId(id: number){
     }
     this.currentListFriends = this.curentLoginUserActiveFriendList
     return this.curentLoginUserActiveFriendList
+  }
+
+  getActiveFriend(userId: number) {
+    this.friendService.getActiveFriendListByIdUser(userId).subscribe(
+      data => {
+        this.currentListFriends = data
+      }
+    )
+  }
+
+  getNewFriend(userId: number) {
+    this.friendService.getNewFriendListByIdUser(userId).subscribe(
+      data => {
+        this.currentListFriends = data
+      }
+    )
+  }
+
+  getSenderFriend(userId: number) {
+    this.friendService.getSendFriendListByIdUser(userId).subscribe(
+      data => {
+        this.currentListFriends = data
+      }
+    )
+  }
+
+  getBlockFriend(userId: number) {
+    this.friendService.getBlockFriendListByIdUser(userId).subscribe(
+      data => {
+        this.currentListFriends = data
+      }
+    )
+  }
+
+  loginListActiveFriend: FriendDto[]
+  loginListSenderFriend: FriendDto[]
+  loginListNewFriend: FriendDto[]
+  loginListBlockFriend: FriendDto[]
+
+  returnActiveFriend(userId: number) {
+    this.loginListActiveFriend = []
+    this.friendService.getBlockFriendListByIdUser(userId).subscribe(
+      data => {
+        this.loginListActiveFriend = data
+      })
+    return this.loginListActiveFriend
+  }
+
+  returnSenderFriend(userId: number) {
+    this.loginListSenderFriend = []
+    this.friendService.getSendFriendListByIdUser(userId).subscribe(
+      data => {
+        this.loginListSenderFriend = data
+      })
+    console.log("cmm",this.loginListSenderFriend)
+    return this.loginListSenderFriend
+  }
+
+  returnNewFriend(userId: number) {
+    this.loginListNewFriend = []
+    this.friendService.getNewFriendListByIdUser(userId).subscribe(
+      data => {
+        this.loginListNewFriend = data
+      })
+    return this.loginListNewFriend
+  }
+
+  returnBlockFriend(userId: number) {
+    this.loginListBlockFriend = []
+    this.friendService.getBlockFriendListByIdUser(userId).subscribe(
+      data => {
+        this.loginListBlockFriend = data
+      })
+    return this.loginListBlockFriend
+  }
+
+  newList: number[] = []
+
+  getIdTargetListFromListFriend(listFriendInput: FriendDto[]) {
+    this.newList = [];
+    listFriendInput.forEach(f => {
+      this.newList.push(f.target.id);
+    })
+    console.log("newList:",this.newList)
+    return this.newList;
+  }
+
+  getListFriendId() {
+    this.activeFriendsId = this.getIdTargetListFromListFriend(this.returnActiveFriend(this.currenLogInId))
+    this.newFriendsId = this.getIdTargetListFromListFriend(this.returnNewFriend(this.currenLogInId))
+    this.blockFriendsId = this.getIdTargetListFromListFriend(this.returnBlockFriend(this.currenLogInId))
+    this.senderFriendsId = this.getIdTargetListFromListFriend(this.returnSenderFriend(this.currenLogInId))
+    console.log("sender",this.returnSenderFriend(this.currenLogInId))
+    this.showOption()
+  }
+
+  getCurentLoginListFriendId() {
+    this.currentActiveFriendsId = this.getIdTargetListFromListFriend(this.returnActiveFriend(this.currenLogInId))
+    this.currentNewFriendsId = this.getIdTargetListFromListFriend(this.returnNewFriend(this.currenLogInId))
+    this.currentBlockFriendsId = this.getIdTargetListFromListFriend(this.returnBlockFriend(this.currenLogInId))
+    this.currentSenderFriendsId = this.getIdTargetListFromListFriend(this.returnSenderFriend(this.currenLogInId))
+  }
+
+  showOption() {
+    if (this.currentActiveFriendsId.includes(this.currentUserId)) {
+      return "Unfriend"
+    } else if (this.currentSenderFriendsId.includes(this.currentUserId)) {
+      return "Waiting...."
+    } else if (this.currentBlockFriendsId.includes(this.currentUserId)) {
+      return "Unblock"
+    } else if (this.currentNewFriendsId.includes(this.currentUserId)) {
+      return "Accept"
+    }
   }
 }

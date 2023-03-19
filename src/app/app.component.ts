@@ -65,42 +65,18 @@ export class AppComponent implements OnInit {
   newFriendsId: number[] = []
   blockFriendsId: number[] = []
   activeFriendsId: number[] = []
+  currentClickId: number
 
 
   ngOnInit(): void {
+    // @ts-ignore
+    this.currentClickId = Number(localStorage.getItem('userId'))
     if (localStorage.length != 0) {
-      this.friendService.getAll().subscribe(
-        data => {
-          this.friendList = data;
-
-          for (let i = 0; i < this.friendList.length; i++) {
-            if (this.friendList[i].source.id == this.currentUserId && this.friendList[i].friendshipStatus == ("Active")) {
-              this.activeFriendsId.push(this.friendList[i].id);
-              this.activeFriends.push(this.friendList[i])
-            }
-          }
-          for (let i = 0; i < this.friendList.length; i++) {
-            if (this.friendList[i].source.id == this.currentUserId && this.friendList[i].friendshipStatus == ("New")) {
-              this.newFriendsId.push(this.friendList[i].id);
-              this.NewFriends.push(this.friendList[i])
-
-            }
-          }
-          for (let i = 0; i < this.friendList.length; i++) {
-            if (this.friendList[i].source.id == this.currentUserId && this.friendList[i].friendshipStatus == ("Block")) {
-              this.blockFriendsId.push(this.friendList[i].id);
-              this.BlockFriends.push(this.friendList[i])
-            }
-          }
-          console.log(this.friendList)
-        }
-      )
-
       this.userService.findById(Number(localStorage.getItem('userId'))).subscribe(
         data => {
           console.log(data);
           this.currentUser = data;
-
+          this.currentClickId = data.id
         }
       )
       //get current logged in user and save them to localstorage
@@ -122,18 +98,19 @@ export class AppComponent implements OnInit {
 
 
   onOutLetLoader(mainTimeLineComponent: MainTimeLineComponent) {
-    mainTimeLineComponent.activeFriends = this.activeFriends;
-    mainTimeLineComponent.NewFriends = this.NewFriends;
-    mainTimeLineComponent.newFriendsId = this.newFriendsId;
-    mainTimeLineComponent.BlockFriends = this.BlockFriends;
-    mainTimeLineComponent.blockFriendsId = this.blockFriendsId;
-    mainTimeLineComponent.currentUserId = this.currentUserId;
-    mainTimeLineComponent.friendList = this.friendList;
+    this.currentClickId = mainTimeLineComponent.currentClickId
+    // mainTimeLineComponent.activeFriends = this.activeFriends;
+    // mainTimeLineComponent.NewFriends = this.NewFriends;
+    // mainTimeLineComponent.newFriendsId = this.newFriendsId;
+    // mainTimeLineComponent.BlockFriends = this.BlockFriends;
+    // mainTimeLineComponent.blockFriendsId = this.blockFriendsId;
+    // mainTimeLineComponent.currentUserId = this.currentUserId;
+    // mainTimeLineComponent.friendList = this.friendList;
   }
 
 
   fowardToMainTimeLine(id: number) {
-    this.currentUserId = id
+    this.currentClickId = id
     this.router.navigateByUrl("/mainTimeLine/" + id)
     localStorage.setItem('currentUserId', String(id))
     console.log(id);
