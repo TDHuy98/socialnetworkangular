@@ -352,20 +352,20 @@ export class MainTimeLineComponent implements OnInit {
 
   }
 
-  friendRequestCancer(sourceId: number, targetId: number) {
-    let sourceCancer = -1;
-    let targetCancer = -1;
-    this.friendList.forEach(f => {
+  friendRequestCancel(sourceId: number, targetId: number) {
+    let sourceCancel = -1;
+    let targetCancel = -1;
+    this.curentLoginActiveFriends.forEach(f => {
       if (f.target.id == targetId && f.source.id == sourceId) {
-        sourceCancer = f.id
+        sourceCancel = f.id
       }
       if (f.target.id == sourceId && f.source.id == targetId) {
-        targetCancer = f.id
+        targetCancel = f.id
       }
     })
     // @ts-ignore
-    this.friendService.unFriend(sourceCancer).subscribe((data) => {
-        this.friendService.unFriend(targetCancer).subscribe((data) => {
+    this.friendService.unFriend(sourceCancel).subscribe((data) => {
+        this.friendService.unFriend(targetCancel).subscribe((data) => {
             this.showDit()
           }
         );
