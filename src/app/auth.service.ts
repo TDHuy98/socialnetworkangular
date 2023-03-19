@@ -34,6 +34,10 @@ export class AuthService {
   jwtAuthResponse: JwtAuthResponse
   someOneLoggedIn: boolean;
 
+  checkLogginForm(loginPayload:LoginPayload):Observable<boolean>{
+    return this.httpClient.post<boolean>(this.url+"check-login-form-information", loginPayload)
+  }
+
   login(loginPayload: LoginPayload): Observable<any> {
     return this.httpClient.post<any>(this.url + "login", loginPayload, {responseType: "text" as "json"})
       .pipe(map(data => {
