@@ -39,7 +39,8 @@ import { ChangePasswordSuccessComponent } from './auth/change-password-success/c
     FriendListComponent,
     PhotosComponent,
     MainTimeLineComponent,
-    ChangePasswordSuccessComponent
+    ChangePasswordSuccessComponent,
+
 
   ],
   imports: [
