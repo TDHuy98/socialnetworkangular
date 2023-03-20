@@ -18,6 +18,7 @@ const routes: Routes = [
   {path: 'home' ,redirectTo:'feed'},
   {path:'setting',component:AccountSettingComponent},
   {path:'',component: MainTimeLineComponent},
+  {path:'feed/:id',component:FeedComponent},
   {path:'mainTimeLine/:id', component: MainTimeLineComponent},
   {path: 'change-password-success', component: ChangePasswordSuccessComponent},
 ];

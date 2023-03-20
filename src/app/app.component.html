@@ -368,16 +368,16 @@
 
 
             <a href="#">
-              <img src="{{currentLoggedInUser.profile}}" class="is_avatar" alt="">
+              <img src="{{loggedInUser.profile }}" class="is_avatar" alt="">
             </a>
             <div uk-drop="mode: click;offset:5" class="header_dropdown profile_dropdown">
 
-              <a (click)="fowardToMainTimeLine(currentLoggedInUser.id)" class="user">
+              <a (click)="fowardToMainTimeLine(loggedInUser.id)" class="user">
                 <div class="user_avatar">
-                  <img src="{{currentLoggedInUser.profile}}" alt="">
+                  <img src="{{loggedInUser.profile}}" alt="">
                 </div>
                 <div class="user_name">
-                  <div> {{currentLoggedInUser.firstname+ " " +currentLoggedInUser.middlename+ " " +currentLoggedInUser.lastname}}</div>
+                  <div> {{loggedInUser.firstName+ " " +loggedInUser.middleName+ " " +loggedInUser.lastName}}</div>
 <!--                  <span> @johnson</span>-->
                 </div>
               </a>
@@ -858,9 +858,8 @@
 </div>
 
 <!-- Craete post modal -->
-<div id="create-post-modal" class="create-post" uk-modal>
-  <div
-    class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical rounded-lg p-0 lg:w-5/12 relative shadow-2xl uk-animation-slide-bottom-small">
+<div id="create-post-modal" class="create-post " uk-modal>
+  <div class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical rounded-lg p-0 lg:w-5/12 relative shadow-2xl uk-animation-slide-bottom-small">
 
     <div class="text-center py-4 border-b">
       <h3 class="text-lg font-semibold"> Create Post </h3>
@@ -951,7 +950,7 @@
                   d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
           </svg>
           Live </a>
-        <a href="#" class="bg-blue-600 flex h-9 items-center justify-center rounded-md text-white px-5 font-medium">
+        <a type="submit" class="bg-blue-600 flex h-9 items-center justify-center rounded-md text-white px-5 font-medium">
           Share </a>
       </div>
 
