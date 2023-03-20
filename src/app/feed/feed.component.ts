@@ -153,6 +153,7 @@ export class FeedComponent implements OnInit {
     })
   }
   Like(postId: number, userId: number, userLastName: string) {
+    console.log('current post like ' + this.currentPostLiked)
     let flagLike = 0;
     let flagLikeID = -1;
     const like = {
@@ -170,16 +171,44 @@ export class FeedComponent implements OnInit {
     if (flagLike == 0) {
       //@ts-ignore
       this.postService.like(like).subscribe((data) => {
-          this.showPost()
-        }
-      );
-    }
-    if (flagLike == 1) {
-      this.postService.unLike(flagLikeID).subscribe((data) => {
-          this.showPost()
+          // this.showDit()
+          this.postService.findAllLike().subscribe(data => {
+              this.currentAllLike = data;
+              console.log('currentAllLike data ' + JSON.stringify(this.currentAllLike))
+              data.forEach(like => {
+                if (like.userId == this.currenLogInId) {
+                  this.currentPostLiked.push(like.postId)
+                  console.log('currentPostLiked after like ' + this.currentPostLiked)
+                }
+              })
 
+            }
+          )
         }
       );
+    } else {
+      //xóa phần tử post ID unlike ra khỏi mảng
+      this.postService.findAllLike().subscribe(data => {
+          this.currentAllLike = data;
+          data.forEach(like => {
+            if (like.userId == this.currenLogInId) {
+              this.currentPostLiked.splice(this.currentPostLiked.indexOf(like.postId), 1)
+              console.log('current post liked after splice ' + this.currentPostLiked)
+            }
+          }),
+            //tiến hành xóa like bên BE
+            this.postService.unLike(flagLikeID).subscribe((data) => {
+                // this.showDit()
+                console.log('dislike this post ' + like.postId)
+                this.postService.findAllLike().subscribe(data => {
+                    this.currentAllLike = data;  //lấy lại giá trị cho currentAllLike để đếm countLike
+                  }
+                )
+              }
+            );
+        }
+      )
+
     }
 
   }

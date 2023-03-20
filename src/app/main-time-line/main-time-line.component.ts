@@ -421,6 +421,7 @@ export class MainTimeLineComponent implements OnInit, OnChanges {
         }
       );
     } else {
+      //xóa phần tử post ID unlike ra khỏi mảng
       this.postService.findAllLike().subscribe(data => {
           this.currentAllLike = data;
           data.forEach(like => {
@@ -429,11 +430,12 @@ export class MainTimeLineComponent implements OnInit, OnChanges {
               console.log('current post liked after splice ' + this.currentPostLiked)
             }
           }),
+            //tiến hành xóa like bên BE
             this.postService.unLike(flagLikeID).subscribe((data) => {
                 // this.showDit()
                 console.log('dislike this post ' + like.postId)
                 this.postService.findAllLike().subscribe(data => {
-                    this.currentAllLike = data;
+                    this.currentAllLike = data;  //lấy lại giá trị cho currentAllLike để đếm countLike
                   }
                 )
               }
