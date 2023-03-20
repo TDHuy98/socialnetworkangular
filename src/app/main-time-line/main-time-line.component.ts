@@ -420,25 +420,34 @@ export class MainTimeLineComponent implements OnInit, OnChanges {
           )
         }
       );
-    }
-    if (flagLike == 1) {
+    } else {
       this.postService.findAllLike().subscribe(data => {
           this.currentAllLike = data;
-          console.log('currentAllLike data ' + JSON.stringify(this.currentAllLike))
           data.forEach(like => {
             if (like.userId == this.currenLogInId) {
-              let index = this.currentPostLiked.indexOf(like.postId)
-              this.currentPostLiked.splice(index, 1)
+              this.currentPostLiked.splice(this.currentPostLiked.indexOf(like.postId), 1)
               console.log('current post liked after splice ' + this.currentPostLiked)
             }
-          })
-          this.postService.unLike(flagLikeID).subscribe((data) => {
-              // this.showDit()
-              console.log('dislike this post ' + like.postId)
-            }
-          )
+          }),
+            this.postService.unLike(flagLikeID).subscribe((data) => {
+                // this.showDit()
+                console.log('dislike this post ' + like.postId)
+                this.postService.findAllLike().subscribe(data => {
+                    this.currentAllLike = data;
+                    data.forEach(like => {
+                      if (like.userId == this.currenLogInId) {
+                        this.currentPostLiked.splice(this.currentPostLiked.indexOf(like.postId), 1)
+                        console.log('current post liked after splice ' + this.currentPostLiked)
+                      }
+                    })
+                    this.currentAllLike = data;
+                  }
+                )
+              }
+            );
         }
-      );
+      )
+
     }
 
   }
