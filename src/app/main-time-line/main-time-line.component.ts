@@ -101,10 +101,34 @@ export class MainTimeLineComponent implements OnInit, OnChanges {
     this.curentLoginNewFriends = []
     this.curentLoginBlockFriends = []
     this.currentId = Number(localStorage.getItem('currentUserId'))
+
+
+    this.postService.getAll(this.currentId).subscribe(
+      (data) => {
+        console.log('postService getALl 1')
+        this.posts = data;
+        this.postService.findAllLike().subscribe(
+          (data) => {
+            this.currentAllLike = data;
+            this.postService.getAllComment().subscribe(
+              (data) => {
+                this.allCmt = data;
+              }
+            )
+          }
+        )
+      }
+    )
+
+
+
+    //get clicked in user id
     this.userService.findById(this.currentClickId).subscribe(data => {
       this.loggedInUser = data;
       this.currentClickId = data.id
     })
+
+
     this.friendService.getActiveFriendListByIdUser(this.currenLogInId).subscribe(
       data => {
         this.curentLoginActiveFriends = data
@@ -164,21 +188,9 @@ export class MainTimeLineComponent implements OnInit, OnChanges {
   showDit() {
     // @ts-ignore
     this.currentClickId = +this.route.snapshot.paramMap.get('id');
-    this.postService.getAll(this.currentId).subscribe(
-      (data) => {
-        this.posts = data;
-        this.postService.findAllLike().subscribe(
-          (data) => {
-            this.currentAllLike = data;
-            this.postService.getAllComment().subscribe(
-              (data) => {
-                this.allCmt = data;
-              }
-            )
-          }
-        )
-      }
-    )
+
+
+
     this.curentLoginActiveFriends = this.returnActiveFriend(this.currenLogInId)
     this.curentLoginSenderFriends = this.returnSenderFriend(this.currenLogInId)
     this.curentLoginBlockFriends = this.returnBlockFriend(this.currenLogInId)
@@ -199,7 +211,8 @@ export class MainTimeLineComponent implements OnInit, OnChanges {
     });
 
     this.postService.getAll(this.currentId).subscribe((data) => {
-        this.posts = data;
+      console.log('postService getALl 2')
+      this.posts = data;
         this.currentPostLiked = []
         this.postService.findAllLike().subscribe(data => {
             this.currentAllLike = data;
@@ -215,18 +228,19 @@ export class MainTimeLineComponent implements OnInit, OnChanges {
     )
   }
 
-  loadLike() {
-    this.postService.getAll(this.currentId).subscribe(
-      (data) => {
-        this.posts = data;
-        this.postService.findAllLike().subscribe(
-          (data) => {
-            this.currentAllLike = data;
-          }
-        )
-      }
-    )
-  }
+  // loadLike() {
+  //   this.postService.getAll(this.currentId).subscribe(
+  //     (data) => {
+  //       console.log('load like')
+  //       this.posts = data;
+  //       this.postService.findAllLike().subscribe(
+  //         (data) => {
+  //           this.currentAllLike = data;
+  //         }
+  //       )
+  //     }
+  //   )
+  // }
 
   showFriendListByIdUserAndStatus(id: number) {
     this.currentListFriends = []
