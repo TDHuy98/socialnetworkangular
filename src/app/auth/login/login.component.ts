@@ -43,6 +43,7 @@ export class LoginComponent implements OnInit {
     this.loginPayload.username = this.loginForm.get('username')?.value;
     this.loginPayload.password = this.loginForm.get('password')?.value;
     this.authService.login(this.loginPayload).subscribe(data => {
+      this.LoginFailedMessage =''
       console.log('login success')
       this.router.navigateByUrl("/home")
     }, error => {

@@ -12,7 +12,7 @@
                         </span>
 
           <div id="logo">
-            <a href="/feed">
+            <a class="btn" (click)="goToFeed()">
               <img src="assets/images/logo.png" alt="">
               <img src="assets/images/logo-mobile.png" class="logo_mobile" alt="">
             </a>
@@ -64,11 +64,6 @@
         </div>
 
         <div class="right_side">
-          <button (click)="getCurrentLoggedInUser()">Get Current Usrer</button>
-          <a class="btn-group">
-            <a href="/login" class="btn-danger">Login</a>
-            <a href="/register" class="btn-warning">Sign Up</a>
-          </a>
           <div class="header_widgets" *ngIf="checkLog()">
 
             <a href="#" class="is_icon" uk-tooltip="title: Notifications">
@@ -372,13 +367,12 @@
             </a>
             <div uk-drop="mode: click;offset:5" class="header_dropdown profile_dropdown">
 
-              <a (click)="fowardToMainTimeLine(currentLoggedInUser.id)" class="user">
+              <a (click)="fowardToMainTimeLine(currentLoggedInUser.id)" class="user btn">
                 <div class="user_avatar">
                   <img src="{{currentLoggedInUser.profile}}" alt="">
                 </div>
                 <div class="user_name">
-                  <div> {{currentLoggedInUser.firstname+ " " +currentLoggedInUser.middlename+ " " +currentLoggedInUser.lastname}}</div>
-<!--                  <span> @johnson</span>-->
+                  <div> {{currentLoggedInUser.firstname + " " + currentLoggedInUser.middlename + " " + currentLoggedInUser.lastname}}</div>
                 </div>
               </a>
               <a href="/setting">
@@ -389,15 +383,15 @@
                 </svg>
                 My Account
               </a>
-<!--              <a href="groups.html">-->
-<!--                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">-->
-<!--                  <path fill-rule="evenodd"-->
-<!--                        d="M3 6a3 3 0 013-3h10a1 1 0 01.8 1.6L14.25 8l2.55 3.4A1 1 0 0116 13H6a1 1 0 00-1 1v3a1 1 0 11-2 0V6z"-->
-<!--                        clip-rule="evenodd"/>-->
-<!--                </svg>-->
-<!--                Manage Pages-->
-<!--              </a>-->
-              <a  id="night-mode" class="btn-night-mode">
+              <!--              <a href="groups.html">-->
+              <!--                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">-->
+              <!--                  <path fill-rule="evenodd"-->
+              <!--                        d="M3 6a3 3 0 013-3h10a1 1 0 01.8 1.6L14.25 8l2.55 3.4A1 1 0 0116 13H6a1 1 0 00-1 1v3a1 1 0 11-2 0V6z"-->
+              <!--                        clip-rule="evenodd"/>-->
+              <!--                </svg>-->
+              <!--                Manage Pages-->
+              <!--              </a>-->
+              <a id="night-mode" class="btn-night-mode">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                   <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"/>
                 </svg>
@@ -967,11 +961,11 @@
     class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical rounded-lg p-0 lg:w-5/12 relative shadow-2xl uk-animation-slide-bottom-small">
 
     <button class="uk-modal-close-default bg-gray-100 rounded-full p-2.5 m-1 right-2" type="button" uk-close
-            uk-tooltip="title: Close ; pos: bottom ;offset:7" ></button>
+            uk-tooltip="title: Close ; pos: bottom ;offset:7"></button>
     <div class="flex flex-1 items-start space-x-4 p-5">
 
     </div>
-    <div class="flex items-center w-full justify-between p-3 border-t" >
+    <div class="flex items-center w-full justify-between p-3 border-t">
       <div *ngIf="!activeFriendsId.indexOf(currentUser.id)">
         <select class="selectpicker mt-2 col-4 story" style="width: 50px">
           <option> Friend request</option>

@@ -1,4 +1,5 @@
 export class ChangePassword {
   userId:number;
-  password:string
+  oldPassword:string
+  newPassword:string
 }

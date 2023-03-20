@@ -69,18 +69,8 @@ export class AppComponent implements OnInit {
 
 
   ngOnInit(): void {
-    // @ts-ignore
-    this.currentClickId = Number(localStorage.getItem('userId'))
+    //get current logged in user and save them to localstorage
     if (localStorage.length != 0) {
-      this.userService.findById(Number(localStorage.getItem('userId'))).subscribe(
-        data => {
-          console.log(data);
-          this.currentUser = data;
-          this.currentClickId = data.id
-        }
-      )
-      //get current logged in user and save them to localstorage
-
       this.authService.getCurrentLoggedInUser().subscribe(data => {
         this.currentLoggedInUser = data
         this.currentUserId = this.currentLoginUser.id;
@@ -93,6 +83,18 @@ export class AppComponent implements OnInit {
         console.log('can not get current logged in user')
       })
       console.log(this.currentLoggedInUser)
+    }
+    // @ts-ignore
+    this.currentClickId = Number(localStorage.getItem('userId'))
+    if (localStorage.length != 0) {
+      this.userService.findById(Number(localStorage.getItem('userId'))).subscribe(
+        data => {
+          console.log(data);
+          this.currentUser = data;
+          this.currentClickId = data.id
+        }
+      )
+
     }
   }
 
@@ -136,6 +138,14 @@ export class AppComponent implements OnInit {
 
   checkLog() {
     return localStorage.getItem('authenticationToken') != null;
+  }
+
+  goToFeed() {
+    if (localStorage.getItem('authenticationToken') != null) {
+      this.router.navigateByUrl("/feed")
+    } else {
+      this.router.navigateByUrl("/login")
+    }
   }
 }
 

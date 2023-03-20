@@ -23,6 +23,8 @@ import { FriendListComponent } from './friend-list/friend-list.component';
 import { PhotosComponent } from './photos/photos.component';
 import { MainTimeLineComponent } from './main-time-line/main-time-line.component';
 import { ChangePasswordSuccessComponent } from './auth/change-password-success/change-password-success.component';
+import {FriendDto} from "./model/Dto/FriendDto";
+import { CreatPostFormComponent } from './creat-post-form/creat-post-form.component';
 
 
 @NgModule({
@@ -39,7 +41,8 @@ import { ChangePasswordSuccessComponent } from './auth/change-password-success/c
     FriendListComponent,
     PhotosComponent,
     MainTimeLineComponent,
-    ChangePasswordSuccessComponent
+    ChangePasswordSuccessComponent,
+    CreatPostFormComponent,
 
   ],
   imports: [
