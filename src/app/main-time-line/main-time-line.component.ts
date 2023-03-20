@@ -434,13 +434,6 @@ export class MainTimeLineComponent implements OnInit, OnChanges {
                 console.log('dislike this post ' + like.postId)
                 this.postService.findAllLike().subscribe(data => {
                     this.currentAllLike = data;
-                    data.forEach(like => {
-                      if (like.userId == this.currenLogInId) {
-                        this.currentPostLiked.splice(this.currentPostLiked.indexOf(like.postId), 1)
-                        console.log('current post liked after splice ' + this.currentPostLiked)
-                      }
-                    })
-                    this.currentAllLike = data;
                   }
                 )
               }
