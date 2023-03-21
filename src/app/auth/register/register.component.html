@@ -19,14 +19,18 @@
       <label class="mb-0"> Username </label>
       <input type="text" placeholder="Username" formControlName="username"
              class="bg-gray-100 h-12 mt-2 px-3 rounded-md w-full">
-      <a *ngIf="registerErrorMessage=='This username has already registed'">{{registerErrorMessage}}</a>
+      <a *ngIf="registerErrorMessage=='This username has already registed'" class="text-danger">{{registerErrorMessage}}</a>
 
     </div>
     <div>
       <label class="mb-0"> Email Address </label>
       <input type="email" placeholder="Info@example.com" formControlName="email"
              class="bg-gray-100 h-12 mt-2 px-3 rounded-md w-full" email="true">
-      <a *ngIf="registerErrorMessage=='This email has already registed'">{{registerErrorMessage}}</a>
+      <a *ngIf="registerErrorMessage=='This email has already registed'" class="text-danger">{{registerErrorMessage}}</a>
+      <span *ngIf="registerForm.get('email')?.invalid&&registerForm.get('email')?.touched" class="text-danger">
+        <a *ngIf="registerForm.get('email')?.errors?.['required']">Please enter your email</a>
+        <a *ngIf="registerForm.get('email')?.errors?.['email']">Email must match example@email.com format</a>
+      </span>
     </div>
     <div>
       <label class="mb-0"> Password </label>
@@ -50,14 +54,14 @@
       </div>
       <div>
         <label class="mb-0"> Phone:</label>
-        <input type="text" formControlName="mobile" placeholder="03 5445 0543"
-               class="bg-gray-100 h-12 mt-2 px-3 rounded-md w-full">
-        <a *ngIf="registerErrorMessage=='This mobile has already registed'">{{registerErrorMessage}}</a>
-<!--        <div *ngIf="registerForm.get('mobile').touched && registerForm.get('mobile').invalid"-->
-<!--             class="alert alert-danger">-->
-<!--          <div *ngIf="registerForm.get('mobile').errors?.required">Please enter mobile number</div>-->
-<!--          <div *ngIf="registerForm.get('mobile').errors?.pattern">Mobile number is not 10 digit</div>-->
-<!--        </div>-->
+        <input type="text" id="mobile"  formControlName="mobile" placeholder="03 5445 0543"
+               class="bg-gray-100 h-12 mt-2 px-3 rounded-md w-full" [minLength]="10" [maxLength]="12" >
+        <a *ngIf="registerErrorMessage=='This mobile has already registed'" class="text-danger">{{registerErrorMessage}}</a>
+        <div *ngIf="registerForm.get('mobile')?.touched && registerForm.get('mobile')?.invalid"
+             class="text-danger">
+          <span *ngIf="registerForm.get('mobile')?.errors?.['required']"> Please enter mobile number</span>
+          <span *ngIf="registerForm.get('mobile')?.errors?.['pattern']">Mobile number is not 10 digit</span>
+        </div>
       </div>
       <a
         *ngIf="registerErrorMessage=='These mobile, email and username have already registed'">{{registerErrorMessage}}</a>

@@ -75,7 +75,7 @@ export class MainTimeLineComponent implements OnInit, OnChanges {
 
   constructor(private route: ActivatedRoute,
               @Inject(AngularFireStorage)
-              private  storage : AngularFireStorage,
+              private storage: AngularFireStorage,
               private postServicek: PostServicek,
               private userService: UserService,
               private router: Router, private friendService: FriendListService,
@@ -87,7 +87,9 @@ export class MainTimeLineComponent implements OnInit, OnChanges {
 
 
   }
-  @ViewChild('uploadFile',{static:true}) public avatarDom : ElementRef | undefined ;
+
+  @ViewChild('uploadFile', {static: true}) public avatarDom: ElementRef | undefined;
+
   ngOnChanges(changes: SimpleChanges): void {
     throw new Error('Method not implemented.');
 
@@ -101,10 +103,33 @@ export class MainTimeLineComponent implements OnInit, OnChanges {
     this.curentLoginNewFriends = []
     this.curentLoginBlockFriends = []
     this.currentId = Number(localStorage.getItem('currentUserId'))
+
+
+    this.postService.getAll(this.currentId).subscribe(
+      (data) => {
+        console.log('postService getALl 1')
+        this.posts = data;
+        this.postService.findAllLike().subscribe(
+          (data) => {
+            this.currentAllLike = data;
+            this.postService.getAllComment().subscribe(
+              (data) => {
+                this.allCmt = data;
+              }
+            )
+          }
+        )
+      }
+    )
+
+
+    //get clicked in user id
     this.userService.findById(this.currentClickId).subscribe(data => {
       this.loggedInUser = data;
       this.currentClickId = data.id
     })
+
+
     this.friendService.getActiveFriendListByIdUser(this.currenLogInId).subscribe(
       data => {
         this.curentLoginActiveFriends = data
@@ -113,7 +138,7 @@ export class MainTimeLineComponent implements OnInit, OnChanges {
           data => {
             this.curentLoginSenderFriends = data
 
-            console.log("dc,,", this.curentLoginSenderFriends)
+            // console.log("dc,,", this.curentLoginSenderFriends)
             this.friendService.getNewFriendListByIdUser(this.currenLogInId).subscribe(
               data => {
                 this.curentLoginNewFriends = data
@@ -146,39 +171,26 @@ export class MainTimeLineComponent implements OnInit, OnChanges {
     )
     this.showDit()
     this.postForm = new FormGroup({
-      content: new FormControl(""),
-      postStatus: new FormControl("postStatus",Validators.required),
+      content: new FormControl("content"),
+      postStatus: new FormControl("postStatus", Validators.required),
       img: new FormControl(""),
       posts: new FormControl(""),
     })
 
 
-    this.editForm =new FormGroup({
+    this.editForm = new FormGroup({
       id: new FormControl("id"),
       postStatus: new FormControl("postStatus"),
-      content: new FormControl("content",Validators.required),
-      img : new FormControl("img"),
+      content: new FormControl("content", Validators.required),
+      img: new FormControl("img"),
     })
   }
 
   showDit() {
     // @ts-ignore
     this.currentClickId = +this.route.snapshot.paramMap.get('id');
-    this.postService.getAll(this.currentId).subscribe(
-      (data) => {
-        this.posts = data;
-        this.postService.findAllLike().subscribe(
-          (data) => {
-            this.currentAllLike = data;
-            this.postService.getAllComment().subscribe(
-              (data) => {
-                this.allCmt = data;
-              }
-            )
-          }
-        )
-      }
-    )
+
+
     this.curentLoginActiveFriends = this.returnActiveFriend(this.currenLogInId)
     this.curentLoginSenderFriends = this.returnSenderFriend(this.currenLogInId)
     this.curentLoginBlockFriends = this.returnBlockFriend(this.currenLogInId)
@@ -199,34 +211,42 @@ export class MainTimeLineComponent implements OnInit, OnChanges {
     });
 
     this.postService.getAll(this.currentId).subscribe((data) => {
+        console.log('postService getALl 2')
         this.posts = data;
         this.currentPostLiked = []
         this.postService.findAllLike().subscribe(data => {
             this.currentAllLike = data;
+            console.log("this is all like data " + JSON.stringify(data))
             data.forEach(like => {
               if (like.userId == this.currenLogInId) {
                 this.currentPostLiked.push(like.postId)
               }
             })
-
+            console.log(this.currentPostLiked)
+            this.postService.getAllComment().subscribe(
+              (data) => {
+                this.allCmt = data;
+              }
+            )
           }
         )
       }
     )
   }
 
-  loadLike() {
-    this.postService.getAll(this.currentId).subscribe(
-      (data) => {
-        this.posts = data;
-        this.postService.findAllLike().subscribe(
-          (data) => {
-            this.currentAllLike = data;
-          }
-        )
-      }
-    )
-  }
+  // loadLike() {
+  //   this.postService.getAll(this.currentId).subscribe(
+  //     (data) => {
+  //       console.log('load like')
+  //       this.posts = data;
+  //       this.postService.findAllLike().subscribe(
+  //         (data) => {
+  //           this.currentAllLike = data;
+  //         }
+  //       )
+  //     }
+  //   )
+  // }
 
   showFriendListByIdUserAndStatus(id: number) {
     this.currentListFriends = []
@@ -367,6 +387,7 @@ export class MainTimeLineComponent implements OnInit, OnChanges {
 
 
   Like(postId: number, userId: number, userLastName: string) {
+    console.log('current post like ' + this.currentPostLiked)
     let flagLike = 0;
     let flagLikeID = -1;
     const like = {
@@ -384,16 +405,44 @@ export class MainTimeLineComponent implements OnInit, OnChanges {
     if (flagLike == 0) {
       //@ts-ignore
       this.postService.like(like).subscribe((data) => {
-          this.showDit()
-        }
-      );
-    }
-    if (flagLike == 1) {
-      this.postService.unLike(flagLikeID).subscribe((data) => {
-          this.showDit()
+          // this.showDit()
+          this.postService.findAllLike().subscribe(data => {
+              this.currentAllLike = data;
+              console.log('currentAllLike data ' + JSON.stringify(this.currentAllLike))
+              data.forEach(like => {
+                if (like.userId == this.currenLogInId) {
+                  this.currentPostLiked.push(like.postId)
+                  console.log('currentPostLiked after like ' + this.currentPostLiked)
+                }
+              })
 
+            }
+          )
         }
       );
+    } else {
+      //xóa phần tử post ID unlike ra khỏi mảng
+      this.postService.findAllLike().subscribe(data => {
+          this.currentAllLike = data;
+          data.forEach(like => {
+            if (like.userId == this.currenLogInId) {
+              this.currentPostLiked.splice(this.currentPostLiked.indexOf(like.postId), 1)
+              console.log('current post liked after splice ' + this.currentPostLiked)
+            }
+          }),
+            //tiến hành xóa like bên BE
+            this.postService.unLike(flagLikeID).subscribe((data) => {
+                // this.showDit()
+                console.log('dislike this post ' + like.postId)
+                this.postService.findAllLike().subscribe(data => {
+                    this.currentAllLike = data;  //lấy lại giá trị cho currentAllLike để đếm countLike
+                  }
+                )
+              }
+            );
+        }
+      )
+
     }
 
   }
@@ -412,7 +461,12 @@ export class MainTimeLineComponent implements OnInit, OnChanges {
         this.formCmt.reset();
       },
     );
-    this.showDit()
+    // this.showDit()
+    this.postService.getAllComment().subscribe(
+      (data) => {
+        this.allCmt = data;
+      }
+    )
   }
 
   coutLike(idPost: number) {
@@ -524,28 +578,31 @@ export class MainTimeLineComponent implements OnInit, OnChanges {
   creatPost() {
     const filePath = this.selectedImage.name;
     const fileRef = this.storage.ref(filePath);
-    this.storage.upload(filePath,this.selectedImage).snapshotChanges().pipe(
-      finalize(()=> (fileRef.getDownloadURL().subscribe(url =>{
+    this.storage.upload(filePath, this.selectedImage).snapshotChanges().pipe(
+      finalize(() => (fileRef.getDownloadURL().subscribe(url => {
         this.ArrayPicture = url;
         console.log("picture " + url)
         this.newPost.userId = this.currentLoggedInUserId;
-        this.newPost.content= this.postForm.get("content").value;
-        this.newPost.postStatus=this.postForm.get("postStatus").value;
+        this.newPost.content = this.postForm.get("content").value;
+        this.newPost.postStatus = this.postForm.get("postStatus").value;
         this.newPost.img = url
-        this.postServicek.save(this.newPost).subscribe(()=>{
+        this.postServicek.save(this.newPost).subscribe(() => {
           console.log("success")
           this.router.navigateByUrl("/feed");
+          window.location.reload();
         })
       })))
     ).subscribe()
   }
-  currentLoggedInUserId=Number(localStorage.getItem('userId'))
+
+  currentLoggedInUserId = Number(localStorage.getItem('userId'))
 
   selectedImage: any = null;
-  newPost: NewPost=new NewPost()
+  newPost: NewPost = new NewPost()
 
   ArrayPicture = "";
-  upload(){
+
+  upload() {
     this.selectedImage = this.avatarDom?.nativeElement.files[0];
   }
 
@@ -559,10 +616,10 @@ export class MainTimeLineComponent implements OnInit, OnChanges {
 
   delete(id: number) {
     alert("Delete Success")
-    this.postService.delete(id).subscribe(() =>{
+    this.postService.delete(id).subscribe(() => {
       alert("delete succes")
       this.router.navigate(["/feed"])
-    },error => {
+    }, error => {
       alert("delete false")
     })
 

@@ -12,21 +12,9 @@ import {Router} from "@angular/router";
 export class RegisterComponent implements OnInit {
   registerForm: FormGroup
   registerPayload: RegisterPayload
-  public myForm: FormGroup;
 
   constructor(private formBuilder: FormBuilder, private authService: AuthService, private router: Router) {
-    this.registerForm = formBuilder.group({
-      firstname: new FormControl(),
-      lastname: new FormControl(),
-      dateOfBirth: new FormControl(),
-      mobile: ['', [Validators.required, Validators.pattern("^((\\+91-?)|0)?[0-9]{10}$")]],
-      email: ['', [
-        Validators.required,
-        Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$")]],
-      username: new FormControl(),
-      password: new FormControl(),
-      confirmPassword: new FormControl()
-    }),
+
       this.registerPayload = {
         firstname: '',
         lastname: '',
@@ -36,19 +24,29 @@ export class RegisterComponent implements OnInit {
         username: '',
         password: ''
       }
-    this.myForm = formBuilder.group({
-      mob: ['', [Validators.required, Validators.pattern("^((\\+91-?)|0)?[0-9]{10}$")]]
-    })
+
   }
   get m() {
-    return this.myForm.controls;
+    return this.registerForm.controls ;
   }
-  onSubmit(){
-    console.log(this.myForm.value);
-  }
+
   ngOnInit(): void {
     this.registerErrorMessage = ''
 
+    this.registerForm = this.formBuilder.group({
+      firstname: '',
+      lastname: '',
+      dateOfBirth: '',
+      mobile: ['', [Validators.required, Validators.pattern("^((\\+91-?)|0)?[0-9]{10}$")]],
+      email: ['', [
+        Validators.email,
+        Validators.required,
+        // Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$")
+      ]],
+      username: '',
+      password: '',
+      confirmPassword: ''
+    })
 
   }
 

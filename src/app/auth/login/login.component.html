@@ -12,15 +12,18 @@
 
     <div>
       <label class="mb-0"> Password </label>
-      <input type="password"  formControlName="password"
+      <input type="password" formControlName="password"
              class="bg-gray-100 h-12 mt-2 px-3 rounded-md w-full">
     </div>
-    <div *ngIf="LoginFailedMessage!=''">{{LoginFailedMessage}}</div>
+    <div *ngIf="LoginFailedMessage!=''" class="text-danger">{{LoginFailedMessage}}</div>
     <div>
       <button type="submit"
               class="bg-blue-600 font-semibold p-2 mt-5 rounded-md text-center text-white w-full">
-        Tiến tới vùng đất đau khổ
+        Go to Land of Suffering
       </button>
+      <a>Dont have an account, click <a href="/register" class="btn-warning text-danger">here</a> to register
+      </a>
+
     </div>
   </form>
 

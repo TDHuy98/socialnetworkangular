@@ -67,39 +67,46 @@ export class AppComponent implements OnInit {
   friendList: Friend[] = []
 
   activeFriends: Friend[] = []
+  NewFriends: Friend[] = []
 
+  BlockFriends: Friend[] = []
+  newFriendsId: number[] = []
+  blockFriendsId: number[] = []
   activeFriendsId: number[] = []
   loggedInUser: User;
 
 
   ngOnInit(): void {
-    alert(this.loggedInUser.id)
-    // @ts-ignore
-    this.currentClickId = Number(localStorage.getItem('userId'))
-    console.log(this.currentClickId)
-    // if (this.currentClickId=Undefined)
 
-    this.userService.findById(Number(localStorage.getItem('userId'))).subscribe(
-      data => {
-        console.log(data);
-        this.currentUser = data;
-        this.loggedInUser = data
-        this.currentClickId = data.id
-        localStorage.setItem('loggedInUser', JSON.stringify(this.loggedInUser))
-      }
-    )
-    //get current logged in user and save them to localstorage
+      //get current clicked user id
+      // @ts-ignore
+      this.currentClickId = Number(localStorage.getItem('userId'))
+      console.log(this.currentClickId)
+      // if (this.currentClickId=Undefined)
+    //check if there is a user logged in
 
-    this.authService.getCurrentLoggedInUser().subscribe(data => {
-      this.currentLoggedInUser = data
-      this.currentUserId = this.currentLoginUser.id;
-      localStorage.setItem('loggedInUser', JSON.stringify(this.currentLoggedInUser))
-      console.log("local", localStorage.getItem('loggedInUser'))
-    }, error => {
-      console.log('can not get current logged in user')
-    })
-    console.log(this.currentLoggedInUser)
-    this.showUser()
+      this.userService.findById(Number(localStorage.getItem('userId'))).subscribe(
+        data => {
+          console.log(data);
+          this.currentUser = data;
+          this.loggedInUser = data
+          this.currentClickId = data.id
+          localStorage.setItem('loggedInUser', JSON.stringify(this.loggedInUser))
+        }
+      )
+      //get current logged in user and save them to localstorage
+    if (localStorage.length != 0) {
+      this.authService.getCurrentLoggedInUser().subscribe(data => {
+        this.currentLoggedInUser = data
+        this.currentUserId = this.currentLoginUser.id;
+        localStorage.setItem('loggedInUser', JSON.stringify(this.currentLoggedInUser))
+        console.log("local", localStorage.getItem('loggedInUser'))
+      }, error => {
+        console.log('can not get current logged in user')
+      })
+      console.log(this.currentLoggedInUser)
+      this.showUser()
+    }
   }
 
 
@@ -149,6 +156,14 @@ export class AppComponent implements OnInit {
 
   checkLog() {
     return localStorage.getItem('authenticationToken') != null;
+  }
+
+  goToFeed() {
+    if (localStorage.getItem('authenticationToken') != null) {
+      this.router.navigateByUrl("/feed")
+    } else {
+      this.router.navigateByUrl("/login")
+    }
   }
 }
 

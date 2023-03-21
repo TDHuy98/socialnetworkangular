@@ -1,4 +1,5 @@
-<input disabled hidden [(ngModel)]="settingNavigation">
+<input disabled hidden [(ngModel)]="settingNavigation" xmlns="http://www.w3.org/1999/html"
+       xmlns="http://www.w3.org/1999/html">
 <div class="mb-6">
   <h2 class="text-2xl font-semibold border-b md:m-0 -mx-4"> Setting </h2>
 
@@ -39,91 +40,106 @@
   <div class="lg:w-2/3">
 
     <div *ngIf="settingNavigation=='profile'" class="lg:flex lg:flex-col justify-between lg:h-full">
-      <!--      <form [formGroup]="updateInformationForm" (ngSubmit)="updateInformation()">-->
-      <!-- form header -->
-      <div>
-        <div class="lg:px-10 lg:py-8 p-6">
-          <h3 class="font-bold mb-2 text-xl">Profile</h3>
-          <p class=""> This information will be dispalyed publicly so be carful what you share. </p>
+      <form #updateForm="ngForm" (ngSubmit)="updateInformation()">
+        <!--       form header -->
+        <div>
+          <div class="lg:px-10 lg:py-8 p-6">
+            <h3 class="font-bold mb-2 text-xl">Profile</h3>
+            <p class=""> This information will be dispalyed publicly so be carful what you share. </p>
+          </div>
+
+          <!-- form body -->
+          <div class="lg:py-8 lg:px-20 flex-1 space-y-4 p-6">
+
+            <div>
+              <label for="firstName">First Name</label>
+              <input id="firstName" autocomplete="off" name="firstName" type="text"
+                     onkeyup="this.setAttribute('value', this.value);" value=""
+                     [(ngModel)]="userInfor.firstName" pattern="[a-zA-Z ]*">
+
+            </div>
+            <div>
+              <label for="middleName">Middle Name</label>
+              <input id="middleName" autocomplete="off" name="firstName" type="text"
+                     onkeyup="this.setAttribute('value', this.value);" value=""
+                     [(ngModel)]="userInfor.middleName" pattern="[a-zA-Z ]*">
+            </div>
+            <div>
+              <label for="lastName"> Last Name </label>
+              <input id="lastName" autocomplete="off" name="lastName" type="text"
+                     onkeyup="this.setAttribute('value', this.value);" value=""
+                     required
+                     [(ngModel)]="userInfor.lastName">
+
+            </div>
+            <div>
+              <label for="email">Email </label>
+              <input id="email" autocomplete="off" name="email" type="email"
+                     onkeyup="this.setAttribute('value', this.value);" value=""
+                     [(ngModel)]="userInfor.email" email required>
+
+              <span class="text-danger"
+                    *ngIf="updateInforMessage=='This email has already exist, please use another'">{{updateInforMessage}}</span>
+            </div>
+            <div>
+              <label for="mobile">Mobile </label>
+              <input id="mobile" autocomplete="off" name="mobile" type="text"
+                     onkeyup="this.setAttribute('value', this.value);" value=""
+                     [(ngModel)]="userInfor.mobile">
+
+              <span class="text-danger"
+                    *ngIf="updateInforMessage=='This mobile has already exist, please use another'">{{updateInforMessage}}</span>
+            </div>
+            <label for="intro">Intro</label>
+            <div>
+
+              <input class="line h-32" autocomplete="off" type="text"
+                     onkeyup="this.setAttribute('value', this.value);" value=""
+                     id="intro" [(ngModel)]="userInfor.intro" pattern="[a-zA-Z ]*">
+            </div>
+          </div>
+          <div class="bg-gray-10 p-6 pt-0 flex justify-content-center space-x-3">
+            <button class="p-2 px-4 rounded bg-gray-50 text-red-500"> Cancel</button>
+            <button type="submit" class="button bg-blue-700"> Save</button>
+          </div>
         </div>
-
-        <!-- form body -->
-        <div class="lg:py-8 lg:px-20 flex-1 space-y-4 p-6">
-
-          <div>
-            <label for="firstName">First Name</label>
-            <input id="firstName" autocomplete="off" name="firstName" type="text"
-                   onkeyup="this.setAttribute('value', this.value);" value=""
-                   [(ngModel)]="firstName" pattern="[a-zA-Z ]*">
-          </div>
-          <div>
-            <label for="middleName">Middle Name</label>
-            <input id="middleName" autocomplete="off" name="firstName" type="text"
-                   onkeyup="this.setAttribute('value', this.value);" value=""
-                   [(ngModel)]="middleName" pattern="[a-zA-Z ]*">
-          </div>
-          <div>
-            <label for="lastName"> Last Name </label>
-            <input id="lastName" autocomplete="off" name="lastName" type="text"
-                   onkeyup="this.setAttribute('value', this.value);" value=""
-                   [(ngModel)]="lastName">
-
-          </div>
-          <div class>
-            <label for="email">Email </label>
-            <input id="email" autocomplete="off" name="email" type="email"
-                   onkeyup="this.setAttribute('value', this.value);" value=""
-                   [(ngModel)]="email" email>
-          </div>
-          <label for="intro">Intro</label>
-          <div>
-
-            <input class="line h-32" autocomplete="off" type="text"
-                   onkeyup="this.setAttribute('value', this.value);" value=""
-                   id="intro" [(ngModel)]="intro" pattern="[a-zA-Z ]*">
-          </div>
-        </div>
-
-        <div class="bg-gray-10 p-6 pt-0 flex justify-content-center space-x-3">
-          <button class="p-2 px-4 rounded bg-gray-50 text-red-500"> Cancel</button>
-          <button type="button" class="button bg-blue-700" (click)="updateInformation()"> Save</button>
-        </div>
-      </div>
-      <!--      </form>-->
+      </form>
     </div>
 
     <div *ngIf="settingNavigation=='password'" class="bg-white rounded-md lg:shadow-md shadow">
+      <form [formGroup]="changePasswordForm" (ngSubmit)="changePassword()">
+        <div class="grid grid-cols-2 gap-3 lg:p-6 p-4">
+          <div class="col-span-2">
+            <label for="old password">Old Password</label>
+            <a>
+              <input id="old password" formControlName="password" type="password"
+                     placeholder="old password" class="shadow-none with-border">
+              <p *ngIf="!isPasswordChecked" class="text-danger">Old Password wrong, please fill again!</p>
+            </a>
+          </div>
+          <div class="col-span-2">
+            <label for="new password"> New Password</label>
+            <input id="new password" type="password" placeholder="New Password" class="shadow-none with-border"
+                   (input)="checkIsNewPasswordConfirmed()" formControlName="newPassword">
+            <a *ngIf="changePasswordForm.get('newPassword')?.value!='' &&!isNewPasswordConfirmed" class="text-danger">
+              New password not matched confirm password</a>
+          </div>
+          <div class="col-span-2">
+            <label for="confirm new password"> Confirm New Password</label>
+            <input id="confirm new password" type="password" placeholder="Confirm New Password"
+                   class="shadow-none with-border"
+                   (input)="checkIsNewPasswordConfirmed()" formControlName="confirmNewPassword">
+            <a *ngIf="changePasswordForm.get('confirmNewPassword')?.value!='' &&!isNewPasswordConfirmed"
+               class="text-danger">Confirm password not matched new password</a>
+          </div>
+          <div class="col-span-2" disabled *ngIf="message!=''" class="text-danger"><a>{{message}}</a></div>
 
-      <div class="grid grid-cols-2 gap-3 lg:p-6 p-4">
-        <div class="col-span-2">
-          <label for="old password">Old Password</label>
-          <a>
-            <input id="old password" [(ngModel)]="password" type="text"
-                   placeholder="old password" class="shadow-none with-border">
-            <p *ngIf="!isPasswordChecked" class="text-danger">Old Password wrong, please fill again!</p>
-          </a>
+          <div class="bg-gray-10 p-6 pt-0 flex justify-end space-x-3">
+            <button class="p-2 px-4 rounded bg-gray-50 text-red-500"> Cancel</button>
+            <button type="submit" class="button bg-blue-700"> Save</button>
+          </div>
         </div>
-        <div class="col-span-2">
-          <label for="new password"> New Password</label>
-          <input id="new password" type="password" placeholder="New Password" class="shadow-none with-border"
-              (input)="checkIsNewPasswordConfirmed()"    [(ngModel)]="newPassword">
-          <a *ngIf="newPassword!='' &&!isNewPasswordConfirmed" class="text-danger"> New password not matched confirm password</a>
-        </div>
-        <div class="col-span-2">
-          <label for="confirm new password"> Confirm New Password</label>
-          <input id="confirm new password" type="password" placeholder="Confirm New Password"
-                 class="shadow-none with-border"
-                 (input)="checkIsNewPasswordConfirmed()" [(ngModel)]="confirmNewPassword">
-          <a *ngIf="confirmNewPassword!='' &&!isNewPasswordConfirmed" class="text-danger">Confirm password not matched new password</a>
-        </div>
-        <div class="col-span-2" disabled *ngIf="message!=''"><a>{{message}}</a></div>
-
-        <div class="bg-gray-10 p-6 pt-0 flex justify-end space-x-3">
-          <button class="p-2 px-4 rounded bg-gray-50 text-red-500"> Cancel</button>
-          <button type="button" class="button bg-blue-700" (click)="changePassword()"> Save</button>
-        </div>
-      </div>
-
+      </form>
 
     </div>
 

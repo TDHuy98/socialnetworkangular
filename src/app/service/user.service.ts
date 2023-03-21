@@ -20,7 +20,7 @@ export class UserService {
   }
 
   updateUserInformation(userInformation: UserUpdate): Observable<UserUpdate> {
-    return this.httpClient.post<UserUpdate>(this.url + "setting", userInformation)
+    return this.httpClient.put<UserUpdate>(this.url + "setting", userInformation)
   }
 
 
