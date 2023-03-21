@@ -5,6 +5,7 @@ import {User} from "../model/User";
 
 import {UserUpdate} from "../model/UserUpdate";
 import {ChangePassword} from "../model/ChangePassword";
+import {UserSearch} from "../model/UserSearch";
 
 @Injectable({
   providedIn: 'root'
@@ -48,31 +49,13 @@ export class UserService {
     this.mystatusChanged.emit(val);
   }
 
-  // getAllImg(): Observable<ImgPost[]> {
-  //   return this.http.get<ImgPost[]>('http://localhost:8080/images')
-  // }
-  //
-  // findAll(): Observable<Post[]> {
-  //   return this.http.get<Post[]>('http://localhost:8080/posts');
-  // }
-  //
+
   findById(id: number): Observable<User> {
     return this.httpClient.get<User>('http://localhost:8080/user/' + id);
   }
 
-  //
-  //
-  // delete(id: number): Observable<void> {
-  //   return this.http.delete<void>(`http://localhost:8080/posts/${id}`);
-  // }
-  //
-  // create(post: { postTime: string; user: { id: number }; content: any }): Observable<Post> {
-  //   return this.http.post<Post>('http://localhost:8080/posts', post);
-  // }
-
-
-  // edit(post: Post): Observable<any> {
-  //   return this.http.put('http://localhost:8080/posts', post);
-  // }
+  search(searchValue:string):Observable<UserSearch[]>{
+    return this.httpClient.get<UserSearch[]>(this.url+searchValue)
+  }
 }
 

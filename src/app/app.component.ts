@@ -74,6 +74,7 @@ export class AppComponent implements OnInit {
   blockFriendsId: number[] = []
   activeFriendsId: number[] = []
   loggedInUser: User;
+  searchValue: '';
 
 
   ngOnInit(): void {
