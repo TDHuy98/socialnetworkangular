@@ -291,7 +291,7 @@
 
                   <div class="flex space-x-4 lg:font-bold">
                     <a
-                      (click)="Like(puppy.id,this.currenLogInId,this.loggedInUser.firstName+this.loggedInUser.middleName+this.loggedInUser.lastName)"
+                      (click)="Like(puppy.id,this.currenLogInId,this.loggedInUser.middleName+this.loggedInUser.lastName,puppy.userId,puppy.profile)"
                       class="flex items-center space-x-2">
                       <div class="p-2 rounded-full  text-black lg:bg-gray-100 dark:bg-gray-600">
                         <svg *ngIf="currentPostLiked.includes(puppy.id)" xmlns="http://www.w3.org/2000/svg"
@@ -383,7 +383,7 @@
 
 
                   <div class="bg-gray-100 rounded-full relative dark:bg-gray-800 border-t">
-                    <form (ngSubmit)="cmt(this.puppy.id)" [formGroup]="formCmt">
+                    <form (ngSubmit)="cmt(this.puppy.id,'cmt your post','Uncheck',puppy.profile,'post',puppy.userId,puppy.middlename+' '+puppy.lastname)" [formGroup]="formCmt">
                       <input formControlName="content" placeholder="Add your Comment.."
                              class="bg-transparent max-h-10 shadow-none px-5">
                       <div class="-m-0.5 absolute bottom-0 flex items-center right-3 text-xl">

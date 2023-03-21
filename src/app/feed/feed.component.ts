@@ -344,7 +344,6 @@ export class FeedComponent implements OnInit {
     this.postServicec.getAllNotices(idUser).subscribe(
       data => {
         this.notices = data;
-        console.log("notice", this.notices)
       }
     )
   }

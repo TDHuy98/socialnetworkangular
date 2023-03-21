@@ -468,8 +468,9 @@ export class MainTimeLineComponent implements OnInit, OnChanges {
     );
   }
 
+  // creatNotice(content: string, idUser: number, idPost: number, status: string, userAvatar: string, type: string, name: string) {
 
-  Like(postId: number, userId: number, userLastName: string) {
+  Like(postId: number, userId: number, userLastName: string,userIdRevNotice:number,actionAvartar:string,) {
     console.log('current post like ' + this.currentPostLiked)
     let flagLike = 0;
     let flagLikeID = -1;
@@ -488,7 +489,24 @@ export class MainTimeLineComponent implements OnInit, OnChanges {
     if (flagLike == 0) {
       //@ts-ignore
       this.postService.like(like).subscribe((data) => {
+        let flag =0;
+
           // this.showDit()
+        // Tạo thông báo sau khi like
+          this.postService.getAllNotices(this.loggedInUser.id).subscribe(
+            data => {
+              data.forEach(item => {
+                if (item.postId == postId && item.type=='like'){
+                  flag+=1;
+                }
+              })
+              if (flag==0){
+                this.creatNotice("like your post", userIdRevNotice, postId, "Uncheck", actionAvartar, "like", userLastName)
+              }
+            }
+          )
+
+
           this.postService.findAllLike().subscribe(data => {
               this.currentAllLike = data;
               console.log('currentAllLike data ' + JSON.stringify(this.currentAllLike))
@@ -530,7 +548,7 @@ export class MainTimeLineComponent implements OnInit, OnChanges {
 
   }
 
-  cmt(idPost: number) {
+  cmt(idPost: number, contentNotice: string, status: string, userCmtAvatar: string, type: string, userId: number, nameAction: string) {
     const cmt = {
       content: this.formCmt.controls["content"].value,
       user: {
@@ -538,6 +556,11 @@ export class MainTimeLineComponent implements OnInit, OnChanges {
       },
       postId: idPost
     };
+    //Tạo thông báo sau khi cmt
+    this.creatNotice("cmt your post", userId, idPost, "Uncheck", userCmtAvatar, "cmt", nameAction)
+    // creatNotice(content: string, idUser: number, idPost: number, status: string, userAvatar: string, type: string, name: string) {
+
+
     // console.log(this.posts)
     // @ts-ignore
     this.postService.comment(cmt).subscribe((data) => {
@@ -729,15 +752,16 @@ export class MainTimeLineComponent implements OnInit, OnChanges {
   }
 
   getEditComment(id: number, content: string, postId: number) {
-    this.idCommetToEdit= id
-    this.contentToEdit=content
-    this.postIdToEdit= postId
+    this.idCommetToEdit = id
+    this.contentToEdit = content
+    this.postIdToEdit = postId
   }
 
   idCommetToEdit: number
   contentToEdit: string
   postIdToEdit: number
 
+//Chưa chạy đâu anh ơi
   editComment() {
     const cmt = {
       id: this.idCommetToEdit,
@@ -759,24 +783,50 @@ export class MainTimeLineComponent implements OnInit, OnChanges {
       },
     );
   }
-   count = 0
+
+  count = 0
 
   countCmt(id: number) {
-    this.count=0;
+    this.count = 0;
     this.allCmt.forEach((cmt) => {
       if (cmt.postId === id) {
-        this.count+=1;
+        this.count += 1;
       }
     })
     return " " + this.count + " comments"
   }
 
   notices: Notifications[];
-  loadNotice(idUser: number){
+
+  loadNotice(idUser: number) {
     this.postService.getAllNotices(idUser).subscribe(
-      data=>{
-        this.notices= data;
+      data => {
+        this.notices = data;
       }
     )
+  }
+
+  creatNotice(content: string, idUser: number, idPost: number, status: string, userAvatar: string, type: string, name: string) {
+    const notice = {
+      content: content,
+      postId: idPost,
+      userId: idUser,
+      status: status,
+      targetAvatar: userAvatar,
+      type: type,
+      userLastName: name,
+
+    };
+    console.log("notice: " , notice);
+    // @ts-ignore
+    this.postService.createNotications(notice).subscribe((data) => {
+        this.postService.getAllNotices(this.loggedInUser.id).subscribe(
+          (data) => {
+            this.notices = data;
+            this.loadNotice(this.loggedInUser.id)
+          }
+        )
+      },
+    );
   }
 }
