@@ -225,15 +225,23 @@ export class FeedComponent implements OnInit {
     // @ts-ignore
     this.postService.comment(cmt).subscribe((data) => {
         this.formCmt.reset();
+      this.postService.getAllComment().subscribe(
+        (data) => {
+          this.allCmt = data;
+        }
+      )
       },
     );
-    this.showPost()
   }
 
 
   DeleteCmt(id: number) {
     this.postService.commentDelete(id).subscribe(() => {
-      this.showPost()
+      this.postService.getAllComment().subscribe(
+        (data) => {
+          this.allCmt = data;
+        }
+      )
     })
 
   }

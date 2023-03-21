@@ -459,14 +459,15 @@ export class MainTimeLineComponent implements OnInit, OnChanges {
     // @ts-ignore
     this.postService.comment(cmt).subscribe((data) => {
         this.formCmt.reset();
+        this.postService.getAllComment().subscribe(
+          (data) => {
+            this.allCmt = data;
+          }
+        )
       },
     );
     // this.showDit()
-    this.postService.getAllComment().subscribe(
-      (data) => {
-        this.allCmt = data;
-      }
-    )
+
   }
 
   coutLike(idPost: number) {
@@ -486,7 +487,11 @@ export class MainTimeLineComponent implements OnInit, OnChanges {
 
   DeleteCmt(id: number) {
     this.postService.commentDelete(id).subscribe(() => {
-      this.showDit()
+      this.postService.getAllComment().subscribe(
+        (data) => {
+          this.allCmt = data;
+        }
+      )
     })
 
   }
