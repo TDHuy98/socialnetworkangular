@@ -18,6 +18,11 @@ import {User} from "../model/User";
 import {MainTimeLineComponent} from "../main-time-line/main-time-line.component";
 import {Like} from "../model/Like";
 import {CommentDto} from "../model/Dto/CommentDto";
+import {FriendListService} from "../service/friend-list.service";
+import {FriendDto} from "../model/Dto/FriendDto";
+
+
+
 @Component({
   selector: 'app-feed',
   templateUrl: './feed.component.html',
@@ -39,6 +44,7 @@ export class FeedComponent implements OnInit {
 
   constructor(private postService: PostServicek,
               private router: Router,
+              private friendService: FriendListService,
               private route: ActivatedRoute,
               @Inject(AngularFireStorage) private  storage : AngularFireStorage, private userService: UserService) {
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
@@ -75,6 +81,10 @@ export class FeedComponent implements OnInit {
     name: new FormControl(""),
   })
   currentUser:User;
+  curentLoginActiveFriends: FriendDto[] = [];
+  curentLoginNewFriends: FriendDto[] = [];
+  curentLoginBlockFriends: FriendDto[] = [];
+  curentLoginSenderFriends: FriendDto[] = [];
   loggedInUser:User;
 
   ngOnInit() {
@@ -112,8 +122,20 @@ export class FeedComponent implements OnInit {
       content: new FormControl("content",Validators.required),
       img : new FormControl("img"),
     })
+    this.loadloginListFr()
+  }
+  currentActiveFriendsId: Number[] = [];
 
-
+  loadloginListFr() {
+    this.friendService.getActiveFriendListByIdUser(this.currenLogInId).subscribe(
+      data => {
+        this.curentLoginActiveFriends = data
+        this.currentActiveFriendsId=[]
+        this.curentLoginActiveFriends.forEach(item => {
+          this.currentActiveFriendsId.push(item.target.id)
+        })
+      }
+    )
   }
 
   showEdit(id: number) {

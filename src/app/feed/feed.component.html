@@ -729,7 +729,7 @@
           <h3 class="text-line-through font-semibold mb-1"> Birthdays </h3>
           <div class="-mx-2 duration-300 flex hover:bg-gray-50 px-2 py-2 rounded-md">
             <img src="assets/images/icons/gift-icon.png" class="w-9 h-9 mr-3" alt="">
-            <p class="line-clamp-2 leading-6"><strong> Mike </strong>
+            <p class="line-clamp-2 leading-6"><strong> Trần Đức Huy </strong>
               have a birthdays to day .
             </p>
           </div>
@@ -747,24 +747,24 @@
           </ul>
         </nav>
 
-        <div class="contact-list">
+        <div *ngFor="let puppy of curentLoginActiveFriends" class="contact-list">
 
           <a href="#">
             <div class="contact-avatar">
               <img
-                src="https://scontent.fhan17-1.fna.fbcdn.net/v/t39.30808-6/325950043_729703911817406_963578585034051307_n.jpg?stp=dst-jpg_s851x315&_nc_cat=104&ccb=1-7&_nc_sid=da31f3&_nc_ohc=ijGN0HhBPQgAX8EPUIb&_nc_oc=AQkpgr8z-V5HdMoqqMJZ3oSpJ42J2-FDE1Xr_QhL7vqoM61HzlCQGvd-JlkQLITE5Pw&_nc_ht=scontent.fhan17-1.fna&oh=00_AfBM_pI4kOLQ1bOKwSYb6PWNIWyXwFkYf0cFR9NSiWHj6A&oe=640DCBAF"
+                src="{{puppy.source.profile}}"
                 alt="">
               <span class="user_status status_online"></span>
             </div>
-            <div class="contact-username">Mike</div>
+            <div class="contact-username">{{puppy.target.middleName}}{{puppy.source.lastName}}</div>
           </a>
           <div uk-drop="pos: left-center ;animation: uk-animation-slide-left-small">
             <div class="contact-list-box">
               <div class="contact-avatar">
-                <img src="assets/images/avatars/avatar-2.jpg" alt="">
+                <img src="{{puppy.target.profile}}" alt="">
                 <span class="user_status status_online"></span>
               </div>
-              <div class="contact-username"> Mike</div>
+              <div class="contact-username"> {{puppy.target.middleName}}{{puppy.source.lastName}}</div>
               <p>
                 <ion-icon name="people" class="text-lg mr-1"></ion-icon>
                 Become friends with

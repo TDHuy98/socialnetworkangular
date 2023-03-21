@@ -39,6 +39,12 @@ export class MainTimeLineComponent implements OnInit, OnChanges {
     content: new FormControl(""),
     name: new FormControl(""),
   })
+  formEditCmt: FormGroup = new FormGroup({
+    content: new FormControl(""),
+    id: new FormControl(""),
+    postId: new FormControl(""),
+
+  })
   currentId = Number(localStorage.getItem("userId"));
 
   loggedInUser: User = new User();
@@ -53,7 +59,7 @@ export class MainTimeLineComponent implements OnInit, OnChanges {
   curentLoginActiveFriends: FriendDto[] = [];
   curentLoginNewFriends: FriendDto[] = [];
   curentLoginBlockFriends: FriendDto[] = [];
-  curentLoginSenderFriends: FriendDto[] = []
+  curentLoginSenderFriends: FriendDto[] = [];
   postForm: FormGroup[] | any;
   editForm: FormGroup | any;
   newFriendsId: number[] = [];
@@ -98,13 +104,7 @@ export class MainTimeLineComponent implements OnInit, OnChanges {
 
 
   ngOnInit(): void {
-    this.curentLoginActiveFriends = []
-    this.curentLoginBlockFriends = []
-    this.curentLoginNewFriends = []
-    this.curentLoginBlockFriends = []
     this.currentId = Number(localStorage.getItem('currentUserId'))
-
-
     this.postService.getAll(this.currentId).subscribe(
       (data) => {
         console.log('postService getALl 1')
@@ -121,54 +121,13 @@ export class MainTimeLineComponent implements OnInit, OnChanges {
         )
       }
     )
-
-
     //get clicked in user id
     this.userService.findById(this.currentClickId).subscribe(data => {
       this.loggedInUser = data;
       this.currentClickId = data.id
     })
-
-
-    this.friendService.getActiveFriendListByIdUser(this.currenLogInId).subscribe(
-      data => {
-        this.curentLoginActiveFriends = data
-
-        this.friendService.getSendFriendListByIdUser(this.currenLogInId).subscribe(
-          data => {
-            this.curentLoginSenderFriends = data
-
-            // console.log("dc,,", this.curentLoginSenderFriends)
-            this.friendService.getNewFriendListByIdUser(this.currenLogInId).subscribe(
-              data => {
-                this.curentLoginNewFriends = data
-
-                this.friendService.getBlockFriendListByIdUser(this.currenLogInId).subscribe(
-                  data => {
-                    this.curentLoginBlockFriends = data
-                    this.curentLoginActiveFriends.forEach(item => {
-                      this.currentActiveFriendsId.push(item.target.id)
-                    })
-                    this.curentLoginSenderFriends.forEach(item => {
-                      this.currentSenderFriendsId.push(item.target.id)
-                    })
-                    this.curentLoginNewFriends.forEach(item => {
-                      this.currentNewFriendsId.push(item.target.id)
-                    })
-                    this.curentLoginBlockFriends.forEach(item => {
-                      this.currentBlockFriendsId.push(item.target.id)
-                    })
-
-
-                  }
-                )
-
-              }
-            )
-          }
-        )
-      }
-    )
+    this.loadloginListFr();
+    this.loadTargetListFr(this.currentClickId);
     this.showDit()
     this.postForm = new FormGroup({
       content: new FormControl("content"),
@@ -176,8 +135,6 @@ export class MainTimeLineComponent implements OnInit, OnChanges {
       img: new FormControl(""),
       posts: new FormControl(""),
     })
-
-
     this.editForm = new FormGroup({
       id: new FormControl("id"),
       postStatus: new FormControl("postStatus"),
@@ -189,13 +146,6 @@ export class MainTimeLineComponent implements OnInit, OnChanges {
   showDit() {
     // @ts-ignore
     this.currentClickId = +this.route.snapshot.paramMap.get('id');
-
-
-    this.curentLoginActiveFriends = this.returnActiveFriend(this.currenLogInId)
-    this.curentLoginSenderFriends = this.returnSenderFriend(this.currenLogInId)
-    this.curentLoginBlockFriends = this.returnBlockFriend(this.currenLogInId)
-    this.curentLoginNewFriends = this.returnNewFriend(this.currenLogInId)
-
     // @ts-ignore
     this.currentId = +this.route.snapshot.paramMap.get('id');
     // @ts-ignore
@@ -226,6 +176,77 @@ export class MainTimeLineComponent implements OnInit, OnChanges {
             this.postService.getAllComment().subscribe(
               (data) => {
                 this.allCmt = data;
+              }
+            )
+          }
+        )
+      }
+    )
+  }
+
+  loadTargetListFr(userId: number) {
+    this.friendService.getBlockFriendListByIdUser(userId).subscribe(
+      data => {
+        this.targetBlockFriendList = data
+      }
+    )
+    this.friendService.getActiveFriendListByIdUser(userId).subscribe(
+      data => {
+        this.targetActiveFriendList = data
+
+      }
+    )
+    this.friendService.getNewFriendListByIdUser(userId).subscribe(
+      data => {
+        this.targetNewFriendList = data
+
+      }
+    )
+    this.friendService.getSendFriendListByIdUser(userId).subscribe(
+      data => {
+        this.targetSenderFriendList = data
+        console.log("cmm", this.targetSenderFriendList)
+
+      }
+    )
+  }
+
+  loadloginListFr() {
+    this.friendService.getActiveFriendListByIdUser(this.currenLogInId).subscribe(
+      data => {
+        this.curentLoginActiveFriends = data
+        this.currentActiveFriendsId = []
+        this.currentNewFriendsId = []
+        this.currentSenderFriendsId = []
+
+        this.friendService.getSendFriendListByIdUser(this.currenLogInId).subscribe(
+          data => {
+            this.curentLoginSenderFriends = data
+
+            this.friendService.getNewFriendListByIdUser(this.currenLogInId).subscribe(
+              data => {
+                this.curentLoginNewFriends = data
+
+                this.friendService.getBlockFriendListByIdUser(this.currenLogInId).subscribe(
+                  data => {
+                    this.curentLoginBlockFriends = data
+                    this.curentLoginActiveFriends.forEach(item => {
+                      this.currentActiveFriendsId.push(item.target.id)
+                    })
+                    this.curentLoginSenderFriends.forEach(item => {
+                      this.currentSenderFriendsId.push(item.target.id)
+                    })
+                    this.curentLoginNewFriends.forEach(item => {
+                      this.currentNewFriendsId.push(item.target.id)
+                    })
+                    this.curentLoginBlockFriends.forEach(item => {
+                      this.currentBlockFriendsId.push(item.target.id)
+                    })
+
+
+                  }
+                )
+
               }
             )
           }
@@ -286,9 +307,13 @@ export class MainTimeLineComponent implements OnInit, OnChanges {
     // console.log(this.friend)
     // @ts-ignore
     this.friendService.addFriend(friend).subscribe((data) => {
+        this.loadloginListFr()
+        this.loadTargetListFr(targetId)
         // @ts-ignore
         this.friendService.addFriend(friendTarget).subscribe((data) => {
             this.showDit()
+            this.loadloginListFr()
+            this.loadTargetListFr(targetId)
           }
         );
       }
@@ -328,7 +353,7 @@ export class MainTimeLineComponent implements OnInit, OnChanges {
       relationshipType: 'Normal',
       friendshipStatus: 'Active',
     };
-    this.friendRequestDenyNoReload(sourceId, targetId)
+    this.friendRequestDeny(sourceId, targetId)
     // this.friendRequestCancer(targetId,sourceId)
     // console.log(this.friend)
     // @ts-ignore
@@ -343,24 +368,36 @@ export class MainTimeLineComponent implements OnInit, OnChanges {
   }
 
 
-  friendRequestDenyNoReload(sourceId: number, targetId: number) {
-    let sourceCancer = -1;
-    let targetCancer = -1;
-    this.loginListNewFriend.forEach(f => {
+  friendRequestDeny(sourceId: number, targetId: number) {
+    this.loadloginListFr()
+    this.loadTargetListFr(targetId)
+    this.currentNewFriendsId.splice(this.currentNewFriendsId.indexOf(targetId), 1);
+    let source = -1;
+    let target = -1;
+    console.log(sourceId, targetId)
+    console.log("2list", this.curentLoginNewFriends, this.targetSenderFriendList)
+    this.curentLoginNewFriends.forEach(f => {
       if (f.target.id == targetId && f.source.id == sourceId) {
-        sourceCancer = f.id
+        source = f.id
       }
     })
     this.targetSenderFriendList.forEach(f => {
       if (f.target.id == sourceId && f.source.id == targetId) {
-        // targetCancer = f.idlll
+        target = f.id
       }
     })
+    console.log("s,t", source, target)
+    console.log('1 ' + this.currentNewFriendsId)
 
+    this.friendService.unFriend(source).subscribe((data) => {
+        console.log('2 ' + this.currentNewFriendsId)
+        this.loadTargetListFr(targetId)
+        this.loadloginListFr()
+        this.friendService.unFriend(target).subscribe((data) => {
+            console.log('3 ' + this.currentNewFriendsId)
+            this.loadTargetListFr(targetId)
+            this.loadloginListFr()
 
-    // @ts-ignore
-    this.friendService.unFriend(sourceCancer).subscribe((data) => {
-        this.friendService.unFriend(targetCancer).subscribe((data) => {
           }
         );
       }
@@ -368,21 +405,59 @@ export class MainTimeLineComponent implements OnInit, OnChanges {
 
   }
 
-  friendRequestCancel(sourceId: number, targetId: number) {
+//Huỷ kết bạn
+  unFriend(sourceId: number, targetId: number) {
+    this.loadloginListFr()
+    this.loadTargetListFr(targetId)
+    let source = -1;
+    let target = -1;
+    this.curentLoginNewFriends.forEach(f => {
+      if (f.target.id == targetId && f.source.id == sourceId) {
+        source = f.id
+      }
+    })
+    this.targetSenderFriendList.forEach(f => {
+      if (f.target.id == sourceId && f.source.id == targetId) {
+        target = f.id
+      }
+    })
+
+
+    this.friendService.unFriend(source).subscribe((data) => {
+        this.loadloginListFr()
+        this.loadTargetListFr(targetId)
+        this.friendService.unFriend(target).subscribe((data) => {
+            this.loadloginListFr()
+            this.loadTargetListFr(targetId)
+          }
+        );
+      }
+    );
+  }
+
+  // Huỷ lời mời kết bạn
+  cancelRequest(sourceId: number, targetId: number) {
+    this.loadloginListFr()
+    this.loadTargetListFr(targetId)
     let sourceCancel = -1;
     let targetCancel = -1;
-    this.curentLoginActiveFriends.forEach(f => {
+    this.curentLoginSenderFriends.forEach(f => {
       if (f.target.id == targetId && f.source.id == sourceId) {
         sourceCancel = f.id
       }
+    })
+    this.targetNewFriendList.forEach(f => {
       if (f.target.id == sourceId && f.source.id == targetId) {
         targetCancel = f.id
       }
     })
-    // @ts-ignore
+
     this.friendService.unFriend(sourceCancel).subscribe((data) => {
+        this.loadloginListFr()
+        this.loadTargetListFr(targetId)
         this.friendService.unFriend(targetCancel).subscribe((data) => {
-            this.showDit()
+            this.loadloginListFr()
+            this.loadTargetListFr(targetId)
           }
         );
       }
@@ -470,8 +545,6 @@ export class MainTimeLineComponent implements OnInit, OnChanges {
         )
       },
     );
-    // this.showDit()
-
   }
 
   coutLike(idPost: number) {
@@ -481,11 +554,6 @@ export class MainTimeLineComponent implements OnInit, OnChanges {
         this.thisPostLike += 1;
       }
     }
-    // if (this.thisPostLike == 1) {
-    //   return 'You like this post'
-    // } else if (this.thisPostLike == 0) {
-    //   return 'No one like this post'
-    // } else
     return (this.thisPostLike + ' People like this post')
   }
 
@@ -564,7 +632,7 @@ export class MainTimeLineComponent implements OnInit, OnChanges {
     return this.loginListSenderFriend
   }
 
-  returnNewFriend(userId: number):FriendDto[] {
+  returnNewFriend(userId: number): FriendDto[] {
     this.loginListNewFriend = []
     this.friendService.getNewFriendListByIdUser(userId).subscribe(
       data => {
@@ -632,5 +700,70 @@ export class MainTimeLineComponent implements OnInit, OnChanges {
       alert("delete false")
     })
 
+  }
+
+  Edit(idComment: number, idPost: number) {
+    const cmt = {
+      id: idComment,
+      content: this.formCmt.controls["content"].value,
+      user: {
+        "id": this.currenLogInId
+      },
+      postId: idPost
+    };
+    // console.log(this.posts)
+    // @ts-ignore
+    this.postService.comment(cmt).subscribe((data) => {
+        this.formCmt.reset();
+        this.postService.getAllComment().subscribe(
+          (data) => {
+            this.allCmt = data;
+          }
+        )
+      },
+    );
+  }
+
+  getEditComment(id: number, content: string, postId: number) {
+    this.idCommetToEdit= id
+    this.contentToEdit=content
+    this.postIdToEdit= postId
+  }
+
+  idCommetToEdit: number
+  contentToEdit: string
+  postIdToEdit: number
+
+  editComment() {
+    const cmt = {
+      id: this.idCommetToEdit,
+      content: this.contentToEdit,
+      user: {
+        "id": this.currenLogInId
+      },
+      postId: this.postIdToEdit
+    };
+    // console.log(this.posts)
+    // @ts-ignore
+    this.postService.comment(cmt).subscribe((data) => {
+        this.formCmt.reset();
+        this.postService.getAllComment().subscribe(
+          (data) => {
+            this.allCmt = data;
+          }
+        )
+      },
+    );
+  }
+   count = 0
+
+  countCmt(id: number) {
+    this.count=0;
+    this.allCmt.forEach((cmt) => {
+      if (cmt.postId === id) {
+        this.count+=1;
+      }
+    })
+    return "This post have " + this.count + " comments"
   }
 }
