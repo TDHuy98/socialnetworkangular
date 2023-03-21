@@ -179,7 +179,7 @@ export class FeedComponent implements OnInit {
     })
   }
 
-  Like(postId: number, userId: number, userLastName: string) {
+  Like(postId: number, userId: number, userLastName: string,userIdRevNotice:number,actionAvartar:string) {
     console.log('current post like ' + this.currentPostLiked)
     let flagLike = 0;
     let flagLikeID = -1;
@@ -198,6 +198,22 @@ export class FeedComponent implements OnInit {
     if (flagLike == 0) {
       //@ts-ignore
       this.postService.like(like).subscribe((data) => {
+        let flag =0;
+
+        // this.showDit()
+        // Tạo thông báo sau khi like
+        this.postServicec.getAllNotices(this.loggedInUser.id).subscribe(
+          data => {
+            data.forEach(item => {
+              if (item.postId == postId && item.type=='like'){
+                flag+=1;
+              }
+            })
+            if (flag==0){
+              this.creatNotice("like your post", userIdRevNotice, postId, "Uncheck", actionAvartar, "like", userLastName)
+            }
+          }
+        )
           // this.showDit()
           this.postService.findAllLike().subscribe(data => {
               this.currentAllLike = data;
@@ -240,7 +256,7 @@ export class FeedComponent implements OnInit {
 
   }
 
-  cmt(idPost: number) {
+  cmt(idPost: number, contentNotice: string, status: string, userCmtAvatar: string, type: string, userId: number, nameAction: string) {
     const cmt = {
       content: this.formCmt.controls["content"].value,
       user: {
@@ -248,6 +264,8 @@ export class FeedComponent implements OnInit {
       },
       postId: idPost
     };
+    //Tạo thông báo sau khi cmt
+    this.creatNotice("cmt your post", userId, idPost, "Uncheck", userCmtAvatar, "cmt", nameAction)
     // console.log(this.posts)
     // @ts-ignore
     this.postService.comment(cmt).subscribe((data) => {
@@ -338,6 +356,20 @@ export class FeedComponent implements OnInit {
     return (this.thisPostLike + ' People like this post')
   }
 
+
+
+  count = 0
+
+  countCmt(id: number) {
+    this.count = 0;
+    this.allCmt.forEach((cmt) => {
+      if (cmt.postId === id) {
+        this.count += 1;
+      }
+    })
+    return " " + this.count + " comments"
+  }
+
   notices: Notifications[];
 
   loadNotice(idUser: number) {
@@ -346,5 +378,29 @@ export class FeedComponent implements OnInit {
         this.notices = data;
       }
     )
+  }
+
+  creatNotice(content: string, idUser: number, idPost: number, status: string, userAvatar: string, type: string, name: string) {
+    const notice = {
+      content: content,
+      postId: idPost,
+      userId: idUser,
+      status: status,
+      targetAvatar: userAvatar,
+      type: type,
+      userLastName: name,
+
+    };
+    console.log("notice: " , notice);
+    // @ts-ignore
+    this.postServicec.createNotications(notice).subscribe((data) => {
+        this.postServicec.getAllNotices(this.loggedInUser.id).subscribe(
+          (data) => {
+            this.notices = data;
+            this.loadNotice(this.loggedInUser.id)
+          }
+        )
+      },
+    );
   }
 }
