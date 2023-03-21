@@ -28,6 +28,8 @@ import {FriendDto} from "../model/Dto/FriendDto";
 import {finalize} from "rxjs";
 import {PostServicek} from "../service/post/postServicek";
 import {NewPost} from "../model/Dto/newPost";
+import {Notifications} from "../model/Dto/Notifications";
+import {data} from "jquery";
 
 @Component({
   selector: 'app-main-time-line',
@@ -104,6 +106,7 @@ export class MainTimeLineComponent implements OnInit, OnChanges {
 
 
   ngOnInit(): void {
+
     this.currentId = Number(localStorage.getItem('currentUserId'))
     this.postService.getAll(this.currentId).subscribe(
       (data) => {
@@ -129,6 +132,7 @@ export class MainTimeLineComponent implements OnInit, OnChanges {
     this.loadloginListFr();
     this.loadTargetListFr(this.currentClickId);
     this.showDit()
+    this.loadNotice(this.loggedInUser.id)
     this.postForm = new FormGroup({
       content: new FormControl("content"),
       postStatus: new FormControl("postStatus", Validators.required),
@@ -764,6 +768,15 @@ export class MainTimeLineComponent implements OnInit, OnChanges {
         this.count+=1;
       }
     })
-    return "This post have " + this.count + " comments"
+    return " " + this.count + " comments"
+  }
+
+  notices: Notifications[];
+  loadNotice(idUser: number){
+    this.postService.getAllNotices(idUser).subscribe(
+      data=>{
+        this.notices= data;
+      }
+    )
   }
 }

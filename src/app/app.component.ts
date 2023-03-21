@@ -7,6 +7,8 @@ import {MainTimeLineComponent} from "./main-time-line/main-time-line.component";
 import {ActivatedRoute, Router} from "@angular/router";
 import {AuthService} from "./auth.service";
 import {CurrentLoggedInUser} from "./model/CurrentLoggedInUser";
+import {Notifications} from "./model/Dto/Notifications";
+import {PostService} from "./service/post.service";
 
 @Component({
   selector: 'app-root',
@@ -36,6 +38,7 @@ export class AppComponent implements OnInit {
   constructor(private friendService: FriendListService, route: ActivatedRoute,
               private userService: UserService,
               private router: Router,
+              private postService: PostService,
               private authService: AuthService) {
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
 
@@ -78,24 +81,31 @@ export class AppComponent implements OnInit {
 
 
   ngOnInit(): void {
+    this.loadNotice(this.loggedInUser.id)
 
-      //get current clicked user id
-      // @ts-ignore
-      this.currentClickId = Number(localStorage.getItem('userId'))
-      console.log(this.currentClickId)
-      // if (this.currentClickId=Undefined)
+    //get current clicked user id
+    // @ts-ignore
+    this.currentClickId = Number(localStorage.getItem('userId'))
+    console.log(this.currentClickId)
+    // if (this.currentClickId=Undefined)
     //check if there is a user logged in
 
-      this.userService.findById(Number(localStorage.getItem('userId'))).subscribe(
-        data => {
-          console.log(data);
-          this.currentUser = data;
-          this.loggedInUser = data
-          this.currentClickId = data.id
-          localStorage.setItem('loggedInUser', JSON.stringify(this.loggedInUser))
-        }
-      )
-      //get current logged in user and save them to localstorage
+    this.userService.findById(Number(localStorage.getItem('userId'))).subscribe(
+      data => {
+        this.postService.getAllNotices(this.loggedInUser.id).subscribe(
+          data => {
+            this.notices = data;
+            console.log("notice", this.notices)
+          }
+        )
+        console.log(data);
+        this.currentUser = data;
+        this.loggedInUser = data
+        this.currentClickId = data.id
+        localStorage.setItem('loggedInUser', JSON.stringify(this.loggedInUser))
+      }
+    )
+    //get current logged in user and save them to localstorage
     if (localStorage.length != 0) {
       this.authService.getCurrentLoggedInUser().subscribe(data => {
         this.currentLoggedInUser = data
@@ -165,6 +175,17 @@ export class AppComponent implements OnInit {
     } else {
       this.router.navigateByUrl("/login")
     }
+  }
+
+  notices: Notifications[];
+
+  loadNotice(idUser: number) {
+    this.postService.getAllNotices(idUser).subscribe(
+      data => {
+        this.notices = data;
+        console.log("notice", this.notices)
+      }
+    )
   }
 }
 

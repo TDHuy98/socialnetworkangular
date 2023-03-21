@@ -20,7 +20,8 @@ import {Like} from "../model/Like";
 import {CommentDto} from "../model/Dto/CommentDto";
 import {FriendListService} from "../service/friend-list.service";
 import {FriendDto} from "../model/Dto/FriendDto";
-
+import {Notifications} from "../model/Dto/Notifications";
+import {PostService} from "../service/post.service";
 
 
 @Component({
@@ -29,42 +30,43 @@ import {FriendDto} from "../model/Dto/FriendDto";
   styleUrls: ['./feed.component.css']
 })
 export class FeedComponent implements OnInit {
-  currentLoggedInUserId=Number(localStorage.getItem('userId'))
+  currentLoggedInUserId = Number(localStorage.getItem('userId'))
   postForm: FormGroup[] | any;
   editForm: FormGroup | any;
   yoursPost: PostDto | undefined;
   posts: PostDto[] | undefined;
   selectedImage: any = null;
-  @ViewChild('uploadFile',{static:true}) public avatarDom : ElementRef | undefined ;
+  @ViewChild('uploadFile', {static: true}) public avatarDom: ElementRef | undefined;
   ArrayPicture = "";
   currentPostLiked: number[] = [];
   allCmt: CommentDto[];
   thisPostLike: number
-  newPost: NewPost=new NewPost()
+  newPost: NewPost = new NewPost()
 
   constructor(private postService: PostServicek,
               private router: Router,
+              private postServicec: PostService,
               private friendService: FriendListService,
               private route: ActivatedRoute,
-              @Inject(AngularFireStorage) private  storage : AngularFireStorage, private userService: UserService) {
+              @Inject(AngularFireStorage) private storage: AngularFireStorage, private userService: UserService) {
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
 
-      this.postService.findAllByUser_Id(this.currentLoggedInUserId).subscribe(data => {
-        this.posts= data
-        this.currentPostLiked = []
-        this.postService.findAllLike().subscribe(data => {
-            this.currentAllLike = data;
-            data.forEach(like => {
-              if (like.userId == this.currenLogInId) {
-                this.currentPostLiked.push(like.postId)
-              }
-            })
+    this.postService.findAllByUser_Id(this.currentLoggedInUserId).subscribe(data => {
+      this.posts = data
+      this.currentPostLiked = []
+      this.postService.findAllLike().subscribe(data => {
+          this.currentAllLike = data;
+          data.forEach(like => {
+            if (like.userId == this.currenLogInId) {
+              this.currentPostLiked.push(like.postId)
+            }
+          })
 
-          }
-        )
-      },error => {
-        alert("false")
-      })
+        }
+      )
+    }, error => {
+      alert("false")
+    })
     this.userService.findById(Number(localStorage.getItem('userId'))).subscribe(
       data => {
         console.log(data);
@@ -76,19 +78,20 @@ export class FeedComponent implements OnInit {
     )
 
   }
+
   formCmt: FormGroup = new FormGroup({
     content: new FormControl(""),
     name: new FormControl(""),
   })
-  currentUser:User;
+  currentUser: User;
   curentLoginActiveFriends: FriendDto[] = [];
   curentLoginNewFriends: FriendDto[] = [];
   curentLoginBlockFriends: FriendDto[] = [];
   curentLoginSenderFriends: FriendDto[] = [];
-  loggedInUser:User;
+  loggedInUser: User;
 
   ngOnInit() {
-
+    this.loadNotice(Number(localStorage.getItem('userId')))
     this.userService.findById(Number(localStorage.getItem('userId'))).subscribe(
       data => {
         console.log(data);
@@ -110,27 +113,28 @@ export class FeedComponent implements OnInit {
     )
     this.postForm = new FormGroup({
       content: new FormControl("content"),
-      postStatus: new FormControl("postStatus",Validators.required),
+      postStatus: new FormControl("postStatus", Validators.required),
       img: new FormControl(""),
       posts: new FormControl(""),
     })
 
 
-    this.editForm =new FormGroup({
+    this.editForm = new FormGroup({
       id: new FormControl("id"),
       postStatus: new FormControl("postStatus"),
-      content: new FormControl("content",Validators.required),
-      img : new FormControl("img"),
+      content: new FormControl("content", Validators.required),
+      img: new FormControl("img"),
     })
     this.loadloginListFr()
   }
+
   currentActiveFriendsId: Number[] = [];
 
   loadloginListFr() {
     this.friendService.getActiveFriendListByIdUser(this.currenLogInId).subscribe(
       data => {
         this.curentLoginActiveFriends = data
-        this.currentActiveFriendsId=[]
+        this.currentActiveFriendsId = []
         this.curentLoginActiveFriends.forEach(item => {
           this.currentActiveFriendsId.push(item.target.id)
         })
@@ -142,7 +146,7 @@ export class FeedComponent implements OnInit {
     alert("ok")
     this.postService.findById(id).subscribe((data) => {
       this.editForm = new FormGroup({
-        id:new FormControl(data.id),
+        id: new FormControl(data.id),
         postStatus: new FormControl(data.postStatus),
         content: new FormControl(data.content),
         img: new FormControl(data.img),
@@ -151,9 +155,9 @@ export class FeedComponent implements OnInit {
     })
   }
 
-  showPost(){
+  showPost() {
     this.postService.findAllByUser_Id(this.currentLoggedInUserId).subscribe(data => {
-      this.posts= data
+      this.posts = data
       this.currentPostLiked = []
       this.postService.findAllLike().subscribe(data => {
           this.currentAllLike = data;
@@ -170,10 +174,11 @@ export class FeedComponent implements OnInit {
 
         }
       )
-    },error => {
+    }, error => {
       alert("false")
     })
   }
+
   Like(postId: number, userId: number, userLastName: string) {
     console.log('current post like ' + this.currentPostLiked)
     let flagLike = 0;
@@ -247,11 +252,11 @@ export class FeedComponent implements OnInit {
     // @ts-ignore
     this.postService.comment(cmt).subscribe((data) => {
         this.formCmt.reset();
-      this.postService.getAllComment().subscribe(
-        (data) => {
-          this.allCmt = data;
-        }
-      )
+        this.postService.getAllComment().subscribe(
+          (data) => {
+            this.allCmt = data;
+          }
+        )
       },
     );
   }
@@ -267,18 +272,19 @@ export class FeedComponent implements OnInit {
     })
 
   }
+
   creatPost() {
     const filePath = this.selectedImage.name;
     const fileRef = this.storage.ref(filePath);
-    this.storage.upload(filePath,this.selectedImage).snapshotChanges().pipe(
-      finalize(()=> (fileRef.getDownloadURL().subscribe(url =>{
+    this.storage.upload(filePath, this.selectedImage).snapshotChanges().pipe(
+      finalize(() => (fileRef.getDownloadURL().subscribe(url => {
         this.ArrayPicture = url;
         console.log("picture " + url)
         this.newPost.userId = this.currentLoggedInUserId;
-        this.newPost.content= this.postForm.get("content").value;
-        this.newPost.postStatus=this.postForm.get("postStatus").value;
+        this.newPost.content = this.postForm.get("content").value;
+        this.newPost.postStatus = this.postForm.get("postStatus").value;
         this.newPost.img = url
-        this.postService.save(this.newPost).subscribe(()=>{
+        this.postService.save(this.newPost).subscribe(() => {
           console.log("success")
           this.router.navigateByUrl("/feed");
           window.location.reload();
@@ -287,7 +293,7 @@ export class FeedComponent implements OnInit {
     ).subscribe()
   }
 
-  upload(){
+  upload() {
     this.selectedImage = this.avatarDom?.nativeElement.files[0];
   }
 
@@ -301,20 +307,22 @@ export class FeedComponent implements OnInit {
 
   delete(id: number) {
     alert("Delete Success")
-    this.postService.delete(id).subscribe(() =>{
+    this.postService.delete(id).subscribe(() => {
       alert("delete succes")
       this.router.navigate(["/feed"])
-    },error => {
+    }, error => {
       alert("delete false")
     })
 
   }
 
-  getCurrentDateTime() : string {
-    return formatDate(new Date(),'dd-MM-yyyyhhmmssa','en-US');
+  getCurrentDateTime(): string {
+    return formatDate(new Date(), 'dd-MM-yyyyhhmmssa', 'en-US');
   }
+
   currenLogInId = Number(localStorage.getItem("userId"));
   currentAllLike: Like[] = [];
+
   coutLike(idPost: number) {
     this.thisPostLike = 0;
     for (let i = 0; i < this.currentAllLike.length; i++) {
@@ -328,5 +336,16 @@ export class FeedComponent implements OnInit {
     //   return 'No one like this post'
     // } else
     return (this.thisPostLike + ' People like this post')
+  }
+
+  notices: Notifications[];
+
+  loadNotice(idUser: number) {
+    this.postServicec.getAllNotices(idUser).subscribe(
+      data => {
+        this.notices = data;
+        console.log("notice", this.notices)
+      }
+    )
   }
 }

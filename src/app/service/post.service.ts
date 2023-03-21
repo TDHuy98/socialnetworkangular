@@ -8,6 +8,7 @@ import {Like} from "../model/Like";
 import {PostDto} from "../model/Dto/PostDto";
 import {Comment} from "../model/Comment";
 import {CommentDto} from "../model/Dto/CommentDto";
+import {Notifications} from "../model/Dto/Notifications";
 
 @Injectable({
   providedIn: 'root'
@@ -69,6 +70,16 @@ export class PostService {
   }
   coutLike(id:number): Observable<any>{
     return this.http.get<any>(`http://localhost:8080/like/coutLike/${id}`)
+  }
+  getAllNotices(id:number): Observable<Notifications[]> {
+    return this.http.get<Notifications[]>(`http://localhost:8080/Notice/${id}`);
+  }
+
+  createNotications(notice: Notifications): Observable<Notifications>{
+    return this.http.post<Notifications>(`http://localhost:8080/Notice`,notice)
+  }
+  deleteNotice(id: number): Observable<void> {
+    return this.http.delete<void>(`http://localhost:8080/Notice/${id}`);
   }
 }
 
