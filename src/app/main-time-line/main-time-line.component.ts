@@ -81,7 +81,7 @@ export class MainTimeLineComponent implements OnInit, OnChanges {
               private router: Router, private friendService: FriendListService,
               private postService: PostService,
               private authService: AuthService) {
-    this.router.routeReuseStrategy.shouldReuseRoute = () => false;
+    // this.router.routeReuseStrategy.shouldReuseRoute = () => false;
     // @ts-ignore
     this.currentClickId = +this.route.snapshot.paramMap.get('id');
 
@@ -328,7 +328,7 @@ export class MainTimeLineComponent implements OnInit, OnChanges {
       relationshipType: 'Normal',
       friendshipStatus: 'Active',
     };
-    this.friendRequestCancelNoReload(sourceId, targetId)
+    this.friendRequestDenyNoReload(sourceId, targetId)
     // this.friendRequestCancer(targetId,sourceId)
     // console.log(this.friend)
     // @ts-ignore
@@ -343,17 +343,21 @@ export class MainTimeLineComponent implements OnInit, OnChanges {
   }
 
 
-  friendRequestCancelNoReload(sourceId: number, targetId: number) {
+  friendRequestDenyNoReload(sourceId: number, targetId: number) {
     let sourceCancer = -1;
     let targetCancer = -1;
-    this.friendList.forEach(f => {
+    this.loginListNewFriend.forEach(f => {
       if (f.target.id == targetId && f.source.id == sourceId) {
         sourceCancer = f.id
       }
+    })
+    this.targetSenderFriendList.forEach(f => {
       if (f.target.id == sourceId && f.source.id == targetId) {
-        targetCancer = f.id
+        // targetCancer = f.idlll
       }
     })
+
+
     // @ts-ignore
     this.friendService.unFriend(sourceCancer).subscribe((data) => {
         this.friendService.unFriend(targetCancer).subscribe((data) => {
@@ -560,7 +564,7 @@ export class MainTimeLineComponent implements OnInit, OnChanges {
     return this.loginListSenderFriend
   }
 
-  returnNewFriend(userId: number) {
+  returnNewFriend(userId: number):FriendDto[] {
     this.loginListNewFriend = []
     this.friendService.getNewFriendListByIdUser(userId).subscribe(
       data => {
