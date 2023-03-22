@@ -171,11 +171,27 @@ export class AppComponent implements OnInit {
       this.router.navigateByUrl("/login")
     }
   }
+
+  // users: UserDto[]=[];
+  users: UserDto[];
+
+  searchBar() {
+    if (this.searchValue != "") {
+      this.searchService.search(this.searchValue).subscribe(data => {
+        this.users = data
+      }, error => {
+        console.log('lỗi rồi Huy ơi')
+
+      })
+    }
+  }
+
   search() {
     this.searchService.search(this.searchValue).subscribe(data => {
       console.log(JSON.stringify(data))
-      this.router.navigate(['/search-result'], {state:{result: data},onSameUrlNavigation:"reload"}, )
-    },error => {
+      this.users = data
+      this.router.navigate(['/search-result'], {state: {result: data}, onSameUrlNavigation: "reload"},)
+    }, error => {
       console.log('lỗi rồi Huy ơi')
 
     })

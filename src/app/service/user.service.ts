@@ -11,7 +11,7 @@ import {UserSearch} from "../model/UserSearch";
   providedIn: 'root'
 })
 export class UserService {
-  private url = "http://localhost:8080//api/v1/user-setting/"
+  private url = "http://localhost:8080/user/"
 
   constructor(private httpClient: HttpClient) {
   }
@@ -23,12 +23,13 @@ export class UserService {
   updateUserInformation(userInformation: UserUpdate): Observable<UserUpdate> {
     return this.httpClient.put<UserUpdate>(this.url + "setting", userInformation)
   }
-  enableSearchable():Observable<any>{
-    return this.httpClient.post("http://localhost:8080/common/"+"enable-search"+"/"+ localStorage.getItem('userId'),null )
+
+  enableSearchable(): Observable<any> {
+    return this.httpClient.post("http://localhost:8080/api/v1/common/enable-search/" + localStorage.getItem('userId'), null)
   }
 
   disableSearchable(): Observable<any> {
-    return this.httpClient.post("http://localhost:8080/common/" + "disable-search"+"/"+ localStorage.getItem('userId'),null )
+    return this.httpClient.post("http://localhost:8080/api/v1/common/disable-search/" + localStorage.getItem('userId'), null)
   }
 
 
