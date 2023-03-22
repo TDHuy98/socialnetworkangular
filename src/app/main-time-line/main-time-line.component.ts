@@ -153,7 +153,6 @@ export class MainTimeLineComponent implements OnInit, OnChanges {
     // @ts-ignore
     this.currentId = +this.route.snapshot.paramMap.get('id');
     // @ts-ignore
-    this.currentClickId = +this.route.snapshot.paramMap.get('id');
     if (this.currentId == 0) {
       this.currentId = this.currenLogInId
     }
@@ -470,7 +469,7 @@ export class MainTimeLineComponent implements OnInit, OnChanges {
 
   // creatNotice(content: string, idUser: number, idPost: number, status: string, userAvatar: string, type: string, name: string) {
 
-  Like(postId: number, userId: number, userLastName: string,userIdRevNotice:number,actionAvartar:string,) {
+  Like(postId: number, userId: number, userLastName: string, userIdRevNotice: number, actionAvartar: string,) {
     console.log('current post like ' + this.currentPostLiked)
     let flagLike = 0;
     let flagLikeID = -1;
@@ -489,22 +488,24 @@ export class MainTimeLineComponent implements OnInit, OnChanges {
     if (flagLike == 0) {
       //@ts-ignore
       this.postService.like(like).subscribe((data) => {
-        let flag =0;
-
-          // this.showDit()
-        // Tạo thông báo sau khi like
-          this.postService.getAllNotices(this.loggedInUser.id).subscribe(
-            data => {
-              data.forEach(item => {
-                if (item.postId == postId && item.type=='like'){
-                  flag+=1;
+          let flag = 0;
+          if (this.loggedInUser.id != userIdRevNotice){
+            // this.showDit()
+            // Tạo thông báo sau khi like
+            this.postService.getAllNotices(this.loggedInUser.id).subscribe(
+              data => {
+                data.forEach(item => {
+                  if (item.postId == postId && item.type == 'like') {
+                    flag += 1;
+                  }
+                })
+                if (flag == 0) {
+                  this.creatNotice("like your post", userIdRevNotice, postId, "Uncheck", actionAvartar, "like", userLastName)
                 }
-              })
-              if (flag==0){
-                this.creatNotice("like your post", userIdRevNotice, postId, "Uncheck", actionAvartar, "like", userLastName)
               }
-            }
-          )
+            )
+          }
+
 
 
           this.postService.findAllLike().subscribe(data => {
@@ -556,9 +557,11 @@ export class MainTimeLineComponent implements OnInit, OnChanges {
       },
       postId: idPost
     };
-    //Tạo thông báo sau khi cmt
-    this.creatNotice("cmt your post", userId, idPost, "Uncheck", userCmtAvatar, "cmt", nameAction)
-    // creatNotice(content: string, idUser: number, idPost: number, status: string, userAvatar: string, type: string, name: string) {
+    //Tao thong bao khi cmt
+    if (this.loggedInUser.id!=userId){
+      this.creatNotice("cmt your post", userId, idPost, "Uncheck", userCmtAvatar, "cmt", nameAction)
+
+    }
 
 
     // console.log(this.posts)
@@ -805,6 +808,20 @@ export class MainTimeLineComponent implements OnInit, OnChanges {
       }
     )
   }
+  countnotice: number = 0;
+
+  countNotice() {
+    this.countnotice=0;
+    this.postService.getAllNotices(this.loggedInUser.id).subscribe(
+      data => {
+        data.forEach(item => {
+          if (item.status =='Uncheck')
+            this.countnotice+=1;
+        })
+      }
+    )
+    return this.countnotice
+  }
 
   creatNotice(content: string, idUser: number, idPost: number, status: string, userAvatar: string, type: string, name: string) {
     const notice = {
@@ -817,7 +834,7 @@ export class MainTimeLineComponent implements OnInit, OnChanges {
       userLastName: name,
 
     };
-    console.log("notice: " , notice);
+    console.log("notice: ", notice);
     // @ts-ignore
     this.postService.createNotications(notice).subscribe((data) => {
         this.postService.getAllNotices(this.loggedInUser.id).subscribe(

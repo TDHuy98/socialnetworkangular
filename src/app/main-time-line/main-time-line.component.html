@@ -31,7 +31,7 @@
       </div>
 
       <div class="profile_info">
-        <h1>{{currenViewtUser.firstName + " " + currenViewtUser.middleName + " " + currenViewtUser.lastName}} </h1>
+        <h1>{{currenViewtUser.firstname + " " + currenViewtUser.middlename + " " + currenViewtUser.lastname}} </h1>
         <p> {{currenViewtUser.intro + "  "}}<a> </a></p>
       </div>
 
@@ -291,7 +291,7 @@
 
                   <div class="flex space-x-4 lg:font-bold">
                     <a
-                      (click)="Like(puppy.id,this.currenLogInId,this.loggedInUser.middleName+this.loggedInUser.lastName,puppy.userId,puppy.profile)"
+                      (click)="Like(puppy.id,this.currenLogInId,this.loggedInUser.middlename+this.loggedInUser.lastname,puppy.userId,puppy.profile)"
                       class="flex items-center space-x-2">
                       <div class="p-2 rounded-full  text-black lg:bg-gray-100 dark:bg-gray-600">
                         <svg *ngIf="currentPostLiked.includes(puppy.id)" xmlns="http://www.w3.org/2000/svg"
@@ -357,7 +357,7 @@
                     </div>
                     <div *ngIf="comment.postId==puppy.id">
                       <b style="margin-left: 0px"
-                         class=" py-2 px-3 rounded-md relative lg:ml-5 ml-2 lg:mr-12 ">{{comment.firstName + ' ' + comment.middleName + ' ' + comment.lastName}}</b>
+                         class=" py-2 px-3 rounded-md relative lg:ml-5 ml-2 lg:mr-12 ">{{comment.firstname + ' ' + comment.middlename + ' ' + comment.lastname}}</b>
                       <br>
                       <div
                         class="text-gray-700 py-2 px-3 rounded-md bg-gray-100 relative lg:ml-5 ml-2 lg:mr-12  dark:bg-gray-800 dark:text-gray-100">
@@ -1059,7 +1059,7 @@
           </a>
           <div class="pt-3 px-1">
             <a (click)="fowardToMainTimeLine(friend.target.id)"
-               class="text-base font-semibold mb-0.5">  {{friend.target.middleName + friend.target.lastName}} </a>
+               class="text-base font-semibold mb-0.5">  {{friend.target.middlename + friend.target.lastname}} </a>
             <p class="font-medium text-sm">843K Following </p>
             <button
               class="bg-blue-100 w-full flex font-semibold h-8 items-center justify-center mt-3 px-3 rounded-md text-blue-600 text-sm mb-1">
@@ -1736,7 +1736,7 @@
                     <textarea formControlName="content"
                               class="uk-textare text-black shadow-none focus:shadow-none text-xl font-medium resize-none"
                               rows="5"
-                              placeholder="What's Your Mind ? {{loggedInUser.lastName }}"></textarea>
+                              placeholder="What's Your Mind ? {{loggedInUser.lastname }}"></textarea>
         </div>
 
       </div>
@@ -1866,7 +1866,7 @@
                     <textarea
                       class="uk-textare text-black shadow-none focus:shadow-none text-xl font-medium resize-none"
                       rows="5"
-                      placeholder="What's Your Mind ? {{loggedInUser.lastName}}!" formControlName="content"></textarea>
+                      placeholder="What's Your Mind ? {{loggedInUser.lastname}}!" formControlName="content"></textarea>
         </div>
 
       </div>
@@ -1977,7 +1977,7 @@
                     <textarea
                       class="uk-textare text-black shadow-none focus:shadow-none text-xl font-medium resize-none"
                       rows="5"
-                      placeholder="Enter your comment {{loggedInUser.lastName}}!" formControlName="content"></textarea>
+                      placeholder="Enter your comment {{loggedInUser.lastname}}!" formControlName="content"></textarea>
         </div>
 
       </div>

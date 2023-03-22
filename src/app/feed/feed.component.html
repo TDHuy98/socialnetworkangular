@@ -122,7 +122,7 @@
         <div class="p-4 space-y-3">
 
           <div class="flex space-x-4 lg:font-bold">
-            <a (click)="Like(p.id,this.currenLogInId,this.loggedInUser.middleName+this.loggedInUser.lastName,p.userId,p.profile)"
+            <a (click)="Like(p.id,this.currenLogInId,this.loggedInUser.middlename+this.loggedInUser.lastname,p.userId,p.profile)"
                class="flex items-center space-x-2">
               <div class="p-2 rounded-full  text-black lg:bg-gray-100 dark:bg-gray-600">
                 <svg *ngIf="currentPostLiked.includes(p.id)" xmlns="http://www.w3.org/2000/svg"
@@ -190,7 +190,7 @@
               </div>
               <div *ngIf="comment.postId==p.id">
                 <b style="margin-left: 0px"
-                   class=" py-2 px-3 rounded-md relative lg:ml-5 ml-2 lg:mr-12 ">{{comment.firstName + ' ' + comment.middleName + ' ' + comment.lastName}}</b>
+                   class=" py-2 px-3 rounded-md relative lg:ml-5 ml-2 lg:mr-12 ">{{comment.firstname + ' ' + comment.middlename + ' ' + comment.lastname}}</b>
                 <br>
                 <div
                   class="text-gray-700 py-2 px-3 rounded-md bg-gray-100 relative lg:ml-5 ml-2 lg:mr-12  dark:bg-gray-800 dark:text-gray-100">
@@ -756,7 +756,7 @@
                 alt="">
               <span class="user_status status_online"></span>
             </div>
-            <div class="contact-username">{{puppy.target.middleName}}{{puppy.source.lastName}}</div>
+            <div class="contact-username">{{puppy.target.middlename}}{{puppy.source.lastname}}</div>
           </a>
           <div uk-drop="pos: left-center ;animation: uk-animation-slide-left-small">
             <div class="contact-list-box">
@@ -764,7 +764,7 @@
                 <img src="{{puppy.target.profile}}" alt="">
                 <span class="user_status status_online"></span>
               </div>
-              <div class="contact-username"> {{puppy.target.middleName}}{{puppy.source.lastName}}</div>
+              <div class="contact-username"> {{puppy.target.middlename}}{{puppy.source.lastname}}</div>
               <p>
                 <ion-icon name="people" class="text-lg mr-1"></ion-icon>
                 Become friends with

@@ -8,6 +8,7 @@ import {HomeComponent} from "./home/home.component";
 import {AccountSettingComponent} from "./user/account-setting/account-setting.component";
 import {MainTimeLineComponent} from "./main-time-line/main-time-line.component";
 import {ChangePasswordSuccessComponent} from "./auth/change-password-success/change-password-success.component";
+import {CreatPostFormComponent} from "./creat-post-form/creat-post-form.component";
 
 const routes: Routes = [
   { path:'' ,pathMatch : "full",redirectTo:'login'},
@@ -15,6 +16,7 @@ const routes: Routes = [
   {path:'login',component:LoginComponent},
   {path:'register',component:RegisterComponent},
   {path:'register-success', component:RegisterSuccessComponent},
+  {path:'reg/:id', component:CreatPostFormComponent},
   {path: 'home' ,redirectTo:'feed'},
   {path:'setting',component:AccountSettingComponent},
   {path:'',component: MainTimeLineComponent},

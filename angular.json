@@ -13,7 +13,6 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-
             "outputPath": "dist/socialnetworkangular",
             "index": "src/index.html",
             "main": "src/main.ts",
@@ -26,7 +25,6 @@
               "src/assets"
             ],
             "styles": [
-
               "node_modules/bootstrap/dist/css/bootstrap.min.css",
               "src/styles.css",
               "src/assets/css/icons.css",
@@ -35,7 +33,6 @@
               "src/assets/unpkg.com/tailwindcss@2.2.19/dist/tailwind.min.css"
             ],
             "scripts": [
-
               "node_modules/jquery/dist/jquery.min.js",
               "src/assets/js/bootstrap-select.min.js",
               "src/assets/js/custom.js",
@@ -79,7 +76,6 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-
               "browserTarget": "socialnetworkangular:build:production"
             },
             "development": {
@@ -91,7 +87,6 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-
             "browserTarget": "socialnetworkangular:build"
           }
         },
@@ -115,7 +110,6 @@
         }
       }
     }
-
   },
   "cli": {
     "analytics": false

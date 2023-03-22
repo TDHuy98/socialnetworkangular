@@ -42,6 +42,9 @@ export class FeedComponent implements OnInit {
   allCmt: CommentDto[];
   thisPostLike: number
   newPost: NewPost = new NewPost()
+   currentNewFriendsId: any[];
+   currentSenderFriendsId: any[];
+   currentBlockFriendsId: any;
 
   constructor(private postService: PostServicek,
               private router: Router,
@@ -72,6 +75,7 @@ export class FeedComponent implements OnInit {
         console.log(data);
         this.currentUser = data;
         this.loggedInUser = data;
+        this.loadloginListFr()
 
         localStorage.setItem('loggedInUser', JSON.stringify(this.loggedInUser))
       }
@@ -97,7 +101,8 @@ export class FeedComponent implements OnInit {
         console.log(data);
         this.currentUser = data;
         this.loggedInUser = data;
-
+        this.loadloginListFr()
+        alert(this.curentLoginActiveFriends)
         localStorage.setItem('loggedInUser', JSON.stringify(this.loggedInUser))
       }
     )
@@ -125,22 +130,12 @@ export class FeedComponent implements OnInit {
       content: new FormControl("content", Validators.required),
       img: new FormControl("img"),
     })
-    this.loadloginListFr()
+
   }
 
   currentActiveFriendsId: Number[] = [];
 
-  loadloginListFr() {
-    this.friendService.getActiveFriendListByIdUser(this.currenLogInId).subscribe(
-      data => {
-        this.curentLoginActiveFriends = data
-        this.currentActiveFriendsId = []
-        this.curentLoginActiveFriends.forEach(item => {
-          this.currentActiveFriendsId.push(item.target.id)
-        })
-      }
-    )
-  }
+
 
   showEdit(id: number) {
     alert("ok")
@@ -200,20 +195,22 @@ export class FeedComponent implements OnInit {
       this.postService.like(like).subscribe((data) => {
         let flag =0;
 
-        // this.showDit()
-        // Tạo thông báo sau khi like
-        this.postServicec.getAllNotices(this.loggedInUser.id).subscribe(
-          data => {
-            data.forEach(item => {
-              if (item.postId == postId && item.type=='like'){
-                flag+=1;
+        if (this.loggedInUser.id != userIdRevNotice){
+          // this.showDit()
+          // Tạo thông báo sau khi like
+          this.postServicec.getAllNotices(this.loggedInUser.id).subscribe(
+            data => {
+              data.forEach(item => {
+                if (item.postId == postId && item.type == 'like') {
+                  flag += 1;
+                }
+              })
+              if (flag == 0) {
+                this.creatNotice("like your post", userIdRevNotice, postId, "Uncheck", actionAvartar, "like", userLastName)
               }
-            })
-            if (flag==0){
-              this.creatNotice("like your post", userIdRevNotice, postId, "Uncheck", actionAvartar, "like", userLastName)
             }
-          }
-        )
+          )
+        }
           // this.showDit()
           this.postService.findAllLike().subscribe(data => {
               this.currentAllLike = data;
@@ -265,7 +262,10 @@ export class FeedComponent implements OnInit {
       postId: idPost
     };
     //Tạo thông báo sau khi cmt
-    this.creatNotice("cmt your post", userId, idPost, "Uncheck", userCmtAvatar, "cmt", nameAction)
+    if (this.loggedInUser.id!=userId){
+      this.creatNotice("cmt your post", userId, idPost, "Uncheck", userCmtAvatar, "cmt", nameAction)
+
+    }
     // console.log(this.posts)
     // @ts-ignore
     this.postService.comment(cmt).subscribe((data) => {
@@ -393,7 +393,7 @@ export class FeedComponent implements OnInit {
     };
     console.log("notice: " , notice);
     // @ts-ignore
-    this.postServicec.createNotications(notice).subscribe((data) => {
+    this.postService.createNotications(notice).subscribe((data) => {
         this.postServicec.getAllNotices(this.loggedInUser.id).subscribe(
           (data) => {
             this.notices = data;
@@ -403,4 +403,50 @@ export class FeedComponent implements OnInit {
       },
     );
   }
+
+  loadloginListFr() {
+    this.friendService.getActiveFriendListByIdUser(this.currenLogInId).subscribe(
+      data => {
+        this.curentLoginActiveFriends = data
+        this.currentActiveFriendsId = []
+        this.currentNewFriendsId = []
+        this.currentSenderFriendsId = []
+
+        this.friendService.getSendFriendListByIdUser(this.currenLogInId).subscribe(
+          data => {
+            this.curentLoginSenderFriends = data
+
+            this.friendService.getNewFriendListByIdUser(this.currenLogInId).subscribe(
+              data => {
+                this.curentLoginNewFriends = data
+
+                this.friendService.getBlockFriendListByIdUser(this.currenLogInId).subscribe(
+                  data => {
+                    this.curentLoginBlockFriends = data
+                    this.curentLoginActiveFriends.forEach(item => {
+                      this.currentActiveFriendsId.push(item.target.id)
+                    })
+                    this.curentLoginSenderFriends.forEach(item => {
+                      this.currentSenderFriendsId.push(item.target.id)
+                    })
+                    this.curentLoginNewFriends.forEach(item => {
+                      this.currentNewFriendsId.push(item.target.id)
+                    })
+                    this.curentLoginBlockFriends.forEach(item => {
+                      this.currentBlockFriendsId.push(item.target.id)
+                    })
+
+
+                  }
+                )
+
+              }
+            )
+          }
+        )
+      }
+    )
+  }
+
+
 }
