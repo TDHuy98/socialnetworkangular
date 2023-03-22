@@ -251,7 +251,7 @@ export class FeedComponent implements OnInit {
 
   }
 
-  cmt(idPost: number) {
+  cmt(idPost: number, contentNotice: string, status: string, userCmtAvatar: string, type: string, userId: number, nameAction: string) {
     const cmt = {
       content: this.formCmt.controls["content"].value,
       user: {
@@ -302,6 +302,7 @@ export class FeedComponent implements OnInit {
         this.newPost.img = url
         this.postService.save(this.newPost).subscribe(() => {
           console.log("success")
+          this.router.navigateByUrl("/feed");
           window.location.reload();
         })
       })))

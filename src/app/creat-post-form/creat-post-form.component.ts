@@ -77,7 +77,7 @@ export class CreatPostFormComponent implements OnInit {
       {},
       // Dữ liệu được gửi đi
       JSON.stringify({
-        'name': this.loggedInUser.lastname,
+        'name': this.loggedInUser.lastName,
         'message': this.message,
         'idSender': this.loggedInUser.id,
         'idRev': idFriend

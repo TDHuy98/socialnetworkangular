@@ -134,7 +134,7 @@ export class MainTimeLineComponent implements OnInit, OnChanges {
     this.showDit()
     this.loadNotice(this.loggedInUser.id)
     this.postForm = new FormGroup({
-      content: new FormControl("content"),
+      content: new FormControl(""),
       postStatus: new FormControl("postStatus", Validators.required),
       img: new FormControl(""),
       posts: new FormControl(""),
