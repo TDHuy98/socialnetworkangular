@@ -24,6 +24,7 @@ import { TimeLineComponent } from './time-line/time-line.component';
 import { FriendListComponent } from './friend-list/friend-list.component';
 import { PhotosComponent } from './photos/photos.component';
 import { MainTimeLineComponent } from './main-time-line/main-time-line.component';
+import { ChatComponent } from './chat/chat.component';
 
 
 @NgModule({
@@ -41,7 +42,8 @@ import { MainTimeLineComponent } from './main-time-line/main-time-line.component
     TimeLineComponent,
     FriendListComponent,
     PhotosComponent,
-    MainTimeLineComponent
+    MainTimeLineComponent,
+    ChatComponent
 
   ],
   imports: [

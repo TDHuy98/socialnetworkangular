@@ -5,6 +5,4 @@ export class Message{
   source!:User;
   target!:User;
   message!:string;
-  crateAT!:Date;
-  updateAT!:Date;
 }
