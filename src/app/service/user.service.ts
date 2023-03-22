@@ -6,6 +6,7 @@ import {User} from "../model/User";
 import {UserUpdate} from "../model/UserUpdate";
 import {ChangePassword} from "../model/ChangePassword";
 import {UserSearch} from "../model/UserSearch";
+import {Message} from "../model/Message";
 
 @Injectable({
   providedIn: 'root'
@@ -36,7 +37,15 @@ export class UserService {
   changePassword(changePassword: ChangePassword): Observable<ChangePassword> {
     return this.httpClient.put<ChangePassword>(this.url + "changepassword", changePassword)
   }
-
+  findAllMessById(id: number): Observable<Message> {
+    return this.httpClient.get<Message>('http://localhost:8080/Message/' + id);
+  }
+  createMessage(message: Message): Observable<Message>{
+    return this.httpClient.post<Message>(`http://localhost:8080/Message`,message)
+  }
+  deleteMessage(id: number): Observable<void> {
+    return this.httpClient.delete<void>(`http://localhost:8080/Message/${id}`);
+  }
 
   mystatusChanged: EventEmitter<any> = new EventEmitter();
   activeFriendsIds: any;
