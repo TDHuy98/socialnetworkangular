@@ -245,7 +245,6 @@ export class AppComponent implements OnInit {
   }
 
   goToChat(id: number, avatar:string) {
-    this.connect(id)
     this.currentClickId = id;
     localStorage.setItem('avatarChat', String(avatar));
     this.router.navigateByUrl("/reg/" + id)

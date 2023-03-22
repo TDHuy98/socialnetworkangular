@@ -102,7 +102,6 @@ export class FeedComponent implements OnInit {
         this.currentUser = data;
         this.loggedInUser = data;
         this.loadloginListFr()
-        alert(this.curentLoginActiveFriends)
         localStorage.setItem('loggedInUser', JSON.stringify(this.loggedInUser))
       }
     )

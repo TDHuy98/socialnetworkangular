@@ -6,6 +6,8 @@ import {User} from "../model/User";
 import {UserUpdate} from "../model/UserUpdate";
 import {ChangePassword} from "../model/ChangePassword";
 import {UserSearch} from "../model/UserSearch";
+import {Message} from "../model/Message";
+import {Notifications} from "../model/Dto/Notifications";
 
 @Injectable({
   providedIn: 'root'
@@ -56,6 +58,15 @@ export class UserService {
 
   search(searchValue:string):Observable<UserSearch[]>{
     return this.httpClient.get<UserSearch[]>(this.url+searchValue)
+  }
+  findAllMessById(id: number): Observable<Message> {
+    return this.httpClient.get<Message>('http://localhost:8080/Message/' + id);
+  }
+  createMessage(message: Message): Observable<Message>{
+    return this.httpClient.post<Message>(`http://localhost:8080/Message`,message)
+  }
+  deleteMessage(id: number): Observable<void> {
+    return this.httpClient.delete<void>(`http://localhost:8080/Message/${id}`);
   }
 }
 
