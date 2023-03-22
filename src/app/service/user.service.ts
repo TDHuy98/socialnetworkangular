@@ -59,8 +59,8 @@ export class UserService {
   search(searchValue:string):Observable<UserSearch[]>{
     return this.httpClient.get<UserSearch[]>(this.url+searchValue)
   }
-  findAllMessById(id: number): Observable<Message> {
-    return this.httpClient.get<Message>('http://localhost:8080/Message/' + id);
+  findAllMessById(id: number): Observable<Message[]> {
+    return this.httpClient.get<Message[]>('http://localhost:8080/Message/' + id);
   }
   createMessage(message: Message): Observable<Message>{
     return this.httpClient.post<Message>(`http://localhost:8080/Message`,message)

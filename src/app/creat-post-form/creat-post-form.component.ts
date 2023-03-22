@@ -9,6 +9,7 @@ import {CommentDto} from "../model/Dto/CommentDto";
 import {NewPost} from "../model/Dto/newPost";
 import {FriendDto} from "../model/Dto/FriendDto";
 import {FriendListService} from "../service/friend-list.service";
+import {data} from "jquery";
 
 
 @Component({
@@ -31,6 +32,7 @@ export class CreatPostFormComponent implements OnInit {
   currentId: number;
   currentClickId: number;
   messsageBox: Message[]
+  messageSave: Message[]
   currentActiveFriendsId: any[];
 
   constructor(private postService: PostService, private userService: UserService,
@@ -48,6 +50,9 @@ export class CreatPostFormComponent implements OnInit {
   }
 
   connect(id1: number) {
+    this.userService.findAllMessById(this.loggedInUser.id).subscribe(data=> {
+      this.messageSave=data;
+    })
     // @ts-ignore
     this.currentClickId = +this.route.snapshot.paramMap.get('id');
     this.loadloginListFr()
@@ -91,7 +96,8 @@ export class CreatPostFormComponent implements OnInit {
 
   showGreeting(message: any) {
     this.messageText.push(message);
-    this.messsageBox.push(message)
+    this.messsageBox.push(message);
+
   }
 
   ngOnInit(): void {

@@ -855,6 +855,31 @@
               <!--                <td>{{greeting}}</td>-->
               <!--              </tr>-->
               <!--              </tbody>-kdlkasjglkdjslkjdskfjkdjfslkajsdfkjsdkajfksjdakfjskdjfkdjslfjdjflsdjfksdjlfjsdlfjsdjvjaslkdnvlksdjfljasdifjsadfjodsfsdojfosdjafojsdaofjsdojfosdajfsdjfojsdaofdjfj-->
+              <div *ngFor="let mess of messageSave">
+                <div *ngIf="mess.idSenders== loggedInUser.id">
+                  <div class="message-bubble me">
+                    <div class="message-bubble-inner">
+                      <div class="message-avatar"><img src="{{loggedInUser.profile}}" alt=""></div>
+                      <div class="message-text"><p>{{mess.message}}</p></div>
+                    </div>
+                    <div class="clearfix"></div>
+                  </div>
+                </div>
+
+
+                <div *ngIf="mess.idSenders!= loggedInUser.id">
+                  <div *ngIf="mess.idSenders==currentClickId" >
+                    <div class="message-bubble">
+                      <div class="message-bubble-inner">
+                        <div class="message-avatar"><img src="{{getAvatar()}}" alt=""></div>
+                        <div class="message-text"><p>{{mess.message}}</p></div>
+                      </div>
+                      <div class="clearfix"></div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
               <div *ngFor="let greeting of messsageBox">
                 <div *ngIf="greeting.idSenders== loggedInUser.id">
                   <div class="message-bubble me">
