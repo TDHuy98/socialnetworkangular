@@ -1,8 +1,8 @@
 export class CurrentLoggedInUser{
   id:number;
-  firstName:string;
-  middleName:string;
-  lastName:string;
+  firstname:string;
+  middlename:string;
+  lastname:string;
   profile:string;
   dateOfBirth=Date;
   email:string;

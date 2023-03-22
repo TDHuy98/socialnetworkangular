@@ -81,7 +81,7 @@ export class CreatPostFormComponent implements OnInit {
     this.stompClient.send(`/gkz/hello`, {},
       // Dữ liệu được gửi đi
       JSON.stringify({
-        'name': this.loggedInUser.lastName,
+        'name': this.loggedInUser.lastname,
         'message': this.message,
         'idSender': this.loggedInUser.id,
         'idRev': idFriend

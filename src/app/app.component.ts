@@ -58,9 +58,9 @@ export class AppComponent implements OnInit {
 
     this.currentLoggedInUser = {
       id: 1,
-      firstName: '',
-      middleName: '',
-      lastName: '',
+      firstname: '',
+      middlename: '',
+      lastname: '',
       profile: '',
       dateOfBirth: Date,
       email: '',
@@ -89,7 +89,7 @@ export class AppComponent implements OnInit {
   newFriendsId: number[] = []
   blockFriendsId: number[] = []
   activeFriendsId: number[] = []
-  loggedInUser: UserDto;
+  loggedInUser: User;
   searchValue: '';
 
 
