@@ -6,8 +6,6 @@ import {User} from "../model/User";
 import {UserUpdate} from "../model/UserUpdate";
 import {ChangePassword} from "../model/ChangePassword";
 import {UserSearch} from "../model/UserSearch";
-import {Message} from "../model/Message";
-import {Notifications} from "../model/Dto/Notifications";
 
 @Injectable({
   providedIn: 'root'
@@ -26,18 +24,19 @@ export class UserService {
     return this.httpClient.put<UserUpdate>(this.url + "setting", userInformation)
   }
 
-
-  isPasswordCorrect(checkPassword: ChangePassword): Observable<boolean> {
-    return this.httpClient.post<boolean>(this.url + "checkpassword", checkPassword)
+  enableSearchable(): Observable<any> {
+    return this.httpClient.post("http://localhost:8080/api/v1/common/enable-search/" + localStorage.getItem('userId'), null)
   }
+
+  disableSearchable(): Observable<any> {
+    return this.httpClient.post("http://localhost:8080/api/v1/common/disable-search/" + localStorage.getItem('userId'), null)
+  }
+
 
   changePassword(changePassword: ChangePassword): Observable<ChangePassword> {
     return this.httpClient.put<ChangePassword>(this.url + "changepassword", changePassword)
   }
 
-  getAll(): Observable<User[]> {
-    return this.httpClient.get<User[]>('http://localhost:8080/users');
-  }
 
   mystatusChanged: EventEmitter<any> = new EventEmitter();
   activeFriendsIds: any;
@@ -56,17 +55,6 @@ export class UserService {
     return this.httpClient.get<User>('http://localhost:8080/user/' + id);
   }
 
-  search(searchValue:string):Observable<UserSearch[]>{
-    return this.httpClient.get<UserSearch[]>(this.url+searchValue)
-  }
-  findAllMessById(id: number): Observable<Message> {
-    return this.httpClient.get<Message>('http://localhost:8080/Message/' + id);
-  }
-  createMessage(message: Message): Observable<Message>{
-    return this.httpClient.post<Message>(`http://localhost:8080/Message`,message)
-  }
-  deleteMessage(id: number): Observable<void> {
-    return this.httpClient.delete<void>(`http://localhost:8080/Message/${id}`);
-  }
+
 }
 

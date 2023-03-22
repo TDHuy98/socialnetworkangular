@@ -4,19 +4,21 @@ export class CommentDto{
   content :string;
   postId :number;
   profile :string;
-  firstname  :string;
-  middlename :string;
-  lastname   :string;
+  firstName  :string;
+  middleName :string;
+  lastName   :string;
+  createdAt:Date
 
 
-  constructor(id: number, userId: number, content: string, postId: number, profile: string, firstName: string, middleName: string, lastName: string) {
+  constructor(id: number, userId: number, content: string, postId: number, profile: string, firstName: string, middleName: string, lastName: string, createdAt: Date) {
     this.id = id;
     this.userId = userId;
     this.content = content;
     this.postId = postId;
     this.profile = profile;
-    this.firstname = firstName;
-    this.middlename = middleName;
-    this.lastname = lastName;
+    this.firstName = firstName;
+    this.middleName = middleName;
+    this.lastName = lastName;
+    this.createdAt = createdAt;
   }
 }

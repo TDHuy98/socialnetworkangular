@@ -68,8 +68,7 @@ export class FeedComponent implements OnInit {
         }
       )
     }, error => {
-      alert("false")
-    })
+      console.log('failed')    })
     this.userService.findById(Number(localStorage.getItem('userId'))).subscribe(
       data => {
         console.log(data);
@@ -102,6 +101,7 @@ export class FeedComponent implements OnInit {
         this.currentUser = data;
         this.loggedInUser = data;
         this.loadloginListFr()
+        console.log(this.curentLoginActiveFriends)
         localStorage.setItem('loggedInUser', JSON.stringify(this.loggedInUser))
       }
     )
@@ -149,9 +149,9 @@ export class FeedComponent implements OnInit {
     })
   }
 
-  showPost() {
+  showPost(){
     this.postService.findAllByUser_Id(this.currentLoggedInUserId).subscribe(data => {
-      this.posts = data
+      this.posts= data
       this.currentPostLiked = []
       this.postService.findAllLike().subscribe(data => {
           this.currentAllLike = data;
@@ -168,8 +168,7 @@ export class FeedComponent implements OnInit {
 
         }
       )
-    }, error => {
-      alert("false")
+    },error => {
     })
   }
 

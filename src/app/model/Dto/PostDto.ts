@@ -3,9 +3,9 @@ import {PostStatus} from "../PostStatus";
 export class PostDto{
   id:number;
   userId: number;
-  firstname: string;
-  middlename:string;
-  lastname:string;
+  firstName: string;
+  middleName:string;
+  lastName:string;
   content:string;
   postStatus: PostStatus;
   img:string

@@ -8,4 +8,5 @@ export class UserUpdate {
   intro: string;
   profile: string;
   dob: Date;
+  searchable:boolean
 }
