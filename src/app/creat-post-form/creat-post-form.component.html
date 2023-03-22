@@ -907,13 +907,16 @@
 
 
                 <div *ngIf="greeting.idSenders!= loggedInUser.id">
-                  <div class="message-bubble">
-                    <div class="message-bubble-inner">
-                      <div class="message-avatar"><img src="{{getAvatar()}}" alt=""></div>
-                      <div class="message-text"><p>{{greeting.message}}</p></div>
+                  <div *ngIf="greeting.idSenders==currentClickId" >
+                    <div class="message-bubble">
+                      <div class="message-bubble-inner">
+                        <div class="message-avatar"><img src="{{getAvatar()}}" alt=""></div>
+                        <div class="message-text"><p>{{greeting.message}}</p></div>
+                      </div>
+                      <div class="clearfix"></div>
                     </div>
-                    <div class="clearfix"></div>
                   </div>
+
                 </div>
               </div>
 
