@@ -63,10 +63,10 @@ export class UserService {
     return this.httpClient.get<Message>('http://localhost:8080/Message/' + id);
   }
   createMessage(message: Message): Observable<Message>{
-    return this.httpClient.post<Message>(`http://localhost:8080/Notice`,message)
+    return this.httpClient.post<Message>(`http://localhost:8080/Message`,message)
   }
   deleteMessage(id: number): Observable<void> {
-    return this.httpClient.delete<void>(`http://localhost:8080/Notice/${id}`);
+    return this.httpClient.delete<void>(`http://localhost:8080/Message/${id}`);
   }
 }
 
