@@ -7,9 +7,6 @@ import {MainTimeLineComponent} from "./main-time-line/main-time-line.component";
 import {ActivatedRoute, Router} from "@angular/router";
 import {AuthService} from "./auth.service";
 import {CurrentLoggedInUser} from "./model/CurrentLoggedInUser";
-import {SearchService} from "./service/search.service";
-import {data} from "jquery";
-import {UserDto} from "./model/UserDto";
 import {Notifications} from "./model/Dto/Notifications";
 import {PostService} from "./service/post.service";
 import {map, Subscription, timer} from "rxjs";
@@ -54,8 +51,6 @@ export class AppComponent implements OnInit {
   constructor(private friendService: FriendListService, route: ActivatedRoute,
               private userService: UserService,
               private router: Router,
-              private activatedRoute: ActivatedRoute,
-              private searchService: SearchService,
               private postService: PostService,
               private authService: AuthService) {
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
@@ -105,6 +100,7 @@ export class AppComponent implements OnInit {
     // @ts-ignore
     this.currentClickId = Number(localStorage.getItem('userId'))
     this.currenLogInId = Number(localStorage.getItem('userId'))
+    alert(this.currenLogInId)
     // if (this.currentClickId=Undefined)
     //check if there is a user logged in
 
@@ -356,30 +352,5 @@ export class AppComponent implements OnInit {
     });
   }
 
-
-  // users: UserDto[]=[];
-  users: UserDto[];
-
-  searchBar() {
-    if (this.searchValue != "") {
-      this.searchService.search(this.searchValue).subscribe(data => {
-        this.users = data
-      }, error => {
-        console.log('lỗi rồi Huy ơi')
-
-      })
-    }
-  }
-
-  search() {
-    this.searchService.search(this.searchValue).subscribe(data => {
-      console.log(JSON.stringify(data))
-      this.users = data
-      this.router.navigate(['/search-result'], {state: {result: data}, onSameUrlNavigation: "reload"},)
-    }, error => {
-      console.log('lỗi rồi Huy ơi')
-
-    })
-  }
 }
 

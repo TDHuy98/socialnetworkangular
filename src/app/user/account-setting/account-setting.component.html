@@ -94,7 +94,7 @@
             <div>
 
               <input class="line h-32" autocomplete="off" type="text"
-                     onkeyup="this.setAttribute('value', this.value);" value="" name="intro"
+                     onkeyup="this.setAttribute('value', this.value);" value=""
                      id="intro" [(ngModel)]="userInfor.intro" pattern="[a-zA-Z ]*">
             </div>
           </div>
@@ -176,15 +176,11 @@
         <div class="flex justify-between items-center">
           <div>
             <h4> Search engines </h4>
-            <div>Let anyone can find me</div>
+            <div> Lorem ipsum dolor sit amet, consectetuer adipiscing elit,</div>
           </div>
           <div class="switches-list -mt-8 is-large">
-            <div class="switch-container" *ngIf="userInfor.searchable==true">
-              <label class="switch"><input type="checkbox" checked (change)="disableSearch()"><span
-                class="switch-button"></span> </label>
-            </div>
-            <div class="switch-container" *ngIf="userInfor.searchable==false">
-              <label class="switch"><input type="checkbox" (change)="enableSearch()"><span
+            <div class="switch-container">
+              <label class="switch"><input type="checkbox" checked><span
                 class="switch-button"></span> </label>
             </div>
           </div>

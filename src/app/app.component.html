@@ -22,18 +22,40 @@
         <!-- search icon for mobile -->
         <div class="header-search-icon" uk-toggle="target: #wrapper ; cls: show-searchbox"></div>
         <div class="header_search"><i class="uil-search-alt"></i>
-          <form #searchForm="ngForm" (ngSubmit)="search()">
-            <input value="" type="text" class="form-control" placeholder="Search for Friends , Videos and more.."
-                   autocomplete="off" [(ngModel)]="searchValue" name="searchValue" (input)="searchBar()">
-          </form>
+          <input value="" type="text" class="form-control" placeholder="Search for Friends , Videos and more.."
+                 autocomplete="off" [(ngModel)]="searchValue">
           <div uk-drop="mode: click" class="header_search_dropdown">
 
-            <!--            <h4 class="search_title"> Recently </h4>-->
+            <h4 class="search_title"> Recently </h4>
             <ul>
-              <li *ngFor="let user of users">
-                <a>
-                  <img src="{{user.profile}}" alt="" class="list-avatar">
-                  <div class="list-name"> {{user.firstName + " " + user.middleName + " " + user.lastName}}</div>
+              <li>
+                <a href="#">
+                  <img src="assets/images/avatars/avatar-1.jpg" alt="" class="list-avatar">
+                  <div class="list-name"> Erica Jones</div>
+                </a>
+              </li>
+              <li>
+                <a href="#">
+                  <img src="assets/images/avatars/avatar-2.jpg" alt="" class="list-avatar">
+                  <div class="list-name"> Coffee Addicts</div>
+                </a>
+              </li>
+              <li>
+                <a href="#">
+                  <img src="assets/images/avatars/avatar-3.jpg" alt="" class="list-avatar">
+                  <div class="list-name"> Mountain Riders</div>
+                </a>
+              </li>
+              <li>
+                <a href="#">
+                  <img src="assets/images/avatars/avatar-4.jpg" alt="" class="list-avatar">
+                  <div class="list-name"> Property Rent And Sale</div>
+                </a>
+              </li>
+              <li>
+                <a href="#">
+                  <img src="assets/images/avatars/avatar-5.jpg" alt="" class="list-avatar">
+                  <div class="list-name"> Erica Jones</div>
                 </a>
               </li>
             </ul>
@@ -44,12 +66,12 @@
         <div class="right_side">
           <div class="header_widgets" *ngIf="checkLog()">
 
-            <a href="#" class="is_icon" uk-tooltip="title: Notifications">
+            <a (click)="loadNotice(loggedInUser.id)" class="is_icon" uk-tooltip="title: Notifications">
               <svg fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                 <path
                   d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z"></path>
               </svg>
-              <span>3</span>
+<!--              <span>{{countNotice()}}</span>-->
             </a>
             <div uk-drop="mode: click" class="header_dropdown">
               <div class="dropdown_scrollbar" data-simplebar>
@@ -65,165 +87,148 @@
                   </div>
                 </div>
                 <ul>
-                  <li>
+                  <li *ngFor="let notice of notices" class="not-read">
                     <a href="#">
-                      <div class="drop_avatar">
-                        <img src="assets/images/avatars/avatar-1.jpg" alt="">
-                      </div>
-                      <span class="drop_icon bg-gradient-primary">
-                                                     <i class="icon-feather-thumbs-up"></i>
-                                                 </span>
-                      <div class="drop_text">
-                        <p>
-                          <strong>Adrian Mohani</strong> Like Your Comment On Video
-                          <span class="text-link">Learn Prototype Faster </span>
-                        </p>
-                        <time> 2 hours ago</time>
-                      </div>
-                    </a>
-                  </li>
-                  <li class="not-read">
-                    <a href="#">
-                      <div class="drop_avatar status-online"><img src="assets/images/avatars/avatar-2.jpg" alt="">
+                      <div class="drop_avatar status-online"><img src="{{notice.targetAvatar}}" alt="">
                       </div>
                       <div class="drop_text">
                         <p>
-                          <strong>Stella Johnson</strong> Replay Your Comments in
-                          <span class="text-link">Adobe XD Tutorial</span>
+                          <strong>{{notice.userLastName}}</strong> {{notice.content}}
+                          <span class="text-link">{{notice.type}}</span>
                         </p>
-                        <time> 9 hours ago</time>
+                        <time> some mins ago </time>
                       </div>
                     </a>
                   </li>
-                  <li>
-                    <a href="#">
-                      <div class="drop_avatar"><img src="assets/images/avatars/avatar-3.jpg" alt="">
-                      </div>
-                      <span class="drop_icon bg-gradient-primary">
-                                                    <i class="icon-feather-thumbs-up"></i>
-                                                </span>
-                      <div class="drop_text">
-                        <p>
-                          <strong>Alex Dolgove</strong> Added New Review In Video
-                          <span class="text-link">Full Stack PHP Developer</span>
-                        </p>
-                        <time> 12 hours ago</time>
-                      </div>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <div class="drop_avatar"><img src="assets/images/avatars/avatar-1.jpg" alt="">
-                      </div>
-                      <div class="drop_text">
-                        <p>
-                          <strong>Jonathan Madano</strong> Shared Your Discussion On Video
-                          <span class="text-link">Css Flex Box </span>
-                        </p>
-                        <time> Yesterday</time>
-                      </div>
-                    </a>
-                  </li>
-                  <li>
-                    <a>
-                      <div class="drop_avatar"><img src="assets/images/avatars/avatar-1.jpg" alt="">
-                      </div>
-                      <span class="drop_icon bg-gradient-primary">
-                                                    <i class="icon-feather-thumbs-up"></i>
-                                                </span>
-                      <div class="drop_text">
-                        <p>
-                          <strong>Adrian Mohani</strong> Like Your Comment On Course
-                          <span class="text-link">Javascript Introduction </span>
-                        </p>
-                        <time> 2 hours ago</time>
-                      </div>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <div class="drop_avatar status-online"><img src="assets/images/avatars/avatar-2.jpg" alt="">
-                      </div>
-                      <div class="drop_text">
-                        <p>
-                          <strong>Stella Johnson</strong> Replay Your Comments in
-                          <span class="text-link">Programming for Games</span>
-                        </p>
-                        <time> 9 hours ago</time>
-                      </div>
-                    </a>
-                  </li>
-                  <li>
-                    <a>
-                      <div class="drop_avatar"><img src="assets/images/avatars/avatar-2.jpg" alt="">
-                      </div>
-                      <div class="drop_text">
-                        <p>
-                          <strong>Stella Johnson</strong> Replay Your Comments in
-                          <span class="text-link">Programming for Games</span>
-                        </p>
-                        <time> 9 hours ago</time>
-                      </div>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <div class="drop_avatar"><img src="assets/images/avatars/avatar-3.jpg" alt="">
-                      </div>
-                      <div class="drop_text">
-                        <p>
-                          <strong>Alex Dolgove</strong> Added New Review In Course
-                          <span class="text-link">Full Stack PHP Developer</span>
-                        </p>
-                        <time> 12 hours ago</time>
-                      </div>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <div class="drop_avatar"><img src="assets/images/avatars/avatar-1.jpg" alt="">
-                      </div>
-                      <div class="drop_text">
-                        <p>
-                          <strong>Jonathan Madano</strong> Shared Your Discussion On Course
-                          <span class="text-link">Css Flex Box </span>
-                        </p>
-                        <time> Yesterday</time>
-                      </div>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <div class="drop_avatar"><img src="assets/images/avatars/avatar-1.jpg" alt="">
-                      </div>
-                      <div class="drop_text">
-                        <p>
-                          <strong>Adrian Mohani</strong> Like Your Comment On Course
-                          <span class="text-link">Javascript Introduction </span>
-                        </p>
-                        <time> 2 hours ago</time>
-                      </div>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <div class="drop_avatar"><img src="assets/images/avatars/avatar-2.jpg" alt="">
-                      </div>
-                      <div class="drop_text">
-                        <p>
-                          <strong>Stella Johnson</strong> Replay Your Comments in
-                          <span class="text-link">Programming for Games</span>
-                        </p>
-                        <time> 9 hours ago</time>
-                      </div>
-                    </a>
-                  </li>
+<!--                  <li>-->
+<!--                    <a href="#">-->
+<!--                      <div class="drop_avatar"><img src="assets/images/avatars/avatar-3.jpg" alt="">-->
+<!--                      </div>-->
+<!--                      <span class="drop_icon bg-gradient-primary">-->
+<!--                                                    <i class="icon-feather-thumbs-up"></i>-->
+<!--                                                </span>-->
+<!--                      <div class="drop_text">-->
+<!--                        <p>-->
+<!--                          <strong>Alex Dolgove</strong> Added New Review In Video-->
+<!--                          <span class="text-link">Full Stack PHP Developer</span>-->
+<!--                        </p>-->
+<!--                        <time> 12 hours ago</time>-->
+<!--                      </div>-->
+<!--                    </a>-->
+<!--                  </li>-->
+<!--                  <li>-->
+<!--                    <a href="#">-->
+<!--                      <div class="drop_avatar"><img src="assets/images/avatars/avatar-1.jpg" alt="">-->
+<!--                      </div>-->
+<!--                      <div class="drop_text">-->
+<!--                        <p>-->
+<!--                          <strong>Jonathan Madano</strong> Shared Your Discussion On Video-->
+<!--                          <span class="text-link">Css Flex Box </span>-->
+<!--                        </p>-->
+<!--                        <time> Yesterday</time>-->
+<!--                      </div>-->
+<!--                    </a>-->
+<!--                  </li>-->
+<!--                  <li>-->
+<!--                    <a>-->
+<!--                      <div class="drop_avatar"><img src="assets/images/avatars/avatar-1.jpg" alt="">-->
+<!--                      </div>-->
+<!--                      <span class="drop_icon bg-gradient-primary">-->
+<!--                                                    <i class="icon-feather-thumbs-up"></i>-->
+<!--                                                </span>-->
+<!--                      <div class="drop_text">-->
+<!--                        <p>-->
+<!--                          <strong>Adrian Mohani</strong> Like Your Comment On Course-->
+<!--                          <span class="text-link">Javascript Introduction </span>-->
+<!--                        </p>-->
+<!--                        <time> 2 hours ago</time>-->
+<!--                      </div>-->
+<!--                    </a>-->
+<!--                  </li>-->
+<!--                  <li>-->
+<!--                    <a href="#">-->
+<!--                      <div class="drop_avatar status-online"><img src="assets/images/avatars/avatar-2.jpg" alt="">-->
+<!--                      </div>-->
+<!--                      <div class="drop_text">-->
+<!--                        <p>-->
+<!--                          <strong>Stella Johnson</strong> Replay Your Comments in-->
+<!--                          <span class="text-link">Programming for Games</span>-->
+<!--                        </p>-->
+<!--                        <time> 9 hours ago</time>-->
+<!--                      </div>-->
+<!--                    </a>-->
+<!--                  </li>-->
+<!--                  <li>-->
+<!--                    <a>-->
+<!--                      <div class="drop_avatar"><img src="assets/images/avatars/avatar-2.jpg" alt="">-->
+<!--                      </div>-->
+<!--                      <div class="drop_text">-->
+<!--                        <p>-->
+<!--                          <strong>Stella Johnson</strong> Replay Your Comments in-->
+<!--                          <span class="text-link">Programming for Games</span>-->
+<!--                        </p>-->
+<!--                        <time> 9 hours ago</time>-->
+<!--                      </div>-->
+<!--                    </a>-->
+<!--                  </li>-->
+<!--                  <li>-->
+<!--                    <a href="#">-->
+<!--                      <div class="drop_avatar"><img src="assets/images/avatars/avatar-3.jpg" alt="">-->
+<!--                      </div>-->
+<!--                      <div class="drop_text">-->
+<!--                        <p>-->
+<!--                          <strong>Alex Dolgove</strong> Added New Review In Course-->
+<!--                          <span class="text-link">Full Stack PHP Developer</span>-->
+<!--                        </p>-->
+<!--                        <time> 12 hours ago</time>-->
+<!--                      </div>-->
+<!--                    </a>-->
+<!--                  </li>-->
+<!--                  <li>-->
+<!--                    <a href="#">-->
+<!--                      <div class="drop_avatar"><img src="assets/images/avatars/avatar-1.jpg" alt="">-->
+<!--                      </div>-->
+<!--                      <div class="drop_text">-->
+<!--                        <p>-->
+<!--                          <strong>Jonathan Madano</strong> Shared Your Discussion On Course-->
+<!--                          <span class="text-link">Css Flex Box </span>-->
+<!--                        </p>-->
+<!--                        <time> Yesterday</time>-->
+<!--                      </div>-->
+<!--                    </a>-->
+<!--                  </li>-->
+<!--                  <li>-->
+<!--                    <a href="#">-->
+<!--                      <div class="drop_avatar"><img src="assets/images/avatars/avatar-1.jpg" alt="">-->
+<!--                      </div>-->
+<!--                      <div class="drop_text">-->
+<!--                        <p>-->
+<!--                          <strong>Adrian Mohani</strong> Like Your Comment On Course-->
+<!--                          <span class="text-link">Javascript Introduction </span>-->
+<!--                        </p>-->
+<!--                        <time> 2 hours ago</time>-->
+<!--                      </div>-->
+<!--                    </a>-->
+<!--                  </li>-->
+<!--                  <li>-->
+<!--                    <a href="#">-->
+<!--                      <div class="drop_avatar"><img src="assets/images/avatars/avatar-2.jpg" alt="">-->
+<!--                      </div>-->
+<!--                      <div class="drop_text">-->
+<!--                        <p>-->
+<!--                          <strong>Stella Johnson</strong> Replay Your Comments in-->
+<!--                          <span class="text-link">Programming for Games</span>-->
+<!--                        </p>-->
+<!--                        <time> 9 hours ago</time>-->
+<!--                      </div>-->
+<!--                    </a>-->
+<!--                  </li>-->
                 </ul>
               </div>
             </div>
 
             <!-- Message -->
-            <a href="#" class="is_icon" uk-tooltip="title: Message">
+            <a (click)="loadMess(loggedInUser.id)" class="is_icon" uk-tooltip="title: Message">
               <svg fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                 <path fill-rule="evenodd"
                       d="M18 5v8a2 2 0 01-2 2h-5l-5 4v-4H4a2 2 0 01-2-2V5a2 2 0 012-2h12a2 2 0 012 2zM7 8H5v2h2V8zm2 0h2v2H9V8zm6 0h-2v2h2V8z"
@@ -246,12 +251,12 @@
                 </div>
                 <input type="text" class="uk-input" placeholder="Search in Messages">
                 <ul>
-                  <li class="un-read">
-                    <a href="#">
-                      <div class="drop_avatar"><img src="assets/images/avatars/avatar-7.jpg" alt="">
+                  <li *ngFor="let f of curentLoginActiveFriends" class="un-read">
+                    <a (click)="goToChat(f.target.id,f.target.profile)">
+                      <div class="drop_avatar"><img src="{{f.target.profile}}" alt="">
                       </div>
                       <div class="drop_text">
-                        <strong> Stella Johnson </strong>
+                        <strong> {{f.target.middlename}}{{f.target.lastname}} </strong>
                         <time>12:43 PM</time>
                         <p> Alex will explain you how ... </p>
                       </div>
@@ -268,75 +273,10 @@
                       </div>
                     </a>
                   </li>
-                  <li>
-                    <a href="#">
-                      <div class="drop_avatar"><img src="assets/images/avatars/avatar-6.jpg" alt="">
-                      </div>
-                      <div class="drop_text">
-                        <strong>Alia Dolgove </strong>
-                        <time> Wed</time>
-                        <p> Alia just joined Messenger! </p>
-                      </div>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <div class="drop_avatar"><img src="assets/images/avatars/avatar-5.jpg" alt="">
-                      </div>
-                      <div class="drop_text">
-                        <strong> Jonathan Madano </strong>
-                        <time> Sun</time>
-                        <p> Replay Your Comments insit amet consectetur </p>
-                      </div>
-                    </a>
-                  </li>
-                  <li class="un-read">
-                    <a href="#">
-                      <div class="drop_avatar"><img src="assets/images/avatars/avatar-2.jpg" alt="">
-                      </div>
-                      <div class="drop_text">
-                        <strong> Stella Johnson </strong>
-                        <time>12:43 PM</time>
-                        <p> Alex will explain you how ... </p>
-                      </div>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <div class="drop_avatar"><img src="assets/images/avatars/avatar-1.jpg" alt="">
-                      </div>
-                      <div class="drop_text">
-                        <strong> Adrian Mohani </strong>
-                        <time> 6:43 PM</time>
-                        <p> Thanks for The Answer sit amet... </p>
-                      </div>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <div class="drop_avatar"><img src="assets/images/avatars/avatar-3.jpg" alt="">
-                      </div>
-                      <div class="drop_text">
-                        <strong>Alia Dolgove </strong>
-                        <time> Wed</time>
-                        <p> Alia just joined Messenger! </p>
-                      </div>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <div class="drop_avatar"><img src="assets/images/avatars/avatar-4.jpg" alt="">
-                      </div>
-                      <div class="drop_text">
-                        <strong> Jonathan Madano </strong>
-                        <time> Sun</time>
-                        <p> Replay Your Comments insit amet consectetur </p>
-                      </div>
-                    </a>
-                  </li>
+
                 </ul>
               </div>
-              <a href="#" class="see-all"> See all in Messages</a>
+              <a class="see-all"> See all in Messages</a>
             </div>
 
 
@@ -350,8 +290,8 @@
                   <img src="{{loggedInUser.profile}}" alt="">
                 </div>
                 <div class="user_name">
-                  <div> {{loggedInUser.firstName + " " + loggedInUser.middleName + " " + loggedInUser.lastName}}</div>
-                  <!--                  <span> @johnson</span>-->
+                  <div> {{loggedInUser.firstname+ " " +loggedInUser.middlename+ " " +loggedInUser.lastname}}</div>
+<!--                  <span> @johnson</span>-->
                 </div>
               </a>
               <a href="/setting">
@@ -545,7 +485,7 @@
               <img src="{{puppy.target.profile}}" alt="">
               <span class="user_status status_online"></span>
             </div>
-            <div class="contact-username">{{puppy.target.middleName + " " + puppy.target.lastName}}</div>
+            <div class="contact-username">{{puppy.target.middlename + " " + puppy.target.lastname}}</div>
           </a>
 
         </div>
@@ -617,9 +557,6 @@
   <!-- Main Contents -->
   <div class="main_content">
     <router-outlet (activate)="onOutLetLoader($event)"></router-outlet>
-    <!--      <app-main-time-line [pickingUser]="currentUser"></app-main-time-line>-->
-
-
   </div>
 
 </div>

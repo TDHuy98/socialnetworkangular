@@ -25,7 +25,6 @@ import { MainTimeLineComponent } from './main-time-line/main-time-line.component
 import { ChangePasswordSuccessComponent } from './auth/change-password-success/change-password-success.component';
 import {FriendDto} from "./model/Dto/FriendDto";
 import { CreatPostFormComponent } from './creat-post-form/creat-post-form.component';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 
 @NgModule({
@@ -63,8 +62,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     HttpClientModule,
     AngularFireStorageModule,
     AngularFireAuthModule,
-    AngularFireModule.initializeApp(environment.firebaseConfig),
-    BrowserAnimationsModule
+    AngularFireModule.initializeApp(environment.firebaseConfig)
 
   ],
   providers: [{provide: HTTP_INTERCEPTORS, useClass: HttpClientInterceptor, multi: true}],
