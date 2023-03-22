@@ -23,6 +23,7 @@ export class AccountSettingComponent implements OnInit {
     email: '',
     mobile: '',
     intro: '',
+    searchable:true,
   }
 
   updateInforMessage: string
@@ -55,6 +56,7 @@ export class AccountSettingComponent implements OnInit {
           this.userInfor.email = data.email,
           this.userInfor.mobile = data.mobile
         this.userInfor.intro = data.intro
+      this.userInfor.searchable=data.searchable
 
         // @ts-ignore
         // this.updateInformationForm.setValue({
@@ -126,8 +128,27 @@ export class AccountSettingComponent implements OnInit {
       this.message = error.error
       console.log('đổi mk thất bại')
     })
-
   }
 
+  checkSearch:boolean
+
+  enableSearch(){
+    this.userService.enableSearchable().subscribe(data=>{
+      console.log("enbale search")
+      this.checkSearch
+    },error => {
+      console.log("enbale search fail")
+
+    })
+  }
+
+  disableSearch() {
+    this.userService.disableSearchable().subscribe(data => {
+      console.log("disable search")
+    }, error => {
+      console.log("disable search fail")
+
+    })
+  }
 }
 

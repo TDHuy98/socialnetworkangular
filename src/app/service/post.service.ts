@@ -8,6 +8,7 @@ import {Like} from "../model/Like";
 import {PostDto} from "../model/Dto/PostDto";
 import {Comment} from "../model/Comment";
 import {CommentDto} from "../model/Dto/CommentDto";
+import {NewPost} from "../model/Dto/newPost";
 
 @Injectable({
   providedIn: 'root'
@@ -39,7 +40,7 @@ export class PostService {
     return this.http.delete<void>(`http://localhost:8080/posts/${id}`);
   }
 
-  create(post: { postTime: string; user: { id: number }; content: any }): Observable<Post> {
+  create(post: NewPost): Observable<Post> {
     return this.http.post<Post>('http://localhost:8080/posts', post);
   }
 

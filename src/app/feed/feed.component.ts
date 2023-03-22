@@ -228,6 +228,7 @@ export class FeedComponent implements OnInit {
       this.postService.getAllComment().subscribe(
         (data) => {
           this.allCmt = data;
+          console.log(data)
         }
       )
       },
@@ -258,7 +259,6 @@ export class FeedComponent implements OnInit {
         this.newPost.img = url
         this.postService.save(this.newPost).subscribe(()=>{
           console.log("success")
-          this.router.navigateByUrl("/feed");
           window.location.reload();
         })
       })))

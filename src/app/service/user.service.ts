@@ -11,7 +11,7 @@ import {UserSearch} from "../model/UserSearch";
   providedIn: 'root'
 })
 export class UserService {
-  private url = "http://localhost:8080/user/"
+  private url = "http://localhost:8080//api/v1/user-setting/"
 
   constructor(private httpClient: HttpClient) {
   }
@@ -23,19 +23,19 @@ export class UserService {
   updateUserInformation(userInformation: UserUpdate): Observable<UserUpdate> {
     return this.httpClient.put<UserUpdate>(this.url + "setting", userInformation)
   }
-
-
-  isPasswordCorrect(checkPassword: ChangePassword): Observable<boolean> {
-    return this.httpClient.post<boolean>(this.url + "checkpassword", checkPassword)
+  enableSearchable():Observable<any>{
+    return this.httpClient.post("http://localhost:8080/common/"+"enable-search"+"/"+ localStorage.getItem('userId'),null )
   }
+
+  disableSearchable(): Observable<any> {
+    return this.httpClient.post("http://localhost:8080/common/" + "disable-search"+"/"+ localStorage.getItem('userId'),null )
+  }
+
 
   changePassword(changePassword: ChangePassword): Observable<ChangePassword> {
     return this.httpClient.put<ChangePassword>(this.url + "changepassword", changePassword)
   }
 
-  getAll(): Observable<User[]> {
-    return this.httpClient.get<User[]>('http://localhost:8080/users');
-  }
 
   mystatusChanged: EventEmitter<any> = new EventEmitter();
   activeFriendsIds: any;
@@ -54,8 +54,6 @@ export class UserService {
     return this.httpClient.get<User>('http://localhost:8080/user/' + id);
   }
 
-  search(searchValue:string):Observable<UserSearch[]>{
-    return this.httpClient.get<UserSearch[]>(this.url+searchValue)
-  }
+
 }
 

@@ -495,7 +495,48 @@ export class MainTimeLineComponent implements OnInit, OnChanges {
     })
 
   }
+  creatPost() {
+    const filePath = this.selectedImage.name;
+    const fileRef = this.storage.ref(filePath);
+    this.storage.upload(filePath,this.selectedImage).snapshotChanges().pipe(
+      finalize(()=> (fileRef.getDownloadURL().subscribe(url =>{
+        this.ArrayPicture = url;
+        console.log("picture " + url)
+        this.newPost.userId = this.currentLoggedInUserId;
+        this.newPost.content= this.postForm.get("content").value;
+        this.newPost.postStatus=this.postForm.get("postStatus").value;
+        this.newPost.img = url
+        this.postService.create(this.newPost).subscribe(()=>{
+          console.log("success")
+          this.postService.getAll(this.currentId).subscribe((data) => {
+              console.log('postService getALl 2')
+              this.posts = data;
+              this.currentPostLiked = []
+              this.postService.findAllLike().subscribe(data => {
+                  this.currentAllLike = data;
+                  console.log("this is all like data " + JSON.stringify(data))
+                  data.forEach(like => {
+                    if (like.userId == this.currenLogInId) {
+                      this.currentPostLiked.push(like.postId)
+                    }
+                  })
+                  console.log(this.currentPostLiked)
+                  this.postService.getAllComment().subscribe(
+                    (data) => {
+                      this.allCmt = data;
+                    }
+                  )
+                }
+              )
+            }
+          )        })
+      })))
+    ).subscribe()
+  }
 
+  upload(){
+    this.selectedImage = this.avatarDom?.nativeElement.files[0];
+  }
 
   getTargetActiveFriend(userId: number) {
     this.friendService.getActiveFriendListByIdUser(userId).subscribe(
@@ -580,25 +621,6 @@ export class MainTimeLineComponent implements OnInit, OnChanges {
 
   newList: number[] = []
 
-  creatPost() {
-    const filePath = this.selectedImage.name;
-    const fileRef = this.storage.ref(filePath);
-    this.storage.upload(filePath, this.selectedImage).snapshotChanges().pipe(
-      finalize(() => (fileRef.getDownloadURL().subscribe(url => {
-        this.ArrayPicture = url;
-        console.log("picture " + url)
-        this.newPost.userId = this.currentLoggedInUserId;
-        this.newPost.content = this.postForm.get("content").value;
-        this.newPost.postStatus = this.postForm.get("postStatus").value;
-        this.newPost.img = url
-        this.postServicek.save(this.newPost).subscribe(() => {
-          console.log("success")
-          this.router.navigateByUrl("/feed");
-          window.location.reload();
-        })
-      })))
-    ).subscribe()
-  }
 
   currentLoggedInUserId = Number(localStorage.getItem('userId'))
 
@@ -607,9 +629,7 @@ export class MainTimeLineComponent implements OnInit, OnChanges {
 
   ArrayPicture = "";
 
-  upload() {
-    this.selectedImage = this.avatarDom?.nativeElement.files[0];
-  }
+
 
   edit() {
     this.postServicek.save(this.editForm.value).subscribe(() => {

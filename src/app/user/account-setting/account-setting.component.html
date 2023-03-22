@@ -176,11 +176,15 @@
         <div class="flex justify-between items-center">
           <div>
             <h4> Search engines </h4>
-            <div> Lorem ipsum dolor sit amet, consectetuer adipiscing elit,</div>
+            <div>Let anyone can find me</div>
           </div>
           <div class="switches-list -mt-8 is-large">
-            <div class="switch-container">
-              <label class="switch"><input type="checkbox" checked><span
+            <div class="switch-container" *ngIf="userInfor.searchable==true">
+              <label class="switch"><input type="checkbox" checked (change)="disableSearch()"><span
+                class="switch-button"></span> </label>
+            </div>
+            <div class="switch-container" *ngIf="userInfor.searchable==false">
+              <label class="switch"><input type="checkbox" (change)="enableSearch()"><span
                 class="switch-button"></span> </label>
             </div>
           </div>
