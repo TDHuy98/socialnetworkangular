@@ -216,7 +216,7 @@
           <div *ngIf="puppy.userId==currentClickId">
             <div class="card lg:mx-0 uk-animation-slide-bottom-small">
               <div
-                *ngIf="puppy.postStatus=='Friend'&&currentActiveFriendsId.includes(puppy.userId)||puppy.postStatus=='Public'">
+                *ngIf="puppy.postStatus=='Friend'&&currentActiveFriendsId.includes(puppy.userId)||puppy.postStatus=='Public'||puppy.postStatus=='Private'&& loggedInUser.id == puppy.userId">
                 <!-- post header-->
                 <div class="flex justify-between items-center lg:p-4 p-2.5">
                   <div class="flex flex-1 items-center space-x-4">
