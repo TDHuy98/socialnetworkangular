@@ -67,6 +67,7 @@ export class FeedComponent implements OnInit {
         console.log(data);
         this.currentUser = data;
         this.loggedInUser = data;
+        this.loadloginListFr()
 
         localStorage.setItem('loggedInUser', JSON.stringify(this.loggedInUser))
       }
@@ -77,17 +78,21 @@ export class FeedComponent implements OnInit {
     content: new FormControl(""),
     name: new FormControl(""),
   })
-  currentUser:User;
-  loggedInUser:User;
+  currentUser: User;
+  curentLoginActiveFriends: FriendDto[] = [];
+  curentLoginNewFriends: FriendDto[] = [];
+  curentLoginBlockFriends: FriendDto[] = [];
+  curentLoginSenderFriends: FriendDto[] = [];
+  loggedInUser: User;
 
   ngOnInit() {
-
+    this.loadNotice(Number(localStorage.getItem('userId')))
     this.userService.findById(Number(localStorage.getItem('userId'))).subscribe(
       data => {
         console.log(data);
         this.currentUser = data;
         this.loggedInUser = data;
-
+        this.loadloginListFr()
         localStorage.setItem('loggedInUser', JSON.stringify(this.loggedInUser))
       }
     )
@@ -118,6 +123,10 @@ export class FeedComponent implements OnInit {
 
 
   }
+
+  currentActiveFriendsId: Number[] = [];
+
+
 
   showEdit(id: number) {
     alert("ok")
@@ -154,7 +163,8 @@ export class FeedComponent implements OnInit {
     },error => {
     })
   }
-  Like(postId: number, userId: number, userLastName: string) {
+
+  Like(postId: number, userId: number, userLastName: string,userIdRevNotice:number,actionAvartar:string) {
     console.log('current post like ' + this.currentPostLiked)
     let flagLike = 0;
     let flagLikeID = -1;
@@ -173,6 +183,24 @@ export class FeedComponent implements OnInit {
     if (flagLike == 0) {
       //@ts-ignore
       this.postService.like(like).subscribe((data) => {
+        let flag =0;
+
+        if (this.loggedInUser.id != userIdRevNotice){
+          // this.showDit()
+          // Tạo thông báo sau khi like
+          this.postServicec.getAllNotices(this.loggedInUser.id).subscribe(
+            data => {
+              data.forEach(item => {
+                if (item.postId == postId && item.type == 'like') {
+                  flag += 1;
+                }
+              })
+              if (flag == 0) {
+                this.creatNotice("like your post", userIdRevNotice, postId, "Uncheck", actionAvartar, "like", userLastName)
+              }
+            }
+          )
+        }
           // this.showDit()
           this.postService.findAllLike().subscribe(data => {
               this.currentAllLike = data;
@@ -263,11 +291,9 @@ export class FeedComponent implements OnInit {
       },
       postId: idPost
     };
-    console.log(userRevId)
-    console.log(this.loggedInUser.id)
-    //Tao thong bao khi cmt
-    if (this.loggedInUser.id != userRevId) {
-      this.creatNotice("cmt your post", userRevId, idPost, "Uncheck", userCmtAvatar, "cmt", nameAction)
+    //Tạo thông báo sau khi cmt
+    if (this.loggedInUser.id!=userId){
+      this.creatNotice("cmt your post", userId, idPost, "Uncheck", userCmtAvatar, "cmt", nameAction)
 
     }
 
