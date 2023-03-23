@@ -26,10 +26,14 @@ export class UserService {
     return this.httpClient.put<UserUpdate>(this.url + "setting", userInformation)
   }
 
-
-  isPasswordCorrect(checkPassword: ChangePassword): Observable<boolean> {
-    return this.httpClient.post<boolean>(this.url + "checkpassword", checkPassword)
+  enableSearchable(): Observable<any> {
+    return this.httpClient.post<any>("http://localhost:8080/api/v1/common/enable-search/" + localStorage.getItem('userId'), null)
   }
+
+  disableSearchable(): Observable<any> {
+    return this.httpClient.post<any>("http://localhost:8080/api/v1/common/disable-search/" + localStorage.getItem('userId'), null)
+  }
+
 
   changePassword(changePassword: ChangePassword): Observable<ChangePassword> {
     return this.httpClient.put<ChangePassword>(this.url + "changepassword", changePassword)

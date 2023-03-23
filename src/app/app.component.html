@@ -22,40 +22,18 @@
         <!-- search icon for mobile -->
         <div class="header-search-icon" uk-toggle="target: #wrapper ; cls: show-searchbox"></div>
         <div class="header_search"><i class="uil-search-alt"></i>
-          <input value="" type="text" class="form-control" placeholder="Search for Friends , Videos and more.."
-                 autocomplete="off" [(ngModel)]="searchValue">
+          <form #searchForm="ngForm" (ngSubmit)="search()">
+            <input value="" type="text" class="form-control" placeholder="Search for Friends , Videos and more.."
+                   autocomplete="off" [(ngModel)]="searchValue" name="searchValue" (input)="searchBar()">
+          </form>
           <div uk-drop="mode: click" class="header_search_dropdown">
 
-            <h4 class="search_title"> Recently </h4>
+            <!--            <h4 class="search_title"> Recently </h4>-->
             <ul>
-              <li>
-                <a href="#">
-                  <img src="assets/images/avatars/avatar-1.jpg" alt="" class="list-avatar">
-                  <div class="list-name"> Erica Jones</div>
-                </a>
-              </li>
-              <li>
-                <a href="#">
-                  <img src="assets/images/avatars/avatar-2.jpg" alt="" class="list-avatar">
-                  <div class="list-name"> Coffee Addicts</div>
-                </a>
-              </li>
-              <li>
-                <a href="#">
-                  <img src="assets/images/avatars/avatar-3.jpg" alt="" class="list-avatar">
-                  <div class="list-name"> Mountain Riders</div>
-                </a>
-              </li>
-              <li>
-                <a href="#">
-                  <img src="assets/images/avatars/avatar-4.jpg" alt="" class="list-avatar">
-                  <div class="list-name"> Property Rent And Sale</div>
-                </a>
-              </li>
-              <li>
-                <a href="#">
-                  <img src="assets/images/avatars/avatar-5.jpg" alt="" class="list-avatar">
-                  <div class="list-name"> Erica Jones</div>
+              <li *ngFor="let user of users">
+                <a>
+                  <img src="{{user.profile}}" alt="" class="list-avatar">
+                  <div class="list-name"> {{user.firstName + " " + user.middleName + " " + user.lastName}}</div>
                 </a>
               </li>
             </ul>
@@ -96,7 +74,7 @@
                           <strong>{{notice.userLastName}}</strong> {{notice.content}}
                           <span class="text-link">{{notice.type}}</span>
                         </p>
-                        <time> some mins ago </time>
+                        <time> 12 hours ago</time>
                       </div>
                     </a>
                   </li>
@@ -256,7 +234,7 @@
                       <div class="drop_avatar"><img src="{{f.target.profile}}" alt="">
                       </div>
                       <div class="drop_text">
-                        <strong> {{f.target.middlename}}{{f.target.lastname}} </strong>
+                        <strong> {{f.target.middleName}}{{f.target.lastName}} </strong>
                         <time>12:43 PM</time>
                         <p> Alex will explain you how ... </p>
                       </div>
@@ -290,8 +268,8 @@
                   <img src="{{loggedInUser.profile}}" alt="">
                 </div>
                 <div class="user_name">
-                  <div> {{loggedInUser.firstname+ " " +loggedInUser.middlename+ " " +loggedInUser.lastname}}</div>
-<!--                  <span> @johnson</span>-->
+                  <div> {{loggedInUser.firstName + " " + loggedInUser.middleName + " " + loggedInUser.lastName}}</div>
+                  <!--                  <span> @johnson</span>-->
                 </div>
               </a>
               <a href="/setting">
@@ -485,7 +463,7 @@
               <img src="{{puppy.target.profile}}" alt="">
               <span class="user_status status_online"></span>
             </div>
-            <div class="contact-username">{{puppy.target.middlename + " " + puppy.target.lastname}}</div>
+            <div class="contact-username">{{puppy.target.middleName + " " + puppy.target.lastName}}</div>
           </a>
 
         </div>
@@ -557,6 +535,9 @@
   <!-- Main Contents -->
   <div class="main_content">
     <router-outlet (activate)="onOutLetLoader($event)"></router-outlet>
+    <!--      <app-main-time-line [pickingUser]="currentUser"></app-main-time-line>-->
+
+
   </div>
 
 </div>
@@ -876,11 +857,11 @@
     class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical rounded-lg p-0 lg:w-5/12 relative shadow-2xl uk-animation-slide-bottom-small">
 
     <button class="uk-modal-close-default bg-gray-100 rounded-full p-2.5 m-1 right-2" type="button" uk-close
-            uk-tooltip="title: Close ; pos: bottom ;offset:7" ></button>
+            uk-tooltip="title: Close ; pos: bottom ;offset:7"></button>
     <div class="flex flex-1 items-start space-x-4 p-5">
 
     </div>
-    <div class="flex items-center w-full justify-between p-3 border-t" >
+    <div class="flex items-center w-full justify-between p-3 border-t">
       <div *ngIf="!activeFriendsId.indexOf(currentUser.id)">
         <select class="selectpicker mt-2 col-4 story" style="width: 50px">
           <option> Friend request</option>

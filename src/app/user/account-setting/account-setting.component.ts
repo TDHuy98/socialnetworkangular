@@ -55,17 +55,7 @@ export class AccountSettingComponent implements OnInit {
           this.userInfor.email = data.email,
           this.userInfor.mobile = data.mobile
         this.userInfor.intro = data.intro
-
-        // @ts-ignore
-        // this.updateInformationForm.setValue({
-        //   firstName: data.firstName,
-        //   middleName: data.middleName,
-        //   lastName:data.lastName,
-        //   email:data.email,
-        //   mobile:data.mobile,
-        //   intro:data.intro
-        // })
-
+        this.checkSearch = data.searchable
         console.log(data)
         console.log('lấy thông tin user cần update thông tin thành công')
       }, error => {
@@ -79,8 +69,6 @@ export class AccountSettingComponent implements OnInit {
   selected(value: string) {
     this.settingNavigation = value
   }
-
-
 
 
   updateInformation() {
@@ -126,8 +114,32 @@ export class AccountSettingComponent implements OnInit {
       this.message = error.error
       console.log('đổi mk thất bại')
     })
-
   }
 
+  checkSearch: boolean
+
+  enableSearch() {
+    this.userService.enableSearchable().subscribe(data => {
+      this.userService.getUserInformation().subscribe(data => {
+        this.checkSearch = data.searchable
+      })
+      console.log("enbale search")
+    }, error => {
+      console.log("enbale search fail")
+
+    })
+  }
+
+  disableSearch() {
+    this.userService.disableSearchable().subscribe(data => {
+      this.userService.getUserInformation().subscribe(data => {
+        this.checkSearch = data.searchable
+      })
+      console.log("disable search")
+    }, error => {
+      console.log("disable search fail")
+
+    })
+  }
 }
 

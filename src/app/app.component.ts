@@ -13,6 +13,8 @@ import {map, Subscription, timer} from "rxjs";
 import {FriendDto} from "./model/Dto/FriendDto";
 import {Stomp} from "@stomp/stompjs";
 import {Message} from "./model/Message";
+import {SearchService} from "./service/search.service";
+import {UserDto} from "./model/UserDto";
 
 @Component({
   selector: 'app-root',
@@ -52,15 +54,17 @@ export class AppComponent implements OnInit {
               private userService: UserService,
               private router: Router,
               private postService: PostService,
+              private activatedRoute: ActivatedRoute,
+              private searchService: SearchService,
               private authService: AuthService) {
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
 
 
     this.currentLoggedInUser = {
       id: 1,
-      firstname: '',
-      middlename: '',
-      lastname: '',
+      firstName: '',
+      middleName: '',
+      lastName: '',
       profile: '',
       dateOfBirth: Date,
       email: '',
@@ -100,7 +104,6 @@ export class AppComponent implements OnInit {
     // @ts-ignore
     this.currentClickId = Number(localStorage.getItem('userId'))
     this.currenLogInId = Number(localStorage.getItem('userId'))
-    alert(this.currenLogInId)
     // if (this.currentClickId=Undefined)
     //check if there is a user logged in
 
@@ -352,5 +355,29 @@ export class AppComponent implements OnInit {
     });
   }
 
+
+
+  users:UserDto[]
+  searchBar() {
+    if (this.searchValue != "") {
+      this.searchService.search(this.searchValue).subscribe(data => {
+        this.users = data
+      }, error => {
+        console.log('lỗi rồi Huy ơi')
+
+      })
+    }
+  }
+
+  search() {
+    this.searchService.search(this.searchValue).subscribe(data => {
+      console.log(JSON.stringify(data))
+      this.users = data
+      this.router.navigate(['/search-result'], {state: {result: data}, onSameUrlNavigation: "reload"},)
+    }, error => {
+      console.log('lỗi rồi Huy ơi')
+
+    })
+  }
 }
 

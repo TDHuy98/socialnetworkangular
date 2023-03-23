@@ -4,8 +4,8 @@ import {PostStatus} from "./PostStatus";
 export class Post{
   id:number;
   userId:number;
-  firstname:string;
-  lastname:string;
+  firstName:string;
+  lastName:string;
   content:string;
   postStatus:PostStatus;
   img:string;
