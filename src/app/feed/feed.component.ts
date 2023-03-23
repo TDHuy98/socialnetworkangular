@@ -18,6 +18,8 @@ import {User} from "../model/User";
 import {MainTimeLineComponent} from "../main-time-line/main-time-line.component";
 import {Like} from "../model/Like";
 import {CommentDto} from "../model/Dto/CommentDto";
+import {FriendListService} from "../service/friend-list.service";
+import {FriendDto} from "../model/Dto/FriendDto";
 import {Notifications} from "../model/Dto/Notifications";
 import {PostService} from "../service/post.service";
 @Component({
