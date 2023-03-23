@@ -31,9 +31,9 @@
             <!--            <h4 class="search_title"> Recently </h4>-->
             <ul>
               <li *ngFor="let user of users">
-                <a>
+                <a (click)="fowardToMainTimeLine(user.id)" >
                   <img src="{{user.profile}}" alt="" class="list-avatar">
-                  <div class="list-name"> {{user.firstName + " " + user.middleName + " " + user.lastName}}</div>
+                  <div (click)="fowardToMainTimeLine(user.id)" class="list-name"> {{user.firstName + " " + user.middleName + " " + user.lastName}}</div>
                 </a>
               </li>
             </ul>
