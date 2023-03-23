@@ -80,6 +80,9 @@ export class AppComponent implements OnInit {
         localStorage.setItem('loggedInUser', JSON.stringify(this.loggedInUser))
       }
     )
+
+
+
   }
 
   currentClickId: number = 0;
@@ -97,7 +100,25 @@ export class AppComponent implements OnInit {
   searchValue: '';
 
 
+  countnotice: number = 0;
+
+  countNotice() {
+
+    this.countnotice = 0;
+    this.postService.getAllNotices(this.loggedInUser.id).subscribe(
+      data => {
+        data.forEach(item => {
+          if (item.status == 'Uncheck')
+            this.countnotice += 1;
+        })
+      }
+    )
+
+    return this.countnotice
+  }
+
   ngOnInit(): void {
+
     this.loadNotice(this.loggedInUser.id)
 
     //get current clicked user id
@@ -254,7 +275,6 @@ export class AppComponent implements OnInit {
     this.router.navigateByUrl("/reg/" + id)
   }
 
-  countnotice: number = 0;
   timerSubscription: Subscription;
   // countNotice() {
   //   this.countnotice=0;
@@ -380,5 +400,7 @@ export class AppComponent implements OnInit {
 
     })
   }
+
+
 }
 

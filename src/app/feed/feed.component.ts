@@ -432,4 +432,12 @@ export class FeedComponent implements OnInit {
     // } else
     return (this.thisPostLike + ' People like this post')
   }
+
+
+  currentClickId: number;
+
+  fowardToMainTimeLine(id: number) {
+    this.currentClickId = id;
+    this.router.navigateByUrl("/mainTimeLine/" + id)
+  }
 }
