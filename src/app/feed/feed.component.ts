@@ -149,9 +149,9 @@ export class FeedComponent implements OnInit {
     })
   }
 
-  showPost(){
+  showPost() {
     this.postService.findAllByUser_Id(this.currentLoggedInUserId).subscribe(data => {
-      this.posts= data
+      this.posts = data
       this.currentPostLiked = []
       this.postService.findAllLike().subscribe(data => {
           this.currentAllLike = data;

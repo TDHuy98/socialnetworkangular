@@ -640,6 +640,7 @@ export class MainTimeLineComponent implements OnInit, OnChanges {
     this.selectedImage = this.avatarDom?.nativeElement.files[0];
   }
 
+
   getTargetActiveFriend(userId: number) {
     this.friendService.getActiveFriendListByIdUser(userId).subscribe(
       data => {
@@ -722,6 +723,7 @@ export class MainTimeLineComponent implements OnInit, OnChanges {
   }
 
   newList: number[] = []
+
 
 
   currentLoggedInUserId = Number(localStorage.getItem('userId'))
