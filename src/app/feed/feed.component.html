@@ -123,7 +123,7 @@
         <div class="p-4 space-y-3">
 
           <div class="flex space-x-4 lg:font-bold">
-            <a (click)="Like(p.id,this.currenLogInId,this.loggedInUser.middlename+this.loggedInUser.lastname,p.userId,p.profile)"
+            <a (click)="Like(p.id,this.currenLogInId,this.loggedInUser.middleName+this.loggedInUser.lastName,p.userId,p.profile)"
                class="flex items-center space-x-2">
               <div class="p-2 rounded-full  text-black lg:bg-gray-100 dark:bg-gray-600">
                 <svg *ngIf="currentPostLiked.includes(p.id)" xmlns="http://www.w3.org/2000/svg"
@@ -169,12 +169,7 @@
           </div>
           <div class="flex items-center space-x-3 pt-2">
             <div class="flex items-center">
-              <img src="assets/images/avatars/avatar-1.jpg" alt=""
-                   class="w-6 h-6 rounded-full border-2 border-white dark:border-gray-900">
-              <img src="assets/images/avatars/avatar-4.jpg" alt=""
-                   class="w-6 h-6 rounded-full border-2 border-white dark:border-gray-900 -ml-2">
-              <img src="assets/images/avatars/avatar-2.jpg" alt=""
-                   class="w-6 h-6 rounded-full border-2 border-white dark:border-gray-900 -ml-2">
+
             </div>
             <div class="dark:text-gray-100">
               Liked <strong> {{this.coutLike(p.id)}}  </strong>
@@ -186,11 +181,11 @@
             <div *ngIf="allCmt.length!=0">
               <div *ngFor="let comment of allCmt" class="flex">
 
-                <div *ngIf="comment.postId== p.id" class="w-10 h-10 rounded-full relative flex-shrink-0">
+                <div *ngIf="comment.postId== p.postId" class="w-10 h-10 rounded-full relative flex-shrink-0">
                   <img src="{{comment.profile}}" alt="" class="absolute h-full rounded-full w-full">
 
                 </div>
-                <div *ngIf="comment.postId==p.id">
+                <div *ngIf="comment.postId==p.postId">
                   <b style="margin-left: 0px"
                      class=" py-2 px-3 rounded-md relative lg:ml-5 ml-2 lg:mr-12 ">{{comment.firstName + ' ' + comment.middleName + ' ' + comment.lastName}}</b>
                   <br>
@@ -218,7 +213,7 @@
 
           <!--your comment--->
           <div class="bg-gray-100 rounded-full relative dark:bg-gray-800 border-t">
-            <form (ngSubmit)="cmt(this.p.id,'cmt your post','Uncheck',p.profile,'cmt',p.userId,p.middleName+' '+p.lastName)" [formGroup]="formCmt">
+            <form (ngSubmit)="cmt(p.postId,'cmt your post','Uncheck',p.profile,'cmt',p.userId,p.middleName+' '+p.lastName)" [formGroup]="formCmt">
               <input formControlName="content" placeholder="Add your Comment.."
                      class="bg-transparent max-h-10 shadow-none px-5">
               <div class="-m-0.5 absolute bottom-0 flex items-center right-3 text-xl">
@@ -251,7 +246,7 @@
           </ul>
         </nav>
 
-        <div class="contact-list">
+        <div *ngFor="let puppy of curentLoginActiveFriends" class="contact-list">
 
           <a href="#">
             <div class="contact-avatar">
@@ -260,7 +255,7 @@
                 alt="">
               <span class="user_status status_online"></span>
             </div>
-            <div class="contact-username">{{puppy.target.middlename}}{{puppy.source.lastname}}</div>
+            <div class="contact-username">{{puppy.target.middleName}}{{puppy.source.lastName}}</div>
           </a>
           <div uk-drop="pos: left-center ;animation: uk-animation-slide-left-small">
             <div class="contact-list-box">
@@ -268,7 +263,7 @@
                 <img src="{{puppy.target.profile}}" alt="">
                 <span class="user_status status_online"></span>
               </div>
-              <div class="contact-username"> {{puppy.target.middlename}}{{puppy.source.lastname}}</div>
+              <div class="contact-username"> {{puppy.target.middleName}}{{puppy.source.lastName}}</div>
               <p>
                 <ion-icon name="people" class="text-lg mr-1"></ion-icon>
                 Become friends with
@@ -297,89 +292,6 @@
   </div>
 </div>
 
-<!-- birthdays modal -->
-<!--<div id="birthdays" uk-modal>-->
-<!--  <div class="uk-modal-dialog uk-modal-body rounded-xl shadow-lg">-->
-<!--    &lt;!&ndash; close button &ndash;&gt;-->
-<!--    <button class="uk-modal-close-default p-2.5 bg-gray-100 rounded-full m-3" type="button" uk-close></button>-->
-
-<!--    <div class="flex items-center space-x-3 mb-10">-->
-<!--      <ion-icon name="gift" class="text-yellow-500 text-xl bg-yellow-50 p-1 rounded-md"></ion-icon>-->
-<!--      <div class="text-xl font-semibold"> Today's birthdays</div>-->
-<!--    </div>-->
-
-<!--    <div class="space-y-6">-->
-<!--      <div class="sm:space-y-8 space-y-6 pb-2">-->
-
-<!--        <div class="flex items-center sm:space-x-6 space-x-3">-->
-<!--          <img src="assets/images/avatars/avatar-3.jpg" alt="" class="sm:w-16 sm:h-16 w-14 h-14 rounded-full">-->
-<!--          <div class="flex-1">-->
-<!--            <div class="flex items-center justify-between mb-3">-->
-<!--              <div class="text-base font-semibold"><a href="#"> Alex Dolgove </a></div>-->
-<!--              <div class="font-medium text-sm text-gray-400"> 19 years old</div>-->
-<!--            </div>-->
-<!--            <div class="relative">-->
-<!--              <input type="text" name="" id="" class="with-border" placeholder="Write her on Timeline">-->
-<!--              <ion-icon name="happy" class="absolute right-3 text-2xl top-1/4"></ion-icon>-->
-<!--            </div>-->
-<!--          </div>-->
-<!--        </div>-->
-<!--        <div class="flex items-center sm:space-x-6 space-x-3">-->
-<!--          <img src="assets/images/avatars/avatar-2.jpg" alt="" class="sm:w-16 sm:h-16 w-14 h-14 rounded-full">-->
-<!--          <div class="flex-1">-->
-<!--            <div class="flex items-center justify-between mb-3">-->
-<!--              <div class="text-base font-semibold"><a href="#"> Stella Johnson </a></div>-->
-<!--              <div class="font-medium text-sm text-gray-400"> 19 years old</div>-->
-<!--            </div>-->
-<!--            <div class="relative">-->
-<!--              <input type="text" name="" id="" class="with-border" placeholder="Write her on Timeline">-->
-<!--              <ion-icon name="happy" class="absolute right-3 text-2xl top-1/4"></ion-icon>-->
-<!--            </div>-->
-<!--          </div>-->
-<!--        </div>-->
-
-<!--      </div>-->
-<!--      <div class="relative cursor-pointer" uk-toggle="target: #upcoming; animation: uk-animation-fade">-->
-<!--        <div class="bg-gray-50 rounded-lg px-5 py-4 font-semibold text-base"> Upcoming birthdays</div>-->
-<!--        <i class="-translate-y-1/2 absolute icon-feather-chevron-up right-4 text-xl top-1/2 transform text-gray-400"-->
-<!--           id="upcoming" hidden></i>-->
-<!--        <i class="-translate-y-1/2 absolute icon-feather-chevron-down right-4 text-xl top-1/2 transform text-gray-400"-->
-<!--           id="upcoming"></i>-->
-<!--      </div>-->
-<!--      <div class="mt-5 sm:space-y-8 space-y-6" id="upcoming" hidden>-->
-
-<!--        <div class="flex items-center sm:space-x-6 space-x-3">-->
-<!--          <img src="assets/images/avatars/avatar-6.jpg" alt="" class="sm:w-16 sm:h-16 w-14 h-14 rounded-full">-->
-<!--          <div class="flex-1">-->
-<!--            <div class="flex items-center justify-between mb-3">-->
-<!--              <div class="text-base font-semibold"><a href="#"> Erica Jones </a></div>-->
-<!--              <div class="font-medium text-sm text-gray-400"> 19 years old</div>-->
-<!--            </div>-->
-<!--            <div class="relative">-->
-<!--              <input type="text" name="" id="" class="with-border" placeholder="Write her on Timeline">-->
-<!--              <ion-icon name="happy" class="absolute right-3 text-2xl top-1/4"></ion-icon>-->
-<!--            </div>-->
-<!--          </div>-->
-<!--        </div>-->
-<!--        <div class="flex items-center sm:space-x-6 space-x-3">-->
-<!--          <img src="assets/images/avatars/avatar-5.jpg" alt="" class="sm:w-16 sm:h-16 w-14 h-14 rounded-full">-->
-<!--          <div class="flex-1">-->
-<!--            <div class="flex items-center justify-between mb-3">-->
-<!--              <div class="text-base font-semibold"><a href="#"> Dennis Han </a></div>-->
-<!--              <div class="font-medium text-sm text-gray-400"> 19 years old</div>-->
-<!--            </div>-->
-<!--            <div class="relative">-->
-<!--              <input type="text" name="" id="" class="with-border" placeholder="Write her on Timeline">-->
-<!--              <ion-icon name="happy" class="absolute right-3 text-2xl top-1/4"></ion-icon>-->
-<!--            </div>-->
-<!--          </div>-->
-<!--        </div>-->
-
-<!--      </div>-->
-<!--    </div>-->
-
-<!--  </div>-->
-<!--</div>-->
 
 <!-- open chat box -->
 <div uk-toggle="target: #offcanvas-chat" class="start-chat">
@@ -806,7 +718,7 @@
       </div>
 
       <div class="flex flex-1 items-start space-x-4 p-5">
-        <img src="assets/images/avatars/avatar-2.jpg"
+        <img src="{{loggedInUser.profile}}"
              class="bg-gray-200 border border-white rounded-full w-11 h-11">
         <div class="flex-1 pt-2">
                     <textarea

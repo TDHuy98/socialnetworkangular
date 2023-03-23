@@ -32,15 +32,17 @@ export class PostService {
     return this.http.get<Post[]>('http://localhost:8080/posts');
   }
 
-  findById(id: number): Observable<Post> {
-    return this.http.get<Post>('http://localhost:8080/posts/' + id);
+  findById(id: number): Observable<PostDto> {
+    return this.http.get<PostDto>('http://localhost:8080/posts/' + id);
   }
 
 
   delete(id: number): Observable<void> {
     return this.http.delete<void>(`http://localhost:8080/posts/${id}`);
   }
-
+  save(post : NewPost) : Observable<any> {
+    return this.http.post('http://localhost:8080/posts',post)
+  }
   create(post: NewPost): Observable<Post> {
     return this.http.post<Post>('http://localhost:8080/posts', post);
   }
@@ -81,6 +83,10 @@ export class PostService {
   }
   deleteNotice(id: number): Observable<void> {
     return this.http.delete<void>(`http://localhost:8080/Notice/${id}`);
+  }
+
+  feed(id:number):Observable<PostDto[]>{
+    return this.http.get<PostDto[]>('http://localhost:8080/posts/feed/'+id)
   }
 }
 

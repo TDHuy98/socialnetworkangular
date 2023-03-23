@@ -564,8 +564,6 @@ export class MainTimeLineComponent implements OnInit, OnChanges {
 
     }
 
-
-    // console.log(this.posts)
     // @ts-ignore
     this.postService.comment(cmt).subscribe((data) => {
         this.formCmt.reset();

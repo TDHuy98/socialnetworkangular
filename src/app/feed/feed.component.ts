@@ -22,6 +22,8 @@ import {FriendListService} from "../service/friend-list.service";
 import {FriendDto} from "../model/Dto/FriendDto";
 import {Notifications} from "../model/Dto/Notifications";
 import {PostService} from "../service/post.service";
+
+
 @Component({
   selector: 'app-feed',
   templateUrl: './feed.component.html',
@@ -361,7 +363,6 @@ export class FeedComponent implements OnInit {
   }
 
 
-
   DeleteCmt(id: number) {
     this.postService.commentDelete(id).subscribe(() => {
       this.postService.getAllComment().subscribe(
@@ -372,7 +373,9 @@ export class FeedComponent implements OnInit {
     })
 
   }
+  img:''
   creatPost() {
+
     const filePath = this.selectedImage.name;
     const fileRef = this.storage.ref(filePath);
     this.storage.upload(filePath,this.selectedImage).snapshotChanges().pipe(
