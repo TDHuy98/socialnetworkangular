@@ -118,6 +118,10 @@ export class CreatPostFormComponent implements OnInit {
   getAvatar() {
     return localStorage.getItem('avatarChat')
   }
+  getName() {
+    return localStorage.getItem('nameChat')
+
+  }
 
   currentPostLiked: number[] = [];
   allCmt: CommentDto[];

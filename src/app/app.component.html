@@ -252,7 +252,7 @@
                 <input type="text" class="uk-input" placeholder="Search in Messages">
                 <ul>
                   <li *ngFor="let f of curentLoginActiveFriends" class="un-read">
-                    <a (click)="goToChat(f.target.id,f.target.profile)">
+                    <a (click)="goToChat(f.target.id,f.target.profile,f.target.middlename+' '+f.target.lastname)">
                       <div class="drop_avatar"><img src="{{f.target.profile}}" alt="">
                       </div>
                       <div class="drop_text">

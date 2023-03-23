@@ -718,7 +718,7 @@
                       <h5>{{l.target.middlename}}{{l.target.lastname}}</h5>
                       <span>4 hours ago</span>
                     </div>
-                    <p>laoreet dolore magna aliquam erat volutpat sed diam nonummy</p>
+                    <p>Say someThings</p>
                   </div>
                 </a>
               </li>
@@ -836,7 +836,7 @@
         <div class="message-content">
 
           <div class="messages-headline">
-            <h4> Stella Johnson </h4>
+            <h4> {{getName()}} </h4>
             <a href="#" class="message-action text-red-500"><i class="icon-feather-trash-2"></i> <span
               class="md:inline hidden"> Delete Conversation</span> </a>
           </div>
@@ -856,7 +856,7 @@
               <!--              </tr>-->
               <!--              </tbody>-kdlkasjglkdjslkjdskfjkdjfslkajsdfkjsdkajfksjdakfjskdjfkdjslfjdjflsdjfksdjlfjsdlfjsdjvjaslkdnvlksdjfljasdifjsadfjodsfsdojfosdjafojsdaofjsdojfosdajfsdjfojsdaofdjfj-->
               <div *ngFor="let mess of messageSave">
-                <div *ngIf="mess.idSenders== loggedInUser.id">
+                <div *ngIf="mess.idSenders== loggedInUser.id&&mess.idRev==currentClickId">
                   <div class="message-bubble me">
                     <div class="message-bubble-inner">
                       <div class="message-avatar"><img src="{{loggedInUser.profile}}" alt=""></div>
@@ -879,6 +879,7 @@
                   </div>
 
                 </div>
+
               </div>
               <div *ngFor="let greeting of messsageBox">
                 <div *ngIf="greeting.idSenders== loggedInUser.id">
