@@ -37,14 +37,18 @@ export class FeedComponent implements OnInit {
   currentPostLiked: number[] = [];
   allCmt: CommentDto[];
   thisPostLike: number
-  newPost: NewPost=new NewPost()
-   notices: Notifications[];
+  newPost: NewPost = new NewPost()
+   currentNewFriendsId: any[];
+   currentSenderFriendsId: any[];
+   currentBlockFriendsId: any;
 
   constructor(private postService: PostServicek,
               private router: Router,
               private route: ActivatedRoute,
               private postServicec: PostService,
-              @Inject(AngularFireStorage) private  storage : AngularFireStorage, private userService: UserService) {
+              private friendService: FriendListService,
+              private route: ActivatedRoute,
+              @Inject(AngularFireStorage) private storage: AngularFireStorage, private userService: UserService) {
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
 
       this.postService.feed(this.currentLoggedInUserId).subscribe(data => {
