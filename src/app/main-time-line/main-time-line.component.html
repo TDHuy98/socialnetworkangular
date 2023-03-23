@@ -66,10 +66,13 @@
         </a>
 
         <!-- more icon -->
-        <a *ngIf="currenLogInId!=currentClickId"
-           class="icon-brand-angellist flex items-center justify-center h-10 w-10 rounded-md bg-gray-100">
-          <ion-icon name="ellipsis-horizontal" class="text-xl"></ion-icon>
-        </a>
+        <div *ngIf="currenLogInId!=currentClickId ">
+          <a (click)="load2in1()"
+            class="icon-brand-angellist flex items-center justify-center h-10 w-10 rounded-md bg-gray-100">
+            <ion-icon name="ellipsis-horizontal" class="text-xl"></ion-icon>
+          </a>
+        </div>
+
         <!-- more drowpdown -->
 
         <div

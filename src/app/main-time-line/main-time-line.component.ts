@@ -62,7 +62,7 @@ export class MainTimeLineComponent implements OnInit, OnChanges {
   curentLoginActiveFriends: FriendDto[] = [];
   curentLoginNewFriends: FriendDto[] = [];
   curentLoginBlockFriends: FriendDto[] = [];
-  curentLoginSenderFriends: FriendDto[] = []
+  curentLoginSenderFriends: FriendDto[] = [];
   postForm: FormGroup[] | any;
   editForm: FormGroup | any;
   newFriendsId: number[] = [];
@@ -93,7 +93,8 @@ export class MainTimeLineComponent implements OnInit, OnChanges {
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
     // @ts-ignore
     this.currentClickId = +this.route.snapshot.paramMap.get('id');
-
+    this.loadTargetListFr(this.loggedInUser.id)
+    this.loadloginListFr()
 
   }
 
@@ -128,9 +129,10 @@ export class MainTimeLineComponent implements OnInit, OnChanges {
     //get clicked in user id
     this.userService.findById(this.currentClickId).subscribe(data => {
       this.currentClickId = data.id
+      this.loadloginListFr();
+      this.loadTargetListFr(this.currentClickId);
     })
-    this.loadloginListFr();
-    this.loadTargetListFr(this.currentClickId);
+
     this.showDit()
     this.loadNotice(this.loggedInUser.id)
     this.postForm = new FormGroup({
@@ -148,6 +150,7 @@ export class MainTimeLineComponent implements OnInit, OnChanges {
   }
 
   showDit() {
+
     // @ts-ignore
     this.currentClickId = +this.route.snapshot.paramMap.get('id');
     // @ts-ignore
@@ -215,22 +218,22 @@ export class MainTimeLineComponent implements OnInit, OnChanges {
   }
 
   loadloginListFr() {
-    this.friendService.getActiveFriendListByIdUser(this.currenLogInId).subscribe(
+    this.friendService.getActiveFriendListByIdUser(this.loggedInUser.id).subscribe(
       data => {
         this.curentLoginActiveFriends = data
         this.currentActiveFriendsId = []
         this.currentNewFriendsId = []
         this.currentSenderFriendsId = []
 
-        this.friendService.getSendFriendListByIdUser(this.currenLogInId).subscribe(
+        this.friendService.getSendFriendListByIdUser(this.loggedInUser.id).subscribe(
           data => {
             this.curentLoginSenderFriends = data
 
-            this.friendService.getNewFriendListByIdUser(this.currenLogInId).subscribe(
+            this.friendService.getNewFriendListByIdUser(this.loggedInUser.id).subscribe(
               data => {
                 this.curentLoginNewFriends = data
 
-                this.friendService.getBlockFriendListByIdUser(this.currenLogInId).subscribe(
+                this.friendService.getBlockFriendListByIdUser(this.loggedInUser.id).subscribe(
                   data => {
                     this.curentLoginBlockFriends = data
                     this.curentLoginActiveFriends.forEach(item => {
@@ -414,17 +417,22 @@ export class MainTimeLineComponent implements OnInit, OnChanges {
     this.loadTargetListFr(targetId)
     let source = -1;
     let target = -1;
-    this.curentLoginNewFriends.forEach(f => {
+    this.curentLoginActiveFriends.forEach(f => {
       if (f.target.id == targetId && f.source.id == sourceId) {
         source = f.id
       }
     })
-    this.targetSenderFriendList.forEach(f => {
+    this.targetActiveFriendList.forEach(f => {
       if (f.target.id == sourceId && f.source.id == targetId) {
         target = f.id
       }
     })
-
+    console.log(sourceId)
+    console.log(targetId)
+    console.log(source)
+    console.log(target)
+    console.log(this.curentLoginNewFriends)
+    console.log(this.targetSenderFriendList)
 
     this.friendService.unFriend(source).subscribe((data) => {
         this.loadloginListFr()
@@ -436,7 +444,6 @@ export class MainTimeLineComponent implements OnInit, OnChanges {
         );
       }
     );
-
   }
 
   // Huỷ lời mời kết bạn
@@ -867,5 +874,10 @@ export class MainTimeLineComponent implements OnInit, OnChanges {
         )
       },
     );
+  }
+
+  load2in1() {
+    this.loadloginListFr()
+    this.loadTargetListFr(this.currentClickId)
   }
 }
