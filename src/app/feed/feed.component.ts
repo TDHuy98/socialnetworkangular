@@ -244,6 +244,17 @@ export class FeedComponent implements OnInit {
       }
     )
   }
+  count = 0
+
+  countCmt(id: number) {
+    this.count = 0;
+    this.allCmt.forEach((cmt) => {
+      if (cmt.postId === id) {
+        this.count += 1;
+      }
+    })
+    return " " + this.count + " comments"
+  }
   cmt(idPost: number, contentNotice: string, status: string, userCmtAvatar: string, type: string, userRevId: number, nameAction: string) {
     const cmt = {
       content: this.formCmt.controls["content"].value,
