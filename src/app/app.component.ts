@@ -32,16 +32,16 @@ export class AppComponent implements OnInit {
 
   currentLoggedInUser: CurrentLoggedInUser;
 
-   mainTimeLineComponent: MainTimeLineComponent;
-   curentLoginActiveFriends: FriendDto[];
-   currentNewFriendsId: any[];
-   currentActiveFriendsId: any[];
-   currentSenderFriendsId: any[];
-   currenLogInId: number;
-   curentLoginSenderFriends: FriendDto[];
-   curentLoginNewFriends: FriendDto[];
-   curentLoginBlockFriends: FriendDto[];
-   currentBlockFriendsId: any;
+  mainTimeLineComponent: MainTimeLineComponent;
+  curentLoginActiveFriends: FriendDto[];
+  currentNewFriendsId: any[];
+  currentActiveFriendsId: any[];
+  currentSenderFriendsId: any[];
+  currenLogInId: number;
+  curentLoginSenderFriends: FriendDto[];
+  curentLoginNewFriends: FriendDto[];
+  curentLoginBlockFriends: FriendDto[];
+  currentBlockFriendsId: any;
 
   getCurrentUser(user: User) {
     this.currentUser = user;
@@ -82,7 +82,6 @@ export class AppComponent implements OnInit {
     )
 
 
-
   }
 
   currentClickId: number = 0;
@@ -103,7 +102,7 @@ export class AppComponent implements OnInit {
   countnotice: number = 0;
 
   countNotice() {
-
+    setTimeout(()=>(this.countNotice()), 5000)
     this.countnotice = 0;
     this.postService.getAllNotices(this.loggedInUser.id).subscribe(
       data => {
@@ -113,12 +112,11 @@ export class AppComponent implements OnInit {
         })
       }
     )
-
     return this.countnotice
   }
 
   ngOnInit(): void {
-
+this.countNotice()
     this.loadNotice(this.loggedInUser.id)
 
     //get current clicked user id
@@ -157,6 +155,7 @@ export class AppComponent implements OnInit {
       this.showUser()
     }
   }
+
   loadloginListFr() {
     this.friendService.getActiveFriendListByIdUser(this.currenLogInId).subscribe(
       data => {
@@ -268,7 +267,7 @@ export class AppComponent implements OnInit {
     )
   }
 
-  goToChat(id: number, avatar:string,nameClick:string) {
+  goToChat(id: number, avatar: string, nameClick: string) {
     this.currentClickId = id;
     localStorage.setItem('avatarChat', String(avatar));
     localStorage.setItem('nameChat', String(nameClick));
@@ -341,9 +340,11 @@ export class AppComponent implements OnInit {
       }
     )
   }
+
   stompClient: any;
   disabled = true;
   messsageBox: Message[]
+
   setConnected(connected: boolean) {
     this.disabled = !connected;
 
@@ -352,9 +353,11 @@ export class AppComponent implements OnInit {
 
     }
   }
+
   showGreeting(message: any) {
     this.messsageBox.push(message)
   }
+
   connect(id1: number) {
     // @ts-ignore
     // this.currentClickId = +this.route.snapshot.paramMap.get('id');
@@ -377,8 +380,8 @@ export class AppComponent implements OnInit {
   }
 
 
+  users: UserDto[]
 
-  users:UserDto[]
   searchBar() {
     if (this.searchValue != "") {
       this.searchService.search(this.searchValue).subscribe(data => {
