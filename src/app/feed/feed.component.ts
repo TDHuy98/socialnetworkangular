@@ -43,10 +43,10 @@ export class FeedComponent implements OnInit {
    currentNewFriendsId: any[];
    currentSenderFriendsId: any[];
    currentBlockFriendsId: any;
+   notices: Notifications[];
 
   constructor(private postService: PostServicek,
               private router: Router,
-              private route: ActivatedRoute,
               private postServicec: PostService,
               private friendService: FriendListService,
               private route: ActivatedRoute,
@@ -132,6 +132,49 @@ export class FeedComponent implements OnInit {
 
   currentActiveFriendsId: Number[] = [];
 
+  loadloginListFr() {
+    this.friendService.getActiveFriendListByIdUser(this.currenLogInId).subscribe(
+      data => {
+        this.curentLoginActiveFriends = data
+        this.currentActiveFriendsId = []
+        this.currentNewFriendsId = []
+        this.currentSenderFriendsId = []
+
+        this.friendService.getSendFriendListByIdUser(this.currenLogInId).subscribe(
+          data => {
+            this.curentLoginSenderFriends = data
+
+            this.friendService.getNewFriendListByIdUser(this.currenLogInId).subscribe(
+              data => {
+                this.curentLoginNewFriends = data
+
+                this.friendService.getBlockFriendListByIdUser(this.currenLogInId).subscribe(
+                  data => {
+                    this.curentLoginBlockFriends = data
+                    this.curentLoginActiveFriends.forEach(item => {
+                      this.currentActiveFriendsId.push(item.target.id)
+                    })
+                    this.curentLoginSenderFriends.forEach(item => {
+                      this.currentSenderFriendsId.push(item.target.id)
+                    })
+                    this.curentLoginNewFriends.forEach(item => {
+                      this.currentNewFriendsId.push(item.target.id)
+                    })
+                    this.curentLoginBlockFriends.forEach(item => {
+                      this.currentBlockFriendsId.push(item.target.id)
+                    })
+
+
+                  }
+                )
+
+              }
+            )
+          }
+        )
+      }
+    )
+  }
 
 
   showEdit(id: number) {
@@ -298,8 +341,8 @@ export class FeedComponent implements OnInit {
       postId: idPost
     };
     //Tạo thông báo sau khi cmt
-    if (this.loggedInUser.id!=userId){
-      this.creatNotice("cmt your post", userId, idPost, "Uncheck", userCmtAvatar, "cmt", nameAction)
+    if (this.loggedInUser.id!=userRevId){
+      this.creatNotice("cmt your post", userRevId, idPost, "Uncheck", userCmtAvatar, "cmt", nameAction)
 
     }
 
