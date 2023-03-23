@@ -880,4 +880,6 @@ export class MainTimeLineComponent implements OnInit, OnChanges {
     this.loadloginListFr()
     this.loadTargetListFr(this.currentClickId)
   }
+
+
 }

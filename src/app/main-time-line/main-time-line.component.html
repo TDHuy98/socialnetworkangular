@@ -67,7 +67,7 @@
 
         <!-- more icon -->
         <div *ngIf="currenLogInId!=currentClickId ">
-          <a (click)="load2in1()"
+          <a (click)="this.load2in1()"
             class="icon-brand-angellist flex items-center justify-center h-10 w-10 rounded-md bg-gray-100">
             <ion-icon name="ellipsis-horizontal" class="text-xl"></ion-icon>
           </a>
@@ -1351,7 +1351,7 @@
             </svg>
             Live </a>
           <button type="submit"
-             class="bg-blue-600 flex h-9 items-center justify-center rounded-md text-white px-5 font-medium">
+                  class="bg-blue-600 flex h-9 items-center justify-center rounded-md text-white px-5 font-medium">
             Share </button>
         </div>
 
