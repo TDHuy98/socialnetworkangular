@@ -557,6 +557,7 @@ export class MainTimeLineComponent implements OnInit, OnChanges {
       },
       postId: idPost
     };
+    console.log(cmt)
     //Tao thong bao khi cmt
     if (this.loggedInUser.id!=userId){
       this.creatNotice("cmt your post", userId, idPost, "Uncheck", userCmtAvatar, "cmt", nameAction)
