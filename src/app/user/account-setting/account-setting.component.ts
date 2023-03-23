@@ -23,7 +23,6 @@ export class AccountSettingComponent implements OnInit {
     email: '',
     mobile: '',
     intro: '',
-    searchable:true,
   }
 
   updateInforMessage: string
@@ -56,18 +55,7 @@ export class AccountSettingComponent implements OnInit {
           this.userInfor.email = data.email,
           this.userInfor.mobile = data.mobile
         this.userInfor.intro = data.intro
-      this.userInfor.searchable=data.searchable
-
-        // @ts-ignore
-        // this.updateInformationForm.setValue({
-        //   firstName: data.firstName,
-        //   middleName: data.middleName,
-        //   lastName:data.lastName,
-        //   email:data.email,
-        //   mobile:data.mobile,
-        //   intro:data.intro
-        // })
-
+        this.checkSearch = data.searchable
         console.log(data)
         console.log('lấy thông tin user cần update thông tin thành công')
       }, error => {
@@ -81,8 +69,6 @@ export class AccountSettingComponent implements OnInit {
   selected(value: string) {
     this.settingNavigation = value
   }
-
-
 
 
   updateInformation() {
@@ -130,13 +116,15 @@ export class AccountSettingComponent implements OnInit {
     })
   }
 
-  checkSearch:boolean
+  checkSearch: boolean
 
-  enableSearch(){
-    this.userService.enableSearchable().subscribe(data=>{
+  enableSearch() {
+    this.userService.enableSearchable().subscribe(data => {
+      this.userService.getUserInformation().subscribe(data => {
+        this.checkSearch = data.searchable
+      })
       console.log("enbale search")
-      this.checkSearch
-    },error => {
+    }, error => {
       console.log("enbale search fail")
 
     })
@@ -144,6 +132,9 @@ export class AccountSettingComponent implements OnInit {
 
   disableSearch() {
     this.userService.disableSearchable().subscribe(data => {
+      this.userService.getUserInformation().subscribe(data => {
+        this.checkSearch = data.searchable
+      })
       console.log("disable search")
     }, error => {
       console.log("disable search fail")

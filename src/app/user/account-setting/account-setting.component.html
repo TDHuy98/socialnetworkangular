@@ -179,11 +179,11 @@
             <div>Let anyone can find me</div>
           </div>
           <div class="switches-list -mt-8 is-large">
-            <div class="switch-container" *ngIf="userInfor.searchable==true">
+            <div class="switch-container" *ngIf="this.checkSearch==true">
               <label class="switch"><input type="checkbox" checked (change)="disableSearch()"><span
                 class="switch-button"></span> </label>
             </div>
-            <div class="switch-container" *ngIf="userInfor.searchable==false">
+            <div class="switch-container" *ngIf="this.checkSearch==false">
               <label class="switch"><input type="checkbox" (change)="enableSearch()"><span
                 class="switch-button"></span> </label>
             </div>

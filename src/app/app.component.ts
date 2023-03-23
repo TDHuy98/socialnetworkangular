@@ -7,15 +7,14 @@ import {MainTimeLineComponent} from "./main-time-line/main-time-line.component";
 import {ActivatedRoute, Router} from "@angular/router";
 import {AuthService} from "./auth.service";
 import {CurrentLoggedInUser} from "./model/CurrentLoggedInUser";
-import {SearchService} from "./service/search.service";
-import {data} from "jquery";
-import {UserDto} from "./model/UserDto";
 import {Notifications} from "./model/Dto/Notifications";
 import {PostService} from "./service/post.service";
 import {map, Subscription, timer} from "rxjs";
 import {FriendDto} from "./model/Dto/FriendDto";
 import {Stomp} from "@stomp/stompjs";
 import {Message} from "./model/Message";
+import {SearchService} from "./service/search.service";
+import {UserDto} from "./model/UserDto";
 
 @Component({
   selector: 'app-root',
@@ -54,9 +53,9 @@ export class AppComponent implements OnInit {
   constructor(private friendService: FriendListService, route: ActivatedRoute,
               private userService: UserService,
               private router: Router,
+              private postService: PostService,
               private activatedRoute: ActivatedRoute,
               private searchService: SearchService,
-              private postService: PostService,
               private authService: AuthService) {
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
 
@@ -94,7 +93,7 @@ export class AppComponent implements OnInit {
   newFriendsId: number[] = []
   blockFriendsId: number[] = []
   activeFriendsId: number[] = []
-  loggedInUser: UserDto;
+  loggedInUser: User;
   searchValue: '';
 
 
@@ -249,7 +248,6 @@ export class AppComponent implements OnInit {
   }
 
   goToChat(id: number, avatar:string) {
-    this.connect(id)
     this.currentClickId = id;
     localStorage.setItem('avatarChat', String(avatar));
     this.router.navigateByUrl("/reg/" + id)
@@ -358,9 +356,8 @@ export class AppComponent implements OnInit {
   }
 
 
-  // users: UserDto[]=[];
-  users: UserDto[];
 
+  users:UserDto[]
   searchBar() {
     if (this.searchValue != "") {
       this.searchService.search(this.searchValue).subscribe(data => {

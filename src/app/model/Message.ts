@@ -2,9 +2,9 @@ import {User} from "./User";
 
 export class Message{
   id!:number;
-    message: string;
-   idSenders: number;
-   idRev: number;
+  source!:User;
+  target!:User;
+  message!:string;
   crateAT!:Date;
   updateAT!:Date;
 }
