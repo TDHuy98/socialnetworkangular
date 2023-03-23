@@ -18,6 +18,8 @@ import {User} from "../model/User";
 import {MainTimeLineComponent} from "../main-time-line/main-time-line.component";
 import {Like} from "../model/Like";
 import {CommentDto} from "../model/Dto/CommentDto";
+import {Notifications} from "../model/Dto/Notifications";
+import {PostService} from "../service/post.service";
 @Component({
   selector: 'app-feed',
   templateUrl: './feed.component.html',
@@ -36,10 +38,12 @@ export class FeedComponent implements OnInit {
   allCmt: CommentDto[];
   thisPostLike: number
   newPost: NewPost=new NewPost()
+   notices: Notifications[];
 
   constructor(private postService: PostServicek,
               private router: Router,
               private route: ActivatedRoute,
+              private postServicec: PostService,
               @Inject(AngularFireStorage) private  storage : AngularFireStorage, private userService: UserService) {
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
 
@@ -210,8 +214,37 @@ export class FeedComponent implements OnInit {
     }
 
   }
+  creatNotice(content: string, idUser: number, idPost: number, status: string, userAvatar: string, type: string, name: string) {
+    const notice = {
+      content: content,
+      userId: idUser,
+      postId: idPost,
+      status: status,
+      targetAvatar: userAvatar,
+      type: type,
+      userLastName: name,
 
-  cmt(idPost: number) {
+    };
+    console.log("notice: ", notice);
+    // @ts-ignore
+    this.postServicec.createNotications(notice).subscribe((data) => {
+        this.postServicec.getAllNotices(this.loggedInUser.id).subscribe(
+          (data) => {
+            this.notices = data;
+            this.loadNotice(this.loggedInUser.id)
+          }
+        )
+      },
+    );
+  }
+  loadNotice(idUser: number) {
+    this.postServicec.getAllNotices(idUser).subscribe(
+      data => {
+        this.notices = data;
+      }
+    )
+  }
+  cmt(idPost: number, contentNotice: string, status: string, userCmtAvatar: string, type: string, userRevId: number, nameAction: string) {
     const cmt = {
       content: this.formCmt.controls["content"].value,
       user: {
@@ -219,19 +252,28 @@ export class FeedComponent implements OnInit {
       },
       postId: idPost
     };
+    console.log(userRevId)
+    console.log(this.loggedInUser.id)
+    //Tao thong bao khi cmt
+    if (this.loggedInUser.id != userRevId) {
+      this.creatNotice("cmt your post", userRevId, idPost, "Uncheck", userCmtAvatar, "cmt", nameAction)
+
+    }
+
+
     // console.log(this.posts)
     // @ts-ignore
     this.postService.comment(cmt).subscribe((data) => {
         this.formCmt.reset();
-      this.postService.getAllComment().subscribe(
-        (data) => {
-          this.allCmt = data;
-          console.log(data)
-        }
-      )
+        this.postService.getAllComment().subscribe(
+          (data) => {
+            this.allCmt = data;
+          }
+        )
       },
     );
   }
+
 
 
   DeleteCmt(id: number) {

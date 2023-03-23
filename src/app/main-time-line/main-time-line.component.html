@@ -376,7 +376,7 @@
 
 
                   <div class="bg-gray-100 rounded-full relative dark:bg-gray-800 border-t">
-                    <form (ngSubmit)="cmt(this.puppy.id,'cmt your post','Uncheck',puppy.profile,'cmt',puppy.userId,puppy.middleName+' '+puppy.lastName)" [formGroup]="formCmt">
+                    <form (ngSubmit)="cmt(this.puppy.id,'cmt your post','Uncheck',puppy.profile,'cmt',puppy.userId,loggedInUser.middleName+' '+loggedInUser.lastName)"   [formGroup]="formCmt">
                       <input formControlName="content" placeholder="Add your Comment.."
                              class="bg-transparent max-h-10 shadow-none px-5">
                       <div class="-m-0.5 absolute bottom-0 flex items-center right-3 text-xl">

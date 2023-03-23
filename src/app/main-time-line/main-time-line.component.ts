@@ -49,7 +49,8 @@ export class MainTimeLineComponent implements OnInit, OnChanges {
   })
   currentId = Number(localStorage.getItem("userId"));
 
-  loggedInUser: User = new User();
+  // @ts-ignore
+  loggedInUser: User = JSON.parse(localStorage.getItem("loggedInUser"));
 
   currenLogInId = Number(localStorage.getItem("userId"));
   id: number | undefined;
@@ -126,7 +127,6 @@ export class MainTimeLineComponent implements OnInit, OnChanges {
     )
     //get clicked in user id
     this.userService.findById(this.currentClickId).subscribe(data => {
-      this.loggedInUser = data;
       this.currentClickId = data.id
     })
     this.loadloginListFr();
@@ -489,7 +489,7 @@ export class MainTimeLineComponent implements OnInit, OnChanges {
       //@ts-ignore
       this.postService.like(like).subscribe((data) => {
           let flag = 0;
-          if (this.loggedInUser.id != userIdRevNotice){
+          if (this.loggedInUser.id != userIdRevNotice) {
             // this.showDit()
             // Tạo thông báo sau khi like
             this.postService.getAllNotices(this.loggedInUser.id).subscribe(
@@ -505,7 +505,6 @@ export class MainTimeLineComponent implements OnInit, OnChanges {
               }
             )
           }
-
 
 
           this.postService.findAllLike().subscribe(data => {
@@ -549,7 +548,7 @@ export class MainTimeLineComponent implements OnInit, OnChanges {
 
   }
 
-  cmt(idPost: number, contentNotice: string, status: string, userCmtAvatar: string, type: string, userId: number, nameAction: string) {
+  cmt(idPost: number, contentNotice: string, status: string, userCmtAvatar: string, type: string, userRevId: number, nameAction: string) {
     const cmt = {
       content: this.formCmt.controls["content"].value,
       user: {
@@ -557,10 +556,11 @@ export class MainTimeLineComponent implements OnInit, OnChanges {
       },
       postId: idPost
     };
-    console.log(cmt)
+    console.log(userRevId)
+    console.log(this.loggedInUser.id)
     //Tao thong bao khi cmt
-    if (this.loggedInUser.id!=userId){
-      this.creatNotice("cmt your post", userId, idPost, "Uncheck", userCmtAvatar, "cmt", nameAction)
+    if (this.loggedInUser.id != userRevId) {
+      this.creatNotice("cmt your post", userRevId, idPost, "Uncheck", userCmtAvatar, "cmt", nameAction)
 
     }
 
@@ -598,18 +598,19 @@ export class MainTimeLineComponent implements OnInit, OnChanges {
     })
 
   }
+
   creatPost() {
     const filePath = this.selectedImage.name;
     const fileRef = this.storage.ref(filePath);
-    this.storage.upload(filePath,this.selectedImage).snapshotChanges().pipe(
-      finalize(()=> (fileRef.getDownloadURL().subscribe(url =>{
+    this.storage.upload(filePath, this.selectedImage).snapshotChanges().pipe(
+      finalize(() => (fileRef.getDownloadURL().subscribe(url => {
         this.ArrayPicture = url;
         console.log("picture " + url)
         this.newPost.userId = this.currentLoggedInUserId;
-        this.newPost.content= this.postForm.get("content").value;
-        this.newPost.postStatus=this.postForm.get("postStatus").value;
+        this.newPost.content = this.postForm.get("content").value;
+        this.newPost.postStatus = this.postForm.get("postStatus").value;
         this.newPost.img = url
-        this.postService.create(this.newPost).subscribe(()=>{
+        this.postService.create(this.newPost).subscribe(() => {
           console.log("success")
           this.postService.getAll(this.currentId).subscribe((data) => {
               console.log('postService getALl 2')
@@ -632,12 +633,13 @@ export class MainTimeLineComponent implements OnInit, OnChanges {
                 }
               )
             }
-          )        })
+          )
+        })
       })))
     ).subscribe()
   }
 
-  upload(){
+  upload() {
     this.selectedImage = this.avatarDom?.nativeElement.files[0];
   }
 
@@ -726,14 +728,12 @@ export class MainTimeLineComponent implements OnInit, OnChanges {
   newList: number[] = []
 
 
-
   currentLoggedInUserId = Number(localStorage.getItem('userId'))
 
   selectedImage: any = null;
   newPost: NewPost = new NewPost()
 
   ArrayPicture = "";
-
 
 
   edit() {
@@ -831,15 +831,16 @@ export class MainTimeLineComponent implements OnInit, OnChanges {
       }
     )
   }
+
   countnotice: number = 0;
 
   countNotice() {
-    this.countnotice=0;
+    this.countnotice = 0;
     this.postService.getAllNotices(this.loggedInUser.id).subscribe(
       data => {
         data.forEach(item => {
-          if (item.status =='Uncheck')
-            this.countnotice+=1;
+          if (item.status == 'Uncheck')
+            this.countnotice += 1;
         })
       }
     )
@@ -849,8 +850,8 @@ export class MainTimeLineComponent implements OnInit, OnChanges {
   creatNotice(content: string, idUser: number, idPost: number, status: string, userAvatar: string, type: string, name: string) {
     const notice = {
       content: content,
-      postId: idPost,
       userId: idUser,
+      postId: idPost,
       status: status,
       targetAvatar: userAvatar,
       type: type,
