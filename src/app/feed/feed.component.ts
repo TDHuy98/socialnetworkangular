@@ -43,7 +43,7 @@ export class FeedComponent implements OnInit {
               @Inject(AngularFireStorage) private  storage : AngularFireStorage, private userService: UserService) {
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
 
-      this.postService.findAllByUser_Id(this.currentLoggedInUserId).subscribe(data => {
+      this.postService.feed(this.currentLoggedInUserId).subscribe(data => {
         this.posts= data
         this.currentPostLiked = []
         this.postService.findAllLike().subscribe(data => {
@@ -57,7 +57,6 @@ export class FeedComponent implements OnInit {
           }
         )
       },error => {
-        alert("false")
       })
     this.userService.findById(Number(localStorage.getItem('userId'))).subscribe(
       data => {
@@ -99,7 +98,7 @@ export class FeedComponent implements OnInit {
       }
     )
     this.postForm = new FormGroup({
-      content: new FormControl("content"),
+      content: new FormControl(""),
       postStatus: new FormControl("postStatus",Validators.required),
       img: new FormControl(""),
       posts: new FormControl(""),
@@ -129,9 +128,9 @@ export class FeedComponent implements OnInit {
     })
   }
 
-  showPost() {
-    this.postService.findAllByUser_Id(this.currentLoggedInUserId).subscribe(data => {
-      this.posts = data
+  showPost(){
+    this.postService.feed(this.currentLoggedInUserId).subscribe(data => {
+      this.posts= data
       this.currentPostLiked = []
       this.postService.findAllLike().subscribe(data => {
           this.currentAllLike = data;
@@ -149,7 +148,6 @@ export class FeedComponent implements OnInit {
         }
       )
     },error => {
-      alert("false")
     })
   }
   Like(postId: number, userId: number, userLastName: string) {
@@ -271,19 +269,15 @@ export class FeedComponent implements OnInit {
 
   edit() {
     this.postService.save(this.editForm.value).subscribe(() => {
-      alert("update post success")
-      this.router.navigate(["/feed"])
+      this.router.navigate(["/feed"],{onSameUrlNavigation:"reload"})
     })
   }
 
 
   delete(id: number) {
-    alert("Delete Success")
     this.postService.delete(id).subscribe(() =>{
-      alert("delete succes")
       this.router.navigate(["/feed"])
     },error => {
-      alert("delete false")
     })
 
   }

@@ -61,7 +61,7 @@ export class MainTimeLineComponent implements OnInit, OnChanges {
   curentLoginActiveFriends: FriendDto[] = [];
   curentLoginNewFriends: FriendDto[] = [];
   curentLoginBlockFriends: FriendDto[] = [];
-  curentLoginSenderFriends: FriendDto[] = [];
+  curentLoginSenderFriends: FriendDto[] = []
   postForm: FormGroup[] | any;
   editForm: FormGroup | any;
   newFriendsId: number[] = [];
@@ -108,8 +108,6 @@ export class MainTimeLineComponent implements OnInit, OnChanges {
   ngOnInit(): void {
 
     this.currentId = Number(localStorage.getItem('currentUserId'))
-
-
     this.postService.getAll(this.currentId).subscribe(
       (data) => {
         console.log('postService getALl 1')
@@ -126,8 +124,6 @@ export class MainTimeLineComponent implements OnInit, OnChanges {
         )
       }
     )
-
-
     //get clicked in user id
     this.userService.findById(this.currentClickId).subscribe(data => {
       this.loggedInUser = data;
@@ -143,8 +139,6 @@ export class MainTimeLineComponent implements OnInit, OnChanges {
       img: new FormControl(""),
       posts: new FormControl(""),
     })
-
-
     this.editForm = new FormGroup({
       id: new FormControl("id"),
       postStatus: new FormControl("postStatus"),
@@ -156,17 +150,9 @@ export class MainTimeLineComponent implements OnInit, OnChanges {
   showDit() {
     // @ts-ignore
     this.currentClickId = +this.route.snapshot.paramMap.get('id');
-
-
-    this.curentLoginActiveFriends = this.returnActiveFriend(this.currenLogInId)
-    this.curentLoginSenderFriends = this.returnSenderFriend(this.currenLogInId)
-    this.curentLoginBlockFriends = this.returnBlockFriend(this.currenLogInId)
-    this.curentLoginNewFriends = this.returnNewFriend(this.currenLogInId)
-
     // @ts-ignore
     this.currentId = +this.route.snapshot.paramMap.get('id');
     // @ts-ignore
-    this.currentClickId = +this.route.snapshot.paramMap.get('id');
     if (this.currentId == 0) {
       this.currentId = this.currenLogInId
     }
@@ -450,6 +436,7 @@ export class MainTimeLineComponent implements OnInit, OnChanges {
         );
       }
     );
+
   }
 
   // Huỷ lời mời kết bạn
@@ -610,6 +597,48 @@ export class MainTimeLineComponent implements OnInit, OnChanges {
     })
 
   }
+  creatPost() {
+    const filePath = this.selectedImage.name;
+    const fileRef = this.storage.ref(filePath);
+    this.storage.upload(filePath,this.selectedImage).snapshotChanges().pipe(
+      finalize(()=> (fileRef.getDownloadURL().subscribe(url =>{
+        this.ArrayPicture = url;
+        console.log("picture " + url)
+        this.newPost.userId = this.currentLoggedInUserId;
+        this.newPost.content= this.postForm.get("content").value;
+        this.newPost.postStatus=this.postForm.get("postStatus").value;
+        this.newPost.img = url
+        this.postService.create(this.newPost).subscribe(()=>{
+          console.log("success")
+          this.postService.getAll(this.currentId).subscribe((data) => {
+              console.log('postService getALl 2')
+              this.posts = data;
+              this.currentPostLiked = []
+              this.postService.findAllLike().subscribe(data => {
+                  this.currentAllLike = data;
+                  console.log("this is all like data " + JSON.stringify(data))
+                  data.forEach(like => {
+                    if (like.userId == this.currenLogInId) {
+                      this.currentPostLiked.push(like.postId)
+                    }
+                  })
+                  console.log(this.currentPostLiked)
+                  this.postService.getAllComment().subscribe(
+                    (data) => {
+                      this.allCmt = data;
+                    }
+                  )
+                }
+              )
+            }
+          )        })
+      })))
+    ).subscribe()
+  }
+
+  upload(){
+    this.selectedImage = this.avatarDom?.nativeElement.files[0];
+  }
 
 
   getTargetActiveFriend(userId: number) {
@@ -695,25 +724,7 @@ export class MainTimeLineComponent implements OnInit, OnChanges {
 
   newList: number[] = []
 
-  creatPost() {
-    const filePath = this.selectedImage.name;
-    const fileRef = this.storage.ref(filePath);
-    this.storage.upload(filePath, this.selectedImage).snapshotChanges().pipe(
-      finalize(() => (fileRef.getDownloadURL().subscribe(url => {
-        this.ArrayPicture = url;
-        console.log("picture " + url)
-        this.newPost.userId = this.currentLoggedInUserId;
-        this.newPost.content = this.postForm.get("content").value;
-        this.newPost.postStatus = this.postForm.get("postStatus").value;
-        this.newPost.img = url
-        this.postServicek.save(this.newPost).subscribe(() => {
-          console.log("success")
-          this.router.navigateByUrl("/feed");
-          window.location.reload();
-        })
-      })))
-    ).subscribe()
-  }
+
 
   currentLoggedInUserId = Number(localStorage.getItem('userId'))
 
@@ -722,9 +733,7 @@ export class MainTimeLineComponent implements OnInit, OnChanges {
 
   ArrayPicture = "";
 
-  upload() {
-    this.selectedImage = this.avatarDom?.nativeElement.files[0];
-  }
+
 
   edit() {
     this.postServicek.save(this.editForm.value).subscribe(() => {
