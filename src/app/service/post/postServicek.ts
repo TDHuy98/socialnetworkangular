@@ -19,6 +19,9 @@ export class PostServicek {
   findAllByUser_Id(id:number):Observable<PostDto[]> {
     return this.http.get<PostDto[]>('http://localhost:8080/posts/'+id)
   }
+  feed(id:number):Observable<PostDto[]>{
+    return this.http.get<PostDto[]>('http://localhost:8080/posts/feed/'+id)
+  }
 
   save(post : NewPost) : Observable<any> {
     return this.http.post('http://localhost:8080/posts',post)
